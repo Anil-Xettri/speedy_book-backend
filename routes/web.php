@@ -33,7 +33,7 @@ Auth::routes(['register' => false, 'reset' => false, 'password.reset' => false])
 Route::get('/home', [App\Http\Controllers\superadmin\HomeController::class, 'dashboard'])->name('superadmin.home');
 
 Route::group(['prefix' => 'superadmin', 'middleware' => 'auth'], function () {
-
+    Route::resource('vendors', \App\Http\Controllers\superadmin\VendorController::class);
 });
 
 Route::group(['prefix' => 'vendor', 'middleware' => 'auth:vendor'], function () {

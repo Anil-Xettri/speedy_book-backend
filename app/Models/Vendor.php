@@ -12,9 +12,14 @@ class Vendor extends Authenticatable
     use HasFactory;
 
     protected $guarded = ['id'];
-
+    protected $appends = ['image_url'];
     protected $hidden = [
         'password',
         'remember_token',
     ];
+
+    function getImageUrlAttribute()
+    {
+        return asset($this->image);
+    }
 }

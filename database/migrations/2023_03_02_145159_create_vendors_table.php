@@ -17,8 +17,18 @@ class CreateVendorsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('phone')->nullable();
+            $table->string('address')->nullable();
+            $table->string('status')->comment('Active,Inactive')->default('Active');
+            $table->string('image')->nullable();
+
+            $table->string('registration_number')->nullable();
+            $table->string('legal_number')->nullable();
+            $table->string('legal_type')->comment('PAN,VAT')->default('PAN');
+            $table->longText('description')->nullable();
+
+            $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

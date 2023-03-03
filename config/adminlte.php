@@ -318,6 +318,12 @@ return [
             'guard' => 'web'
         ],
         [
+            'text' => 'Vendors',
+            'route' => 'vendors.index',
+            'icon' => 'nav-icon fas fa-store',
+            'guard' => 'web'
+        ],
+        [
             'text' => 'Dashboard',
             'route' => 'vendor.home',
             'icon' => 'nav-icon fas fa-th',
