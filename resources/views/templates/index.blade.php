@@ -8,6 +8,11 @@
 @stop
 
 @section('css')
+    <style>
+        body::-webkit-scrollbar {
+            display: none;  /* Safari and Chrome */
+        }
+    </style>
     @stack('styles')
 @stop
 
@@ -30,7 +35,7 @@
                                     <div class="float-right">
 
                                         <a href="{{route($route.'create')}}"
-                                           class="btn btn-primary float-right">
+                                           class="btn btn-primary btn-sm float-right">
                                             <i class="fa fa-plus"></i>
                                             <span class="kt-hidden-mobile"> Add</span>
                                         </a>
