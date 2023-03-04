@@ -300,6 +300,20 @@ return [
             'type'         => 'fullscreen-widget',
             'topnav_right' => true,
         ],
+        [
+            'icon' => 'fa fa-key',
+            'route' => 'superadmin.change-password',
+            'text' => ' Change Password',
+            'topnav_user' => true,
+            'guard' => 'web'
+        ],
+        [
+            'icon' => 'fa fa-key',
+            'route' => 'vendor.change-password',
+            'text' => ' Change Password',
+            'topnav_user' => true,
+            'guard' => 'vendor'
+        ],
 
         // Sidebar items:
         [

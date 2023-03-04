@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\superadmin\ChangePasswordController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,10 +34,14 @@ Auth::routes(['register' => false, 'reset' => false, 'password.reset' => false])
 Route::get('/home', [App\Http\Controllers\superadmin\HomeController::class, 'dashboard'])->name('superadmin.home');
 
 Route::group(['prefix' => 'superadmin', 'middleware' => 'auth'], function () {
+    Route::get('/change-password', [ChangePasswordController::class, 'changePassword'])->name('superadmin.change-password');
+    Route::post('/change-password/save', [ChangePasswordController::class, 'changePasswordSave'])->name('superadmin-password.store');
     Route::resource('vendors', \App\Http\Controllers\superadmin\VendorController::class);
 });
 
 Route::group(['prefix' => 'vendor', 'middleware' => 'auth:vendor'], function () {
+    Route::get('/change-password', [\App\Http\Controllers\vendor\ChangePasswordController::class, 'changePassword'])->name('vendor.change-password');
+    Route::post('/change-password/save', [\App\Http\Controllers\vendor\ChangePasswordController::class, 'changePasswordSave'])->name('vendor-password.store');
     Route::get('home', [\App\Http\Controllers\vendor\VendorController::class, 'dashboard'])->name('vendor.home');
     Route::get('/logout', [LoginController::class, 'logout']);
 

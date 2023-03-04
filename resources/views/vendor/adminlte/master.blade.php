@@ -52,7 +52,7 @@
     <style>
         [data-notify] { z-index: 9999 !important; }
         .notify-size {
-            width: 17%!important;
+            width: 20%!important;
         }
     </style>
     @yield('adminlte_css')
