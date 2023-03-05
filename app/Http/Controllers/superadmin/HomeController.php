@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\superadmin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Vendor;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -24,6 +25,7 @@ class HomeController extends Controller
      */
     public function dashboard()
     {
-        return view('superadmin.home');
+        $info['vendors'] = Vendor::all()->count();
+        return view('superadmin.home', $info);
     }
 }

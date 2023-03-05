@@ -343,6 +343,12 @@ return [
             'icon' => 'nav-icon fas fa-th',
             'guard' => 'vendor'
         ],
+        [
+            'text' => 'Cinema Hall',
+            'route' => 'cinema-halls.index',
+            'icon' => 'nav-icon fas fa-tv',
+            'guard' => 'vendor'
+        ],
     ],
 
     /*

@@ -4,27 +4,22 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Laravel\Passport\HasApiTokens;
 
-class Vendor extends Authenticatable
+class CinemaHall extends Model
 {
     use HasFactory;
 
     protected $guarded = ['id'];
     protected $appends = ['image_url'];
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    protected $casts = ['seat_details' => 'array'];
 
     function getImageUrlAttribute()
     {
         return asset($this->image);
     }
 
-    public function cinemaHalls()
+    public function vendor()
     {
-        return $this->hasMany(CinemaHall::class, 'vendor_id');
+        return $this->belongsTo(Vendor::class, 'vendor_id');
     }
 }

@@ -23,10 +23,10 @@ class ChangePasswordController extends Controller
             'new_password' => 'required',
             'confirm_password' => 'required|same:new_password',
         ]);
-        $superadmin = User::findOrFail(auth()->user()->id);
-        if (Hash::check($request->old_password, $superadmin->password)) {
-            $superadmin->password = Hash::make($request->new_password);
-            $superadmin->save();
+        $vendor = User::findOrFail(auth('vendor')->user()->id);
+        if (Hash::check($request->old_password, $vendor->password)) {
+            $vendor->password = Hash::make($request->new_password);
+            $vendor->save();
             NotifyHelper::customSuccess('Password Changed Successfully.');
             return redirect()->back();
         } else {
