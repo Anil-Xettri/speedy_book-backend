@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'title' => 'AdminLTE 3',
+    'title' => 'Speedy Book',
     'title_prefix' => '',
     'title_postfix' => '',
 
@@ -63,12 +63,12 @@ return [
     |
     */
 
-    'logo' => '<b>Admin</b>LTE',
-    'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+    'logo' => '<b>Speedy</b>Book',
+    'logo_img' => 'images/icon.jpg',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
-    'logo_img_alt' => 'Admin Logo',
+    'logo_img_alt' => 'icon',
 
     /*
     |--------------------------------------------------------------------------
@@ -347,6 +347,12 @@ return [
             'text' => 'Cinema Hall',
             'route' => 'cinema-halls.index',
             'icon' => 'nav-icon fas fa-tv',
+            'guard' => 'vendor'
+        ],
+        [
+            'text' => 'Movie',
+            'route' => 'movies.index',
+            'icon' => 'nav-icon fas fa-film',
             'guard' => 'vendor'
         ],
     ],

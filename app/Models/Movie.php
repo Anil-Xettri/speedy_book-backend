@@ -5,13 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CinemaHall extends Model
+class Movie extends Model
 {
     use HasFactory;
 
     protected $guarded = ['id'];
     protected $appends = ['image_url'];
-    protected $casts = ['seat_details' => 'array'];
 
     function getImageUrlAttribute()
     {
@@ -23,8 +22,8 @@ class CinemaHall extends Model
         return $this->belongsTo(Vendor::class, 'vendor_id');
     }
 
-    public function movies()
+    public function cinemaHall()
     {
-        return $this->hasMany(Movie::class, 'cinema_hall_id');
+        return $this->belongsTo(CinemaHall::class, 'cinema_hall_id');
     }
 }

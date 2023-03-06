@@ -80,6 +80,7 @@ class VendorController extends BaseController
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:vendors,email',
+            'image' => 'nullable|mimes:jpeg,jpg,png|max:10000',
             'password' => 'required|min:8'
         ]);
 
@@ -99,7 +100,6 @@ class VendorController extends BaseController
         }
 
         NotifyHelper::addSuccess();
-//        ->with('success', 'Vendor Created Successfully.')
         return redirect()->route($this->indexRoute());
     }
 
@@ -144,6 +144,7 @@ class VendorController extends BaseController
         $request->validate([
             'name' => 'required',
             'email' => 'required|email',
+            'image' => 'nullable|mimes:jpeg,jpg,png|max:10000'
         ]);
 
         if ($request->password != null) {
@@ -156,7 +157,7 @@ class VendorController extends BaseController
 
         if ($request->hasFile('image') && $request->image != '') {
 
-//            ImagePostHelper::deleteImage($vendor->image);
+            ImagePostHelper::deleteImage($vendor->image);
 
             $file = $request->file('image');
             $extension = $file->getClientOriginalExtension();

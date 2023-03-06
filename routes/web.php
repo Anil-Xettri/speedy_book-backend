@@ -46,4 +46,5 @@ Route::group(['prefix' => 'vendor', 'middleware' => 'auth:vendor'], function () 
     Route::get('/logout', [LoginController::class, 'logout']);
 
     Route::resource('cinema-halls', \App\Http\Controllers\vendor\CinemaHallController::class);
+    Route::resource('movies', \App\Http\Controllers\vendor\MovieController::class);
 });
