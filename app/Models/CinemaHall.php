@@ -15,7 +15,11 @@ class CinemaHall extends Model
 
     function getImageUrlAttribute()
     {
-        return asset($this->image);
+        if ($this->image) {
+            return asset($this->image);
+        } else {
+            return null;
+        }
     }
 
     public function vendor()

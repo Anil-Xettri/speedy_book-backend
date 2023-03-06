@@ -12,9 +12,19 @@ class Customer extends Authenticatable
     use HasFactory, HasApiTokens;
 
     protected $guarded = ['id'];
+    protected $appends = ['profile_image_url'];
 
     protected $hidden = [
         'password',
         'remember_token',
     ];
+
+    function getProfileImageUrlAttribute()
+    {
+        if ($this->profile_image) {
+            return asset($this->profile_image);
+        } else {
+            return null;
+        }
+    }
 }
