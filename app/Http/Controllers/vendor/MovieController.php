@@ -38,9 +38,6 @@ class MovieController extends BaseController
                     $imgUrl = $data->image ? asset($data->image) : asset('images/placeholder-image.jpg');
                     return '<a target="_blank" href="' . $imgUrl . '"><img style="height: 60%; width: 60%; object-fit: contain" src="' . $imgUrl . '" alt="logo"></a>';
                 })
-                ->editColumn('show_date', function ($data) {
-                    return $data->show_date ?: '-';
-                })
                 ->editColumn('cinema_hall_id', function ($data) {
                     return $data->cinemaHall ? '<a target="_blank" href="' . route('cinema-halls.show', $data->cinemaHall->id) . '">' . $data->cinemaHall->name . '</a>' : '-';
                 })
@@ -49,7 +46,7 @@ class MovieController extends BaseController
                         'id' => $data->id, 'route' => $this->route
                     ])->render();
                 })
-                ->rawColumns(['action', 'image', 'cinema_hall_id', 'show_date'])
+                ->rawColumns(['action', 'image', 'cinema_hall_id'])
                 ->make(true);
         }
 

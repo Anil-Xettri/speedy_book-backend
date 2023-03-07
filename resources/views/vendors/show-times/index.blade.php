@@ -14,9 +14,10 @@
         <table class="table w-100" id="data-table">
             <thead>
             <tr class="text-left text-capitalize">
-                <th>#id</th>
+                <th >#id</th>
                 <th>cinema hall</th>
                 <th>movie</th>
+                <th>show details</th>
                 <th>action</th>
             </tr>
             </thead>
@@ -36,6 +37,18 @@
                     {data: 'id', name: 'id'},
                     {data: 'cinema_hall_id', name: 'cinema_hall_id'},
                     {data: 'movie_id', name: 'movie_id'},
+                    {
+                        data: 'show_details', name: 'show_details', render: function (data, type, full, meta) {
+                            var details = "";
+                            data.forEach(function (value, index) {
+                                let colors = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'dark'];
+                                let randomColor = Math.floor(Math.random() * colors.length);
+                                details +=`<span class="badge badge-${colors[randomColor]} mr-2">${value.show_date} ${value.show_time}, Rs. ${value.ticket_price}</span>`;
+                            });
+
+                            return details;
+                        }
+                    },
                     {data: 'action', name: 'action'},
                 ],
             });

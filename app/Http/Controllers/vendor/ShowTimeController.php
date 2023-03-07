@@ -40,12 +40,15 @@ class ShowTimeController extends BaseController
                 ->editColumn('movie_id', function ($data) {
                     return $data->movie ? '<a target="_blank" href="' . route('movies.show', $data->movie->id) . '">' . $data->movie->title . '</a>' : '-';
                 })
+                ->editColumn('show_details', function ($data) {
+                    return json_decode($data->show_details, true);
+                })
                 ->addColumn('action', function ($data) {
                     return view('templates.index_actions', [
                         'id' => $data->id, 'route' => $this->route
                     ])->render();
                 })
-                ->rawColumns(['action', 'cinema_hall_id', 'movie_id'])
+                ->rawColumns(['action', 'cinema_hall_id', 'movie_id', 'show_details'])
                 ->make(true);
         }
 
@@ -85,7 +88,7 @@ class ShowTimeController extends BaseController
         foreach ($request->show_date as $i => $showDate) {
             $showDetails[] = [
                 "show_date" => $showDate,
-                "show_time" => $request->show_date[$i],
+                "show_time" => $request->show_time[$i],
                 "ticket_price" => $request->ticket_price[$i],
             ];
         }
@@ -149,7 +152,7 @@ class ShowTimeController extends BaseController
         foreach ($request->show_date as $i => $showDate) {
             $showDetails[] = [
                 "show_date" => $showDate,
-                "show_time" => $request->show_date[$i],
+                "show_time" => $request->show_time[$i],
                 "ticket_price" => $request->ticket_price[$i],
             ];
         }

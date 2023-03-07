@@ -18,7 +18,6 @@
                 <th>image</th>
                 <th>title</th>
                 <th>cinema hall</th>
-                <th>show date</th>
                 <th>status</th>
                 <th>action</th>
             </tr>
@@ -40,7 +39,6 @@
                     {data: 'image', name: 'image'},
                     {data: 'title', name: 'title'},
                     {data: 'cinema_hall_id', name: 'cinema_hall_id'},
-                    {data: 'show_date', name: 'show_date'},
                     {
                         data: 'status', name: 'status', render: function (data, type, full, meta) {
                             switch (data) {
