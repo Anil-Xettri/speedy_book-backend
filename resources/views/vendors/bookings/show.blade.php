@@ -26,22 +26,22 @@
 
     <div class="row my-4">
         <div class="col-md-6">
-            <label for=""><span class="show-text">Duration:</span></label> {{ $item->duration.' Minutes' ?: '---'}}<br>
+            <label for=""><span class="show-text">Duration:</span></label> {{ $item->duration ?: '---'}}<br>
         </div>
-{{--        <div class="col-md-6">--}}
-{{--            <label for=""><span class="show-text">Ticket Price:</span></label> {{ $item->ticket_price ?: '---' }}<br>--}}
-{{--        </div>--}}
-{{--    </div>--}}
-{{--    <div class="row my-4">--}}
-{{--        <div class="col-md-6">--}}
-{{--            <label for=""><span--}}
-{{--                    class="show-text">Show Date:</span></label> {{ $item->show_date ?: '---' }}<br>--}}
-{{--        </div>--}}
-{{--        <div class="col-md-6">--}}
-{{--            <label for=""><span class="show-text">Show Time:</span></label> {{$item->show_time ?: '---'}}<br>--}}
-{{--        </div>--}}
-{{--    </div>--}}
-{{--    <div class="row my-4">--}}
+        <div class="col-md-6">
+            <label for=""><span class="show-text">Ticket Price:</span></label> {{ $item->ticket_price ?: '---' }}<br>
+        </div>
+    </div>
+    <div class="row my-4">
+        <div class="col-md-6">
+            <label for=""><span
+                    class="show-text">Show Date:</span></label> {{ $item->show_date ?: '---' }}<br>
+        </div>
+        <div class="col-md-6">
+            <label for=""><span class="show-text">Show Time:</span></label> {{$item->show_time ?: '---'}}<br>
+        </div>
+    </div>
+    <div class="row my-4">
         <div class="col-md-6">
             <label for=""><span class="show-text">Status:</span></label>
             @if($item->status == 'Active')

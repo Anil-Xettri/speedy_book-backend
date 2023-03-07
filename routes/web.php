@@ -47,4 +47,6 @@ Route::group(['prefix' => 'vendor', 'middleware' => 'auth:vendor'], function () 
 
     Route::resource('cinema-halls', \App\Http\Controllers\vendor\CinemaHallController::class);
     Route::resource('movies', \App\Http\Controllers\vendor\MovieController::class);
+    Route::resource('show-times', \App\Http\Controllers\vendor\ShowTimeController::class);
+    Route::resource('bookings', \App\Http\Controllers\vendor\BookingController::class);
 });

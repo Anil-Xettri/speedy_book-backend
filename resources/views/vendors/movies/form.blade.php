@@ -19,23 +19,23 @@
         <input type="number" name="duration" class="form-control" placeholder="Enter Movie Duration in Minutes"
                value="{{old('duration', $item->duration)}}">
     </div>
-    <div class="col-md-6 my-2">
-        <label for="">Ticket Price <span class="text-danger">*</span></label>
-        <input type="number" step="0.01" name="ticket_price" class="form-control" placeholder="Enter Ticket Price"
-               value="{{old('ticket_price', $item->ticket_price)}}">
-    </div>
-    <div class="col-md-6 my-2">
-        <label for="">Show Date</label>
-        <input type="text" class="form-control" onfocus="(this.type='date')" name="show_date"
-               value="{{ old('show_date',$item->show_date) }}"
-               placeholder="Enter Show Date">
-    </div>
-    <div class="col-md-6 my-2">
-        <label for="">Show Time</label>
-        <input type="text" class="form-control" onfocus="(this.type='time')" name="show_time"
-               value="{{ old('show_time',$item->show_time) }}"
-               placeholder="Enter Show Time">
-    </div>
+{{--    <div class="col-md-6 my-2">--}}
+{{--        <label for="">Ticket Price <span class="text-danger">*</span></label>--}}
+{{--        <input type="number" step="0.01" name="ticket_price" class="form-control" placeholder="Enter Ticket Price"--}}
+{{--               value="{{old('ticket_price', $item->ticket_price)}}">--}}
+{{--    </div>--}}
+{{--    <div class="col-md-6 my-2">--}}
+{{--        <label for="">Show Date</label>--}}
+{{--        <input type="text" class="form-control" onfocus="(this.type='date')" name="show_date"--}}
+{{--               value="{{ old('show_date',$item->show_date) }}"--}}
+{{--               placeholder="Enter Show Date">--}}
+{{--    </div>--}}
+{{--    <div class="col-md-6 my-2">--}}
+{{--        <label for="">Show Time</label>--}}
+{{--        <input type="text" class="form-control" onfocus="(this.type='time')" name="show_time"--}}
+{{--               value="{{ old('show_time',$item->show_time) }}"--}}
+{{--               placeholder="Enter Show Time">--}}
+{{--    </div>--}}
     <div class="col-md-6 my-2">
         <label for="">Status</label>
         <select name="status" class="form-control">
@@ -44,7 +44,7 @@
         </select>
     </div>
     <div class="col-md-6 my-2">
-        <label for="image_url">Image</label><br>
+        <label for="image_url">Image <span class="text-danger">*</span></label><br>
         <input type="file" name="image" class="form-control" id="image" onchange="loadFile(event)"><br>
         <img src="" style="display: none" id="outputCreate" class="w-50 h-50"><br>
         @if($item->image)
@@ -61,5 +61,7 @@
     </div>
 </div>
 @push('scripts')
+    <script>
 
+    </script>
 @endpush

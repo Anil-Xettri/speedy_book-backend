@@ -355,6 +355,18 @@ return [
             'icon' => 'nav-icon fas fa-film',
             'guard' => 'vendor'
         ],
+        [
+            'text' => 'Movie Time',
+            'route' => 'show-times.index',
+            'icon' => 'nav-icon fas fa-clock',
+            'guard' => 'vendor'
+        ],
+        [
+            'text' => 'Bookings',
+            'route' => 'bookings.index',
+            'icon' => 'nav-icon fas fa-cash-register',
+            'guard' => 'vendor'
+        ],
     ],
 
     /*

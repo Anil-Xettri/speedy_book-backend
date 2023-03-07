@@ -30,4 +30,14 @@ class Movie extends Model
     {
         return $this->belongsTo(CinemaHall::class, 'cinema_hall_id');
     }
+
+    public function showTimes()
+    {
+        return $this->hasMany(ShowTime::class, 'movie_id');
+    }
+
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class, 'movie_id');
+    }
 }

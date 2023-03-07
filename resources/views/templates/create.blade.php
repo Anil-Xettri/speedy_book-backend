@@ -33,7 +33,7 @@
         }
 
         body::-webkit-scrollbar {
-            display: none;  /* Safari and Chrome */
+            display: none; /* Safari and Chrome */
         }
 
         .container-fluid {
@@ -106,11 +106,23 @@
 @section('js')
     <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.19.0/jquery.validate.min.js"></script>
     <script>
-
         $('#button_submit').click(
             function (e) {
                 var form = $('#form');
+                let valid = true;
+
+                $(document).find('.required-field').each(function () {
+                    if (!$(this).val()) {
+                        $(this).parent().append(`<span style="color: red;font-weight: bold">This field is required.</span>`);
+                        valid = false;
+                    }
+                });
+
                 if (!form.valid()) {
+                    valid = false;
+                }
+
+                if (!valid) {
                     return;
                 }
                 form.submit();
