@@ -62,7 +62,7 @@ class BookingController extends BaseController
     {
         $info = $this->crudInfo();
         $info['cinemaHalls'] = CinemaHall::where(['vendor_id' => auth('vendor')->user()->id, 'status' => 'Active'])->with('movies')->get();
-        $info['movies'] = Movie::where(['vendor_id' => auth('vendor')->user()->id, 'status' => 'Active'])->get();
+        $info['movies'] = Movie::where(['vendor_id' => auth('vendor')->user()->id, 'status' => 'Active'])->with('showTimes')->get();
         return view($this->createResource(), $info);
     }
 
@@ -128,8 +128,8 @@ class BookingController extends BaseController
     {
         $info = $this->crudInfo();
         $info['item'] = Booking::where('vendor_id', auth('vendor')->user()->id)->findOrFail($id);
-        $info['cinemaHalls'] = CinemaHall::where(['vendor_id' => auth('vendor')->user()->id, 'status' => 'Active'])->get();
-        $info['movies'] = Movie::where(['vendor_id' => auth('vendor')->user()->id, 'status' => 'Active'])->get();
+        $info['cinemaHalls'] = CinemaHall::where(['vendor_id' => auth('vendor')->user()->id, 'status' => 'Active'])->with('movies')->get();
+        $info['movies'] = Movie::where(['vendor_id' => auth('vendor')->user()->id, 'status' => 'Active'])->with('showTimes')->get();
         return view($this->editResource(), $info);
     }
 

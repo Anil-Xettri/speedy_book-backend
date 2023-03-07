@@ -57,10 +57,26 @@
     </div>
 
     <div class="col-md-6">
+        <input type="hidden" id="movies" value='@json($movies)'>
         <label for="">Movie <span class="text-danger">*</span></label>
         <select name="movie_id" id="movie" required class="form-control" style="width: 100%">
             <option value="">--Select Movie--</option>
         </select>
+    </div>
+
+    <div class="col-md-6 my-2">
+        <label for="">Time and Ticket Price <span class="text-danger">*</span></label>
+        <select name="time_price" id="time-price" required class="form-control" style="width: 100%">
+            <option value="">--Select Time and Price--</option>
+        </select>
+    </div>
+    <input type="hidden" id="date" value="">
+    <input type="hidden" id="time" value="">
+    <input type="hidden" id="price" value="">
+
+    <div class="col-md-6 my-2">
+        <label>Total Tickets</label>
+        <input type="number" step="1" value="{{$item->quantity}}" name="quantity" class="form-control" placeholder="Enter Total ticket quantity">
     </div>
 </div>
 
@@ -76,6 +92,7 @@
     <script>
         $(document).ready(function () {
             let halls = JSON.parse($("#halls").val());
+            let movies = JSON.parse($("#movies").val());
 
             $('#cinema-hall').select2({
                 placeholder: "Select Cinema Hall",
@@ -83,6 +100,10 @@
             });
             $('#movie').select2({
                 placeholder: "Select Movie",
+                width: 'resolve'
+            });
+            $('#time-price').select2({
+                placeholder: "Select Time and Price",
                 width: 'resolve'
             });
 
@@ -96,11 +117,49 @@
                     $('#movie').empty();
                     $('#movie').append('<option value="{{null}}">--Select Movie--</option>');
                     $.each(hall.movies, function (key, movie) {
-                        $('select[name="movie_id"]').append('<option value="' + movie.id + '">' + movie.title + '</option>');
+                        if (movie.status == "Active") {
+                            $('select[name="movie_id"]').append(`<option value="${movie.id}">${movie.title}</option>`);
+                        }
                     });
                 } else {
                     $('#movie').empty();
                     $('#movie').append('<option value="{{null}}">--Select Movie--</option>');
+                }
+            });
+
+            $(document).on('change', '#movie', function () {
+                let movieId = $(this).val();
+
+                let movieIndex = movies.findIndex(item => item.id == movieId);
+                let movie = movies[movieIndex];
+
+                if (movieIndex !== -1) {
+                    $('#time-price').empty();
+                    $('#time-price').append('<option value="{{null}}">--Select Time and Price--</option>');
+                    $.each(movie.show_times, function (key, showTime) {
+                            let data = JSON.parse(showTime.show_details);
+                            data.forEach(function (value, index) {
+                                $('select[name="time_price"]').append(`<option value="${value.show_date},${value.show_time},${value.ticket_price}"> Date => ${value.show_date}, Time => ${value.show_time}, Price => Rs ${value.ticket_price}</option>`);
+                            });
+                        }
+                    );
+                } else {
+                    $('#time-price').empty();
+                    $('#time-price').append('<option value="{{null}}">--Select Time and Price--</option>');
+                }
+            });
+
+            $(document).on('change', '#time-price', function () {
+                let timePrice = $(this).val();
+                if (timePrice) {
+                    let splitDate = timePrice.split(",");
+                    let date = splitDate[0];
+                    let time = splitDate[1];
+                    let price = splitDate[2];
+
+                    $('#date').val(date);
+                    $('#time').val(time);
+                    $('#price').val(price);
                 }
             });
         });
