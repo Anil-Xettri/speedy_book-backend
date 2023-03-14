@@ -10,12 +10,21 @@ class Movie extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
-    protected $appends = ['image_url'];
+    protected $appends = ['image_url', 'trailer_url'];
 
     function getImageUrlAttribute()
     {
         if ($this->image) {
             return asset($this->image);
+        } else {
+            return null;
+        }
+    }
+
+    function getTrailerUrlAttribute()
+    {
+        if ($this->trailer) {
+            return asset($this->trailer);
         } else {
             return null;
         }

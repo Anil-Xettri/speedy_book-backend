@@ -11,6 +11,14 @@
                      alt="Movie Image">
             </div>
         @endif
+
+        @if($item->trailer)
+            <div class="col-md-6">
+                <label>Trailer: </label><br>
+                <video src="{{$item->trailer_url}}" style="width: 250px; height: 150px" controls>
+                </video>
+            </div>
+        @endif
     </div>
 
     <div class="row my-4">
@@ -28,20 +36,20 @@
         <div class="col-md-6">
             <label for=""><span class="show-text">Duration:</span></label> {{ $item->duration.' Minutes' ?: '---'}}<br>
         </div>
-{{--        <div class="col-md-6">--}}
-{{--            <label for=""><span class="show-text">Ticket Price:</span></label> {{ $item->ticket_price ?: '---' }}<br>--}}
-{{--        </div>--}}
-{{--    </div>--}}
-{{--    <div class="row my-4">--}}
-{{--        <div class="col-md-6">--}}
-{{--            <label for=""><span--}}
-{{--                    class="show-text">Show Date:</span></label> {{ $item->show_date ?: '---' }}<br>--}}
-{{--        </div>--}}
-{{--        <div class="col-md-6">--}}
-{{--            <label for=""><span class="show-text">Show Time:</span></label> {{$item->show_time ?: '---'}}<br>--}}
-{{--        </div>--}}
-{{--    </div>--}}
-{{--    <div class="row my-4">--}}
+        {{--        <div class="col-md-6">--}}
+        {{--            <label for=""><span class="show-text">Ticket Price:</span></label> {{ $item->ticket_price ?: '---' }}<br>--}}
+        {{--        </div>--}}
+        {{--    </div>--}}
+        {{--    <div class="row my-4">--}}
+        {{--        <div class="col-md-6">--}}
+        {{--            <label for=""><span--}}
+        {{--                    class="show-text">Show Date:</span></label> {{ $item->show_date ?: '---' }}<br>--}}
+        {{--        </div>--}}
+        {{--        <div class="col-md-6">--}}
+        {{--            <label for=""><span class="show-text">Show Time:</span></label> {{$item->show_time ?: '---'}}<br>--}}
+        {{--        </div>--}}
+        {{--    </div>--}}
+        {{--    <div class="row my-4">--}}
         <div class="col-md-6">
             <label for=""><span class="show-text">Status:</span></label>
             @if($item->status == 'Active')

@@ -37,6 +37,7 @@ Route::group(['prefix' => 'superadmin', 'middleware' => 'auth'], function () {
     Route::get('/change-password', [ChangePasswordController::class, 'changePassword'])->name('superadmin.change-password');
     Route::post('/change-password/save', [ChangePasswordController::class, 'changePasswordSave'])->name('superadmin-password.store');
     Route::resource('vendors', \App\Http\Controllers\superadmin\VendorController::class);
+    Route::get('customers', [\App\Http\Controllers\superadmin\CustomerController::class,'index'])->name('customers.index');
 });
 
 Route::group(['prefix' => 'vendor', 'middleware' => 'auth:vendor'], function () {

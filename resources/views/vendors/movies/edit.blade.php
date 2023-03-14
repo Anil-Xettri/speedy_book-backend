@@ -11,4 +11,11 @@
             image.src = URL.createObjectURL(event.target.files[0]);
         };
     </script>
+
+    <script>
+        var file = function (event) {
+            var trailer = document.getElementById('video-edit');
+            trailer.src = URL.createObjectURL(event.target.files[0]);
+        };
+    </script>
 @endpush

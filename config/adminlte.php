@@ -338,6 +338,12 @@ return [
             'guard' => 'web'
         ],
         [
+            'text' => 'Customers',
+            'route' => 'customers.index',
+            'icon' => 'nav-icon fas fa-user',
+            'guard' => 'web'
+        ],
+        [
             'text' => 'Dashboard',
             'route' => 'vendor.home',
             'icon' => 'nav-icon fas fa-th',

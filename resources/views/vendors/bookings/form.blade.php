@@ -76,16 +76,21 @@
 
     <div class="col-md-6 my-2">
         <label>Total Tickets</label>
-        <input type="number" step="1" value="{{$item->quantity}}" name="quantity" class="form-control" placeholder="Enter Total ticket quantity">
+        <input type="number" step="1" id="quantity" value="{{$item->quantity}}" name="quantity" class="form-control" placeholder="Enter Total ticket quantity">
     </div>
 </div>
 
 <div class="row">
-    <div class="col-md-12 my-1">
+    <div class="col-md-6 my-1">
         <label for="description">Notes</label>
         <textarea id="description" class="form-control" name="notes"
                   rows="4">{{$item->notes}}</textarea>
     </div>
+</div>
+<hr>
+<div class="float-right">
+    <label>Sub Total: </label>
+    <input type="number" step="0.01" id="sub-total" style="height: 30px;border-radius: 5px">
 </div>
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>

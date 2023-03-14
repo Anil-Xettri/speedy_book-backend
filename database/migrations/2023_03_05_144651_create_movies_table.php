@@ -20,6 +20,7 @@ class CreateMoviesTable extends Migration
             $table->string('title');
             $table->integer('duration');
             $table->string('image');
+            $table->string('trailer')->nullable();
             $table->string('status')->comment('Active, Inactive')->default('Active');
             $table->longText('description')->nullable();
 

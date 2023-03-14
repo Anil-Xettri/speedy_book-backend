@@ -78,7 +78,8 @@ class MovieController extends BaseController
             'cinema_hall_id' => 'required',
             'title' => 'required',
             'duration' => 'required',
-            'image' => 'required|mimes:jpeg,jpg,png|max:10000'
+            'image' => 'required|mimes:jpeg,jpg,png|max:10000',
+            'trailer' => 'required|file||mimes:mp4,mov,ogg,qt|max:20000'
         ]);
         $data = $request->all();
         $movie = new Movie($data);
@@ -92,6 +93,17 @@ class MovieController extends BaseController
 
             $filename = ImagePostHelper::saveImage($file, '/movies/images', $filename);
             $movie->image = $filename;
+
+            $movie->update();
+        }
+
+        if ($request->hasFile('trailer') && $request->trailer != '') {
+            $file = $request->file('trailer');
+            $extension = $file->getClientOriginalExtension();
+            $filename = time() . '.' . $extension;
+
+            $filename = ImagePostHelper::saveImage($file, '/movies/trailers', $filename);
+            $movie->trailer = $filename;
 
             $movie->update();
         }
@@ -140,7 +152,8 @@ class MovieController extends BaseController
             'cinema_hall_id' => 'required',
             'title' => 'required',
             'duration' => 'required',
-            'image' => 'mimes:jpeg,jpg,png|max:10000'
+            'image' => 'mimes:jpeg,jpg,png|max:10000',
+            'trailer' => 'file|mimes:mp4,mov,ogg,qt|max:20000'
         ]);
         $data = $request->all();
         $movie = Movie::where('vendor_id', auth('vendor')->user()->id)->findOrFail($id);
@@ -160,6 +173,19 @@ class MovieController extends BaseController
             $movie->update();
         }
 
+        if ($request->hasFile('trailer') && $request->trailer != '') {
+            ImagePostHelper::deleteImage($movie->trailer);
+
+            $file = $request->file('trailer');
+            $extension = $file->getClientOriginalExtension();
+            $filename = time() . '.' . $extension;
+
+            $filename = ImagePostHelper::saveImage($file, '/movies/trailers', $filename);
+            $movie->trailer = $filename;
+
+            $movie->update();
+        }
+
         NotifyHelper::addSuccess();
         return redirect()->route($this->indexRoute());
     }
@@ -174,6 +200,7 @@ class MovieController extends BaseController
     {
         $movie = Movie::where('vendor_id', auth('vendor')->user()->id)->findOrFail($id);
         ImagePostHelper::deleteImage($movie->image);
+        ImagePostHelper::deleteImage($movie->trailer);
         $movie->delete();
 
         NotifyHelper::deleteSuccess();

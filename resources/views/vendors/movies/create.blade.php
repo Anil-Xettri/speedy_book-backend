@@ -12,4 +12,12 @@
             $('#outputCreate').css('display', '');
         };
     </script>
+
+    <script>
+        var file = function (event) {
+            var trailer = document.getElementById('video-create');
+            trailer.src = URL.createObjectURL(event.target.files[0]);
+            $('#video-create').css('display', '');
+        };
+    </script>
 @endpush
