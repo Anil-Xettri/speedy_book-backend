@@ -85,6 +85,7 @@ class VendorController extends BaseController
         ]);
 
         $data = $request->all();
+        $data['password'] = bcrypt($request->password);
         $vendor = new Vendor($data);
         $vendor->save();
 

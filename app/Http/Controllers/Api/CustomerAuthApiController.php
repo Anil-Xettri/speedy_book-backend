@@ -41,9 +41,6 @@ class CustomerAuthApiController extends BaseApiController
                     'name',
                     'email',
                     'phone',
-                    'gender',
-                    'address',
-                    'dob',
                 ]
             );
             $token = [
@@ -87,7 +84,7 @@ class CustomerAuthApiController extends BaseApiController
                 if ($request->remember_me)
                     $token->expires_at = Carbon::now()->addMonths(3);
                 $token->save();
-                $user = $user->only('id', 'name', 'email', 'phone', 'address', 'gender', 'dob', 'profile_image');
+                $user = $user->only('id', 'name', 'email', 'phone', 'profile_image');
                 $token = [
                     'access_token' => $tokenResult->accessToken,
                     'token_type' => 'Bearer',
@@ -110,7 +107,6 @@ class CustomerAuthApiController extends BaseApiController
 
         //validation
         $validator = Validator::make($request->all(), [
-            'gender' => 'nullable|string|in:Male,Female,Other,Unspecified',
             'phone' => 'nullable|min:8|max:11'
         ]);
 
@@ -120,7 +116,7 @@ class CustomerAuthApiController extends BaseApiController
             return response()->json($response);
         }
         try {
-            $customer->Update($request->only('name', 'email', 'gender', 'dob', 'address', 'phone'));
+            $customer->Update($request->only('name', 'email', 'phone'));
 
             if ($request->hasFile('profile_image') && $request->profile_image != '') {
 
