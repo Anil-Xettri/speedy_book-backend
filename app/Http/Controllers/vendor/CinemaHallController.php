@@ -7,6 +7,7 @@ use App\Helpers\NotifyHelper;
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Controller;
 use App\Models\CinemaHall;
+use App\Models\Seat;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
@@ -33,16 +34,12 @@ class CinemaHallController extends BaseController
             $data = CinemaHall::where('vendor_id', auth('vendor')->user()->id)->orderBy('id', 'DESC');
             return Datatables::of($data)
                 ->addIndexColumn()
-                ->editColumn('image', function ($data) {
-                    $imgUrl = $data->image ? asset($data->image) : asset('images/placeholder-image.jpg');
-                    return '<a target="_blank" href="' . $imgUrl . '"><img style="height: 60%; width: 60%; object-fit: contain" src="' . $imgUrl . '" alt="logo"></a>';
-                })
                 ->addColumn('action', function ($data) {
                     return view('templates.index_actions', [
                         'id' => $data->id, 'route' => $this->route
                     ])->render();
                 })
-                ->rawColumns(['action', 'image'])
+                ->rawColumns(['action'])
                 ->make(true);
         }
 
@@ -58,7 +55,7 @@ class CinemaHallController extends BaseController
     public function create()
     {
         $info = $this->crudInfo();
-
+        $info['routeName'] = "Create";
         return view($this->createResource(), $info);
     }
 
@@ -72,22 +69,28 @@ class CinemaHallController extends BaseController
     {
         $request->validate([
             'name' => 'required',
-            'image' => 'nullable|mimes:jpeg,jpg,png|max:10000'
         ]);
-        $data = $request->all();
-        $cinemaHall = new CinemaHall($data);
+
+        $cinemaHall = new CinemaHall();
+        $cinemaHall->name = $request->name;
+        $cinemaHall->email = $request->email;
+        $cinemaHall->phone = $request->phone;
+        $cinemaHall->status = $request->status;
+        $cinemaHall->seat_calculation = $request->seat_calculation;
+        $cinemaHall->rows = $request->total_rows;
+        $cinemaHall->columns = $request->total_columns;
         $cinemaHall->vendor_id = auth('vendor')->user()->id;
         $cinemaHall->save();
 
-        if ($request->hasFile('image') && $request->image != '') {
-            $file = $request->file('image');
-            $extension = $file->getClientOriginalExtension();
-            $filename = time() . '.' . $extension;
-
-            $filename = ImagePostHelper::saveImage($file, '/cinema-halls/images', $filename);
-            $cinemaHall->image = $filename;
-
-            $cinemaHall->update();
+        foreach ($request->seats ?? [] as $i => $seat) {
+            $seatData = new Seat([
+                'vendor_id' => auth('vendor')->user()->id,
+                'cinema_hall_id' => $cinemaHall->id,
+                'row_no' => $request->rows[$i],
+                'column_no' => $request->columns[$i],
+                'seat_name' => $seat,
+            ]);
+            $seatData->save();
         }
 
         NotifyHelper::addSuccess();
@@ -117,7 +120,8 @@ class CinemaHallController extends BaseController
     {
         $info = $this->crudInfo();
         $info['item'] = CinemaHall::where('vendor_id', auth('vendor')->user()->id)->findOrFail($id);
-        return view($this->createResource(), $info);
+        $info['routeName'] = "Edit";
+        return view($this->editResource(), $info);
     }
 
     /**
@@ -131,24 +135,26 @@ class CinemaHallController extends BaseController
     {
         $request->validate([
             'name' => 'required',
-            'image' => 'nullable|mimes:jpeg,jpg,png|max:10000'
         ]);
-        $data = $request->all();
-        $cinemaHall = CinemaHall::where('vendor_id', auth('vendor')->user()->id)->findOrFail($id);
+        $cinemaHall = CinemaHall::findOrFail($id);
+        $cinemaHall->name = $request->name;
+        $cinemaHall->email = $request->email;
+        $cinemaHall->phone = $request->phone;
+        $cinemaHall->status = $request->status;
+        $cinemaHall->seat_calculation = $request->seat_calculation;
+        $cinemaHall->rows = $request->total_rows;
+        $cinemaHall->columns = $request->total_columns;
         $cinemaHall->vendor_id = auth('vendor')->user()->id;
-        $cinemaHall->update($data);
+        $cinemaHall->update();
 
-        if ($request->hasFile('image') && $request->image != '') {
-            ImagePostHelper::deleteImage($cinemaHall->image);
-
-            $file = $request->file('image');
-            $extension = $file->getClientOriginalExtension();
-            $filename = time() . '.' . $extension;
-
-            $filename = ImagePostHelper::saveImage($file, '/cinema-halls/images', $filename);
-            $cinemaHall->image = $filename;
-
-            $cinemaHall->update();
+        foreach ($request->seats ?? [] as $i => $seat) {
+            $seatData = Seat::findOrFail($request->seat_ids[$i]);
+            $seatData->vendor_id = auth('vendor')->user()->id;
+            $seatData->cinema_hall_id = $cinemaHall->id;
+            $seatData->row_no = $request->rows[$i];
+            $seatData->column_no = $request->columns[$i];
+            $seatData->seat_name = $seat;
+            $seatData->update();
         }
 
         NotifyHelper::updateSuccess();
@@ -164,7 +170,6 @@ class CinemaHallController extends BaseController
     public function destroy($id)
     {
         $cinemaHall = CinemaHall::where('vendor_id', auth('vendor')->user()->id)->findOrFail($id);
-        ImagePostHelper::deleteImage($cinemaHall->image);
         $cinemaHall->delete();
 
         NotifyHelper::deleteSuccess();

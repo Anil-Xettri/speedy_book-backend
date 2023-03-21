@@ -2,17 +2,6 @@
 @push('styles')
 @endpush
 @section('form_content')
-    <div class="row">
-        @if($item->image)
-            <div class="col-md-6">
-                <label>Image: </label><br>
-                <img class="img-fluid" style="width: 150px; height: 150px"
-                     src="{{$item->image_url}}"
-                     alt="Hall Image">
-            </div>
-        @endif
-    </div>
-
     <div class="row my-4">
         <div class="col-md-6">
             <label for=""><span class="show-text">Name:</span></label> {{ $item->name }}<br>
@@ -46,7 +35,24 @@
         <div class="col-md-12">
             <label for=""><span class="show-text">Seat Details:</span></label>
             <hr>
-            {{ $item->seat_details}}
+            <div class="table-responsive">
+                <table>
+                    @for ($r=0; $r<=$item->rows; $r++)
+                        <tr>
+                            @for ($c=0; $c<=$item->columns; $c++)
+                                @foreach($item->seats as $seat)
+                                    @if($seat->row_no == $r && $seat->column_no == $c)
+                                        <td>
+                                            <input type="text" readonly class="form-control w-100 mt-1"
+                                                   value="{{$seat->seat_name}}">
+                                        </td>
+                                    @endif
+                                @endforeach
+                            @endfor
+                        </tr>
+                    @endfor
+                </table>
+            </div>
         </div>
     </div>
 @endsection

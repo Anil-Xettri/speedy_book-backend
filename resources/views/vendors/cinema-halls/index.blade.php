@@ -17,7 +17,6 @@
             <thead>
             <tr class="text-left text-capitalize">
                 <th>#id</th>
-                <th>image</th>
                 <th>name</th>
                 <th>status</th>
                 <th>action</th>
@@ -37,7 +36,6 @@
                 ajax: "{{ route('cinema-halls.index') }}",
                 columns: [
                     {data: 'id', name: 'id'},
-                    {data: 'image', name: 'image'},
                     {data: 'name', name: 'name'},
                     {
                         data: 'status', name: 'status', render: function (data, type, full, meta) {

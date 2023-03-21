@@ -80,7 +80,6 @@ class BookingController extends BaseController
             'customer_name' => 'required',
             'customer_email' => 'required|unique:bookings,customer_email',
             'customer_phone' => 'required|min:8|max:11',
-            'customer_address' => 'required',
         ]);
         $data = $request->all();
         $movie = Movie::where(['vendor_id' => auth('vendor')->user()->id, 'id' => 'movie_id'])->first();
@@ -148,7 +147,6 @@ class BookingController extends BaseController
             'customer_name' => 'required',
             'customer_email' => 'required|unique:bookings,customer_email',
             'customer_phone' => 'required|min:8|max:11',
-            'customer_address' => 'required',
         ]);
         $data = $request->all();
         $movie = Movie::where(['vendor_id' => auth('vendor')->user()->id, 'id' => 'movie_id'])->first();

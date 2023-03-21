@@ -33,12 +33,6 @@
                value="{{ old('customer_phone',$item->customer_phone) }}"
                placeholder="Enter Phone Number">
     </div>
-    <div class="col-md-6 my-2">
-        <label for="">Address <span class="text-danger">*</span></label>
-        <input type="text" required class="form-control" name="customer_address"
-               value="{{ old('customer_address',$item->customer_address) }}"
-               placeholder="Enter Address">
-    </div>
 </div>
 
 <h4>Booking Details</h4>

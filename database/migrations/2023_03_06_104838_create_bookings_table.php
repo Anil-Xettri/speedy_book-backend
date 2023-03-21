@@ -21,7 +21,6 @@ class CreateBookingsTable extends Migration
             $table->string('customer_name');
             $table->string('customer_email');
             $table->string('customer_phone');
-            $table->string('customer_address');
             $table->longText('seat_no')->nullable();
             $table->integer('quantity')->default(1);
             $table->double('sub_total', 8,2);

@@ -350,7 +350,7 @@ return [
             'guard' => 'vendor'
         ],
         [
-            'text' => 'Cinema Hall',
+            'text' => 'Theater',
             'route' => 'cinema-halls.index',
             'icon' => 'nav-icon fas fa-tv',
             'guard' => 'vendor'
@@ -362,7 +362,7 @@ return [
             'guard' => 'vendor'
         ],
         [
-            'text' => 'Movie Time',
+            'text' => 'Show Time',
             'route' => 'show-times.index',
             'icon' => 'nav-icon fas fa-clock',
             'guard' => 'vendor'

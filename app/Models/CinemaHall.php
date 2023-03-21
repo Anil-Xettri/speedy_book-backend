@@ -10,21 +10,15 @@ class CinemaHall extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
-    protected $appends = ['image_url'];
-    protected $casts = ['seat_details' => 'array'];
-
-    function getImageUrlAttribute()
-    {
-        if ($this->image) {
-            return asset($this->image);
-        } else {
-            return null;
-        }
-    }
 
     public function vendor()
     {
         return $this->belongsTo(Vendor::class, 'vendor_id');
+    }
+
+    public function seats()
+    {
+        return $this->hasMany(Seat::class, 'cinema_hall_id');
     }
 
     public function movies()

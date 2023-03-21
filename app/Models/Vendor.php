@@ -32,6 +32,11 @@ class Vendor extends Authenticatable
         return $this->hasMany(CinemaHall::class, 'vendor_id');
     }
 
+    public function seats()
+    {
+        return $this->hasMany(Seat::class, 'vendor_id');
+    }
+
     public function movies()
     {
         return $this->hasMany(Movie::class, 'vendor_id');
