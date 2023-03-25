@@ -5,7 +5,7 @@ namespace App\Http\Controllers\vendor;
 use App\Helpers\NotifyHelper;
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Controller;
-use App\Models\CinemaHall;
+use App\Models\Theater;
 use App\Models\Movie;
 use App\Models\ShowTime;
 use Illuminate\Http\Request;
@@ -34,8 +34,8 @@ class ShowTimeController extends BaseController
             $data = ShowTime::where('vendor_id', auth('vendor')->user()->id)->orderBy('id', 'DESC');
             return Datatables::of($data)
                 ->addIndexColumn()
-                ->editColumn('cinema_hall_id', function ($data) {
-                    return $data->cinemaHall ? '<a target="_blank" href="' . route('cinema-halls.show', $data->cinemaHall->id) . '">' . $data->cinemaHall->name . '</a>' : '-';
+                ->editColumn('theater_id', function ($data) {
+                    return $data->theater ? '<a target="_blank" href="' . route('theaters.show', $data->theater->id) . '">' . $data->theater->name . '</a>' : '-';
                 })
                 ->editColumn('movie_id', function ($data) {
                     return $data->movie ? '<a target="_blank" href="' . route('movies.show', $data->movie->id) . '">' . $data->movie->title . '</a>' : '-';
@@ -48,7 +48,7 @@ class ShowTimeController extends BaseController
                         'id' => $data->id, 'route' => $this->route
                     ])->render();
                 })
-                ->rawColumns(['action', 'cinema_hall_id', 'movie_id', 'show_details'])
+                ->rawColumns(['action', 'theater_id', 'movie_id', 'show_details'])
                 ->make(true);
         }
 
@@ -64,7 +64,7 @@ class ShowTimeController extends BaseController
     public function create()
     {
         $info = $this->crudInfo();
-        $info['cinemaHalls'] = CinemaHall::where(['vendor_id' => auth('vendor')->user()->id, 'status' => 'Active'])->with('movies')->get();
+        $info['theaters'] = Theater::where(['vendor_id' => auth('vendor')->user()->id, 'status' => 'Active'])->with('movies')->get();
         $info['movies'] = Movie::where(['vendor_id' => auth('vendor')->user()->id, 'status' => 'Active'])->get();
         $info['routeName'] = 'Create';
         return view($this->createResource(), $info);
@@ -79,7 +79,7 @@ class ShowTimeController extends BaseController
     public function store(Request $request)
     {
         $request->validate([
-            'cinema_hall_id' => 'required',
+            'theater_id' => 'required',
             'movie_id' => 'required',
         ]);
 
@@ -95,7 +95,7 @@ class ShowTimeController extends BaseController
 
         $showTime = new ShowTime();
         $showTime->vendor_id = auth('vendor')->user()->id;
-        $showTime->cinema_hall_id = $request->cinema_hall_id;
+        $showTime->theater_id = $request->theater_id;
         $showTime->movie_id = $request->movie_id;
         $showTime->show_details = json_encode($showDetails, true);
         $showTime->save();
@@ -127,7 +127,7 @@ class ShowTimeController extends BaseController
     {
         $info = $this->crudInfo();
         $info['item'] = ShowTime::where('vendor_id', auth('vendor')->user()->id)->findOrFail($id);
-        $info['cinemaHalls'] = CinemaHall::where(['vendor_id' => auth('vendor')->user()->id, 'status' => 'Active'])->with('movies')->get();
+        $info['theaters'] = Theater::where(['vendor_id' => auth('vendor')->user()->id, 'status' => 'Active'])->with('movies')->get();
         $info['movies'] = Movie::where(['vendor_id' => auth('vendor')->user()->id, 'status' => 'Active'])->get();
         $info['routeName'] = 'Edit';
         return view($this->editResource(), $info);
@@ -143,7 +143,7 @@ class ShowTimeController extends BaseController
     public function update(Request $request, $id)
     {
         $request->validate([
-            'cinema_hall_id' => 'required',
+            'theater_id' => 'required',
             'movie_id' => 'required',
         ]);
 
@@ -159,7 +159,7 @@ class ShowTimeController extends BaseController
 
         $showTime = ShowTime::where('vendor_id', auth('vendor')->user()->id)->findOrFail($id);
         $showTime->vendor_id = auth('vendor')->user()->id;
-        $showTime->cinema_hall_id = $request->cinema_hall_id;
+        $showTime->theater_id = $request->theater_id;
         $showTime->movie_id = $request->movie_id;
         $showTime->show_details = json_encode($showDetails, true);
         $showTime->update();

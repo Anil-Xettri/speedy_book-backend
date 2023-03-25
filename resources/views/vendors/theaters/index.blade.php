@@ -1,9 +1,9 @@
 @extends('templates.index')
 
-@section('title', 'Cinema Halls')
+@section('title', 'Theaters')
 
 @section('content_header')
-    <h1>Cinema Halls</h1>
+    <h1>Theaters</h1>
 
 
 @stop
@@ -33,7 +33,7 @@
             $('#data-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('cinema-halls.index') }}",
+                ajax: "{{ route('theaters.index') }}",
                 columns: [
                     {data: 'id', name: 'id'},
                     {data: 'name', name: 'name'},

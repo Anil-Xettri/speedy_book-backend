@@ -351,7 +351,7 @@ return [
         ],
         [
             'text' => 'Theater',
-            'route' => 'cinema-halls.index',
+            'route' => 'theaters.index',
             'icon' => 'nav-icon fas fa-tv',
             'guard' => 'vendor'
         ],

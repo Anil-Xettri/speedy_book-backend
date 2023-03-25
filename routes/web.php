@@ -46,7 +46,7 @@ Route::group(['prefix' => 'vendor', 'middleware' => 'auth:vendor'], function () 
     Route::get('home', [\App\Http\Controllers\vendor\VendorController::class, 'dashboard'])->name('vendor.home');
     Route::get('/logout', [LoginController::class, 'logout']);
 
-    Route::resource('cinema-halls', \App\Http\Controllers\vendor\CinemaHallController::class);
+    Route::resource('theaters', \App\Http\Controllers\vendor\TheaterController::class);
     Route::resource('movies', \App\Http\Controllers\vendor\MovieController::class);
     Route::resource('show-times', \App\Http\Controllers\vendor\ShowTimeController::class);
     Route::resource('bookings', \App\Http\Controllers\vendor\BookingController::class);

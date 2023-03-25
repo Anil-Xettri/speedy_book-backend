@@ -17,7 +17,7 @@
                 <th>#id</th>
                 <th>image</th>
                 <th>title</th>
-                <th>cinema hall</th>
+                <th>Theater</th>
                 <th>status</th>
                 <th>action</th>
             </tr>
@@ -38,7 +38,7 @@
                     {data: 'id', name: 'id'},
                     {data: 'image', name: 'image'},
                     {data: 'title', name: 'title'},
-                    {data: 'cinema_hall_id', name: 'cinema_hall_id'},
+                    {data: 'theater_id', name: 'theater_id'},
                     {
                         data: 'status', name: 'status', render: function (data, type, full, meta) {
                             switch (data) {

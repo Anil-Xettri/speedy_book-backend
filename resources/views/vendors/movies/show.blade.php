@@ -27,7 +27,7 @@
         </div>
         <div class="col-md-6">
             <label for=""><span
-                    class="show-text">Cinema Hall:</span></label> {{ $item->cinemaHall ? $item->cinemaHall->name : '---'}}
+                    class="show-text">Theater:</span></label> {{ $item->theater ? $item->theater->name : '---'}}
             <br>
         </div>
     </div>
@@ -36,20 +36,6 @@
         <div class="col-md-6">
             <label for=""><span class="show-text">Duration:</span></label> {{ $item->duration.' Minutes' ?: '---'}}<br>
         </div>
-        {{--        <div class="col-md-6">--}}
-        {{--            <label for=""><span class="show-text">Ticket Price:</span></label> {{ $item->ticket_price ?: '---' }}<br>--}}
-        {{--        </div>--}}
-        {{--    </div>--}}
-        {{--    <div class="row my-4">--}}
-        {{--        <div class="col-md-6">--}}
-        {{--            <label for=""><span--}}
-        {{--                    class="show-text">Show Date:</span></label> {{ $item->show_date ?: '---' }}<br>--}}
-        {{--        </div>--}}
-        {{--        <div class="col-md-6">--}}
-        {{--            <label for=""><span class="show-text">Show Time:</span></label> {{$item->show_time ?: '---'}}<br>--}}
-        {{--        </div>--}}
-        {{--    </div>--}}
-        {{--    <div class="row my-4">--}}
         <div class="col-md-6">
             <label for=""><span class="show-text">Status:</span></label>
             @if($item->status == 'Active')

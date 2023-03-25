@@ -16,12 +16,12 @@ class CreateShowTimesTable extends Migration
         Schema::create('show_times', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('vendor_id');
-            $table->unsignedBigInteger('cinema_hall_id');
+            $table->unsignedBigInteger('theater_id');
             $table->unsignedBigInteger('movie_id');
             $table->longText('show_details');
             $table->longText('description')->nullable();
 
-            $table->foreign('cinema_hall_id')->references('id')->on('cinema_halls')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('theater_id')->references('id')->on('theaters')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('vendor_id')->references('id')->on('vendors')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('movie_id')->references('id')->on('movies')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();

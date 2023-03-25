@@ -17,13 +17,18 @@ class Booking extends Model
         return $this->belongsTo(Vendor::class, 'vendor_id');
     }
 
-    public function cinemaHall()
+    public function seat()
     {
-        return $this->belongsTo(CinemaHall::class, 'cinema_hall_id');
+        return $this->belongsTo(Seat::class, 'seat_id');
     }
 
     public function movie()
     {
         return $this->belongsTo(Movie::class, 'movie_id');
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'customer_id');
     }
 }

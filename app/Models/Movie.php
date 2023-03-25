@@ -35,9 +35,9 @@ class Movie extends Model
         return $this->belongsTo(Vendor::class, 'vendor_id');
     }
 
-    public function cinemaHall()
+    public function theater()
     {
-        return $this->belongsTo(CinemaHall::class, 'cinema_hall_id');
+        return $this->belongsTo(Theater::class, 'theater_id');
     }
 
     public function showTimes()

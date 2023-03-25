@@ -5,12 +5,12 @@
                placeholder="Enter Title">
     </div>
     <div class="col-md-6">
-        <label for="">Cinema Hall <span class="text-danger">*</span></label>
-        <select name="cinema_hall_id" required class="form-control">
-            <option value="">Select Cinema Hall</option>
-            @foreach($cinemaHalls as $cinemaHall)
+        <label for="">Theater <span class="text-danger">*</span></label>
+        <select name="theater_id" required class="form-control">
+            <option value="">Select Theater</option>
+            @foreach($theaters as $theater)
                 <option
-                    value="{{$cinemaHall->id}}" {{old('cinema_hall_id', $item->cinema_hall_id) === $cinemaHall->id ? 'selected' : ''}}>{{$cinemaHall->name}}</option>
+                    value="{{$theater->id}}" {{old('theater_id', $item->theater_id) === $theater->id ? 'selected' : ''}}>{{$theater->name}}</option>
             @endforeach
         </select>
     </div>

@@ -11,7 +11,7 @@ class Seat extends Model
     protected $fillable = [
       'id',
       'vendor_id',
-      'cinema_hall_id',
+      'theater_id',
       'row_no',
       'column_no',
       'seat_name',
@@ -23,8 +23,13 @@ class Seat extends Model
         return $this->belongsTo(Vendor::class, 'vendor_id');
     }
 
-    public function Theater()
+    public function theater()
     {
-        return $this->belongsTo(CinemaHall::class, 'cinema_hall_id');
+        return $this->belongsTo(Theater::class, 'theater_id');
+    }
+
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class, 'customer_id');
     }
 }

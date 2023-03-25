@@ -15,7 +15,7 @@
             <thead>
             <tr class="text-left text-capitalize">
                 <th >#id</th>
-                <th>cinema hall</th>
+                <th>theater</th>
                 <th>movie</th>
                 <th>show details</th>
                 <th>action</th>
@@ -35,7 +35,7 @@
                 ajax: "{{ route('show-times.index') }}",
                 columns: [
                     {data: 'id', name: 'id'},
-                    {data: 'cinema_hall_id', name: 'cinema_hall_id'},
+                    {data: 'theater_id', name: 'theater_id'},
                     {data: 'movie_id', name: 'movie_id'},
                     {
                         data: 'show_details', name: 'show_details', render: function (data, type, full, meta) {

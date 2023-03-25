@@ -13,13 +13,13 @@
 @endpush
 <div class="form-group row">
     <div class="col-md-6">
-        <label for="">Cinema Hall <span class="text-danger">*</span></label>
-        <input type="hidden" id="halls" value='@json($cinemaHalls)'>
-        <select name="cinema_hall_id" id="cinema-hall" class="form-control required-field" style="width: 100%">
+        <label for="">Theater <span class="text-danger">*</span></label>
+        <input type="hidden" id="theaters" value='@json($theaters)'>
+        <select name="theater_id" id="theater" class="form-control required-field" style="width: 100%">
             <option value="">--Select Cinema Hall--</option>
-            @foreach($cinemaHalls as $cinemaHall)
+            @foreach($theaters as $theater)
                 <option
-                    value="{{$cinemaHall->id}}" {{old('cinema_hall_id', $item->cinema_hall_id) === $cinemaHall->id ? 'selected' : ''}}>{{$cinemaHall->name}}</option>
+                    value="{{$theater->id}}" {{old('theater_id', $item->theater_id) === $theater->id ? 'selected' : ''}}>{{$theater->name}}</option>
             @endforeach
         </select>
     </div>
@@ -117,10 +117,10 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function () {
-            let halls = JSON.parse($("#halls").val());
+            let theaters = JSON.parse($("#theaters").val());
 
-            $('#cinema-hall').select2({
-                placeholder: "Select Cinema Hall",
+            $('#theater').select2({
+                placeholder: "Select Theater",
                 width: 'resolve'
             });
             $('#movie').select2({
@@ -129,16 +129,16 @@
             });
 
 
-            let hallId = $('#cinema-hall').val();
+            let theaterId = $('#theater').val();
             let oldMovieId = "{{$item->movie_id}}";
 
-            let index = halls.findIndex(item => item.id == hallId);
-            let hall = halls[index];
+            let index = theaters.findIndex(item => item.id == theaterId);
+            let theater = theaters[index];
 
             if (index !== -1) {
                 $('#movie').empty();
                 $('#movie').append('<option value="{{null}}">--Select Movie--</option>');
-                $.each(hall.movies, function (key, movie) {
+                $.each(theater.movies, function (key, movie) {
                     $('select[name="movie_id"]').append(`<option value='${movie.id}' ${movie.id == oldMovieId ? "selected" : ""}>${movie.title}</option>`);
                 });
             } else {
@@ -147,16 +147,16 @@
             }
 
 
-            $(document).on('change', '#cinema-hall', function () {
-                let hallId = $(this).val();
+            $(document).on('change', '#theater', function () {
+                let theaterId = $(this).val();
 
-                let index = halls.findIndex(item => item.id == hallId);
-                let hall = halls[index];
+                let index = theaters.findIndex(item => item.id == theaterId);
+                let theater = theaters[index];
 
                 if (index !== -1) {
                     $('#movie').empty();
                     $('#movie').append('<option value="{{null}}">--Select Movie--</option>');
-                    $.each(hall.movies, function (key, movie) {
+                    $.each(theater.movies, function (key, movie) {
                         $('select[name="movie_id"]').append('<option value="' + movie.id + '">' + movie.title + '</option>');
                     });
                 } else {

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CinemaHall extends Model
+class Theater extends Model
 {
     use HasFactory;
 
@@ -18,21 +18,16 @@ class CinemaHall extends Model
 
     public function seats()
     {
-        return $this->hasMany(Seat::class, 'cinema_hall_id');
+        return $this->hasMany(Seat::class, 'theater_id');
     }
 
     public function movies()
     {
-        return $this->hasMany(Movie::class, 'cinema_hall_id');
+        return $this->hasMany(Movie::class, 'theater_id');
     }
 
     public function showTimes()
     {
-        return $this->hasMany(ShowTime::class, 'cinema_hall_id');
-    }
-
-    public function bookings()
-    {
-        return $this->hasMany(Booking::class, 'cinema_hall_id');
+        return $this->hasMany(ShowTime::class, 'theater_id');
     }
 }

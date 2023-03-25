@@ -6,7 +6,7 @@ use App\Helpers\ImagePostHelper;
 use App\Helpers\NotifyHelper;
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Controller;
-use App\Models\CinemaHall;
+use App\Models\Theater;
 use App\Models\Movie;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
@@ -38,15 +38,15 @@ class MovieController extends BaseController
                     $imgUrl = $data->image ? asset($data->image) : asset('images/placeholder-image.jpg');
                     return '<a target="_blank" href="' . $imgUrl . '"><img style="height: 60%; width: 60%; object-fit: contain" src="' . $imgUrl . '" alt="logo"></a>';
                 })
-                ->editColumn('cinema_hall_id', function ($data) {
-                    return $data->cinemaHall ? '<a target="_blank" href="' . route('cinema-halls.show', $data->cinemaHall->id) . '">' . $data->cinemaHall->name . '</a>' : '-';
+                ->editColumn('theater_id', function ($data) {
+                    return $data->theater ? '<a target="_blank" href="' . route('theaters.show', $data->theater->id) . '">' . $data->theater->name . '</a>' : '-';
                 })
                 ->addColumn('action', function ($data) {
                     return view('templates.index_actions', [
                         'id' => $data->id, 'route' => $this->route
                     ])->render();
                 })
-                ->rawColumns(['action', 'image', 'cinema_hall_id'])
+                ->rawColumns(['action', 'image', 'theater_id'])
                 ->make(true);
         }
 
@@ -62,7 +62,7 @@ class MovieController extends BaseController
     public function create()
     {
         $info = $this->crudInfo();
-        $info['cinemaHalls'] = CinemaHall::where(['vendor_id' => auth('vendor')->user()->id, 'status' => 'Active'])->get();
+        $info['theaters'] = Theater::where(['vendor_id' => auth('vendor')->user()->id, 'status' => 'Active'])->get();
         return view($this->createResource(), $info);
     }
 
@@ -75,7 +75,7 @@ class MovieController extends BaseController
     public function store(Request $request)
     {
         $request->validate([
-            'cinema_hall_id' => 'required',
+            'theater_id' => 'required',
             'title' => 'required',
             'duration' => 'required',
             'image' => 'required|mimes:jpeg,jpg,png|max:10000',
@@ -135,7 +135,7 @@ class MovieController extends BaseController
     {
         $info = $this->crudInfo();
         $info['item'] = Movie::where('vendor_id', auth('vendor')->user()->id)->findOrFail($id);
-        $info['cinemaHalls'] = CinemaHall::where(['vendor_id' => auth('vendor')->user()->id, 'status' => 'Active'])->get();
+        $info['theaters'] = Theater::where(['vendor_id' => auth('vendor')->user()->id, 'status' => 'Active'])->get();
         return view($this->editResource(), $info);
     }
 
@@ -149,7 +149,7 @@ class MovieController extends BaseController
     public function update(Request $request, $id)
     {
         $request->validate([
-            'cinema_hall_id' => 'required',
+            'theater_id' => 'required',
             'title' => 'required',
             'duration' => 'required',
             'image' => 'mimes:jpeg,jpg,png|max:10000',

@@ -6,19 +6,19 @@ use App\Helpers\ImagePostHelper;
 use App\Helpers\NotifyHelper;
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Controller;
-use App\Models\CinemaHall;
+use App\Models\Theater;
 use App\Models\Seat;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
-class CinemaHallController extends BaseController
+class TheaterController extends BaseController
 {
     public function __construct()
     {
-        $this->title = 'Cinema Hall';
-        $this->resources = 'vendors.cinema-halls.';
+        $this->title = 'Theater';
+        $this->resources = 'vendors.theaters.';
         parent::__construct();
-        $this->route = 'cinema-halls.';
+        $this->route = 'theaters.';
     }
 
     /**
@@ -31,7 +31,7 @@ class CinemaHallController extends BaseController
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = CinemaHall::where('vendor_id', auth('vendor')->user()->id)->orderBy('id', 'DESC');
+            $data = Theater::where('vendor_id', auth('vendor')->user()->id)->orderBy('id', 'DESC');
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($data) {
@@ -69,23 +69,24 @@ class CinemaHallController extends BaseController
     {
         $request->validate([
             'name' => 'required',
+            'total_rows' => 'required',
+            'total_columns' => 'required'
         ]);
 
-        $cinemaHall = new CinemaHall();
-        $cinemaHall->name = $request->name;
-        $cinemaHall->email = $request->email;
-        $cinemaHall->phone = $request->phone;
-        $cinemaHall->status = $request->status;
-        $cinemaHall->seat_calculation = $request->seat_calculation;
-        $cinemaHall->rows = $request->total_rows;
-        $cinemaHall->columns = $request->total_columns;
-        $cinemaHall->vendor_id = auth('vendor')->user()->id;
-        $cinemaHall->save();
+        $theater = new Theater();
+        $theater->name = $request->name;
+        $theater->email = $request->email;
+        $theater->phone = $request->phone;
+        $theater->status = $request->status;
+        $theater->rows = $request->total_rows;
+        $theater->columns = $request->total_columns;
+        $theater->vendor_id = auth('vendor')->user()->id;
+        $theater->save();
 
         foreach ($request->seats ?? [] as $i => $seat) {
             $seatData = new Seat([
                 'vendor_id' => auth('vendor')->user()->id,
-                'cinema_hall_id' => $cinemaHall->id,
+                'theater_id' => $theater->id,
                 'row_no' => $request->rows[$i],
                 'column_no' => $request->columns[$i],
                 'seat_name' => $seat,
@@ -106,7 +107,7 @@ class CinemaHallController extends BaseController
     public function show($id)
     {
         $info = $this->crudInfo();
-        $info['item'] = CinemaHall::where('vendor_id', auth('vendor')->user()->id)->findOrFail($id);
+        $info['item'] = Theater::where('vendor_id', auth('vendor')->user()->id)->findOrFail($id);
         return view($this->showResource(), $info);
     }
 
@@ -119,7 +120,7 @@ class CinemaHallController extends BaseController
     public function edit($id)
     {
         $info = $this->crudInfo();
-        $info['item'] = CinemaHall::where('vendor_id', auth('vendor')->user()->id)->findOrFail($id);
+        $info['item'] = Theater::where('vendor_id', auth('vendor')->user()->id)->findOrFail($id);
         $info['routeName'] = "Edit";
         return view($this->editResource(), $info);
     }
@@ -135,26 +136,28 @@ class CinemaHallController extends BaseController
     {
         $request->validate([
             'name' => 'required',
+            'total_rows' => 'required',
+            'total_columns' => 'required'
         ]);
-        $cinemaHall = CinemaHall::findOrFail($id);
-        $cinemaHall->name = $request->name;
-        $cinemaHall->email = $request->email;
-        $cinemaHall->phone = $request->phone;
-        $cinemaHall->status = $request->status;
-        $cinemaHall->seat_calculation = $request->seat_calculation;
-        $cinemaHall->rows = $request->total_rows;
-        $cinemaHall->columns = $request->total_columns;
-        $cinemaHall->vendor_id = auth('vendor')->user()->id;
-        $cinemaHall->update();
+        $theater = Theater::findOrFail($id);
+        $theater->name = $request->name;
+        $theater->email = $request->email;
+        $theater->phone = $request->phone;
+        $theater->status = $request->status;
+        $theater->rows = $request->total_rows;
+        $theater->columns = $request->total_columns;
+        $theater->vendor_id = auth('vendor')->user()->id;
+        $theater->update();
 
+        Seat::where('theater_id', $theater->id)->delete();
         foreach ($request->seats ?? [] as $i => $seat) {
-            $seatData = Seat::findOrFail($request->seat_ids[$i]);
+            $seatData = new Seat();
             $seatData->vendor_id = auth('vendor')->user()->id;
-            $seatData->cinema_hall_id = $cinemaHall->id;
+            $seatData->theater_id = $theater->id;
             $seatData->row_no = $request->rows[$i];
             $seatData->column_no = $request->columns[$i];
             $seatData->seat_name = $seat;
-            $seatData->update();
+            $seatData->save();
         }
 
         NotifyHelper::updateSuccess();
@@ -169,8 +172,8 @@ class CinemaHallController extends BaseController
      */
     public function destroy($id)
     {
-        $cinemaHall = CinemaHall::where('vendor_id', auth('vendor')->user()->id)->findOrFail($id);
-        $cinemaHall->delete();
+        $theater = Theater::where('vendor_id', auth('vendor')->user()->id)->findOrFail($id);
+        $theater->delete();
 
         NotifyHelper::deleteSuccess();
         return redirect()->route($this->indexRoute());

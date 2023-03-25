@@ -4,7 +4,7 @@
 <div class="form-group row">
     <div class="col-md-6">
         <label for="name">Name <span class="text-danger">*</span></label>
-        <input type="text" id="name" required class="form-control" name="name" placeholder="Enter name of cinema hall"
+        <input type="text" id="name" required class="form-control" name="name" placeholder="Enter name of theater"
                value="{{old('name', $item->name)}}">
     </div>
 
@@ -32,41 +32,22 @@
 <h4>Seat Details</h4>
 <hr>
 <div class="row">
-    <div class="col-md-3">
-        <label>Seat Calculation</label>
-        <select name="seat_calculation" id="seat-selection-type" class="form-control">
-            <option
-                value="Number_of_Seats" {{old('seat_calculation', $item->seat_calculation) === "Number_of_Seats" ? 'selected' : ''}}>
-                Using
-                Number of Seats
-            </option>
-            <option
-                value="Rows_Columns" {{old('seat_calculation', $item->seat_calculation) === "Rows_Columns" ? 'selected' : ''}}>
-                Using
-                Rows and Columns
-            </option>
-        </select>
-    </div>
-    <div class="col-md-3" id="total-seats">
-        <label>Total Seats</label>
-        <input type="number" class="form-control" name="total_seats" placeholder="Enter number of seats">
-    </div>
-    <div class="col-md-3 rows-columns" style="display: none">
+    <div class="col-md-4 rows-columns">
         <label>Total Rows</label>
-        <input type="number" class="form-control" id="rows" name="total_rows" value="{{$item->rows}}"
+        <input type="number" class="form-control" required id="rows" name="total_rows" value="{{$item->rows}}"
                placeholder="Enter number of rows">
         <span class="text-danger" id="rows-error" style="display: none">Rows should not be empty or less than 1.</span>
     </div>
 
-    <div class="col-md-3 rows-columns" style="display: none">
+    <div class="col-md-4 rows-columns">
         <label>Total Columns</label>
-        <input type="number" class="form-control" id="columns" name="total_columns" value="{{$item->columns}}"
+        <input type="number" class="form-control" required id="columns" name="total_columns" value="{{$item->columns}}"
                placeholder="Enter number of columns">
         <span class="text-danger" id="columns-error"
               style="display: none">Columns should not be empty or less than 1.</span>
     </div>
 
-    <div class="col-md-3">
+    <div class="col-md-4">
         <button id="get-seats" class="btn btn-primary" style="margin-top: 31px">Get Seats</button>
     </div>
 </div>
@@ -108,27 +89,27 @@
 
 @push('scripts')
     <script>
-        let oldSelectionType = $('#seat-selection-type').val();
+        // let oldSelectionType = $('#seat-selection-type').val();
+        //
+        // if (oldSelectionType === "Rows_Columns") {
+        //     $('#total-seats').css('display', 'none');
+        //     $('.rows-columns').css('display', '');
+        // } else {
+        //     $('#total-seats').css('display', '');
+        //     $('.rows-columns').css('display', 'none');
+        // }
 
-        if (oldSelectionType === "Rows_Columns") {
-            $('#total-seats').css('display', 'none');
-            $('.rows-columns').css('display', '');
-        } else {
-            $('#total-seats').css('display', '');
-            $('.rows-columns').css('display', 'none');
-        }
-
-        $(document).on('change', '#seat-selection-type', function () {
-            let selectionType = $(this).val();
-
-            if (selectionType === "Rows_Columns") {
-                $('#total-seats').css('display', 'none');
-                $('.rows-columns').css('display', '');
-            } else {
-                $('#total-seats').css('display', '');
-                $('.rows-columns').css('display', 'none');
-            }
-        });
+        // $(document).on('change', '#seat-selection-type', function () {
+        //     let selectionType = $(this).val();
+        //
+        //     if (selectionType === "Rows_Columns") {
+        //         $('#total-seats').css('display', 'none');
+        //         $('.rows-columns').css('display', '');
+        //     } else {
+        //         $('#total-seats').css('display', '');
+        //         $('.rows-columns').css('display', 'none');
+        //     }
+        // });
     </script>
     <script>
         $(document).ready(function () {

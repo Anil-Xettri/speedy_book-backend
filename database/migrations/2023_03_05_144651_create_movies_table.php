@@ -16,7 +16,7 @@ class CreateMoviesTable extends Migration
         Schema::create('movies', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('vendor_id');
-            $table->unsignedBigInteger('cinema_hall_id');
+            $table->unsignedBigInteger('theater_id');
             $table->string('title');
             $table->time('duration');
             $table->string('image');
@@ -24,7 +24,7 @@ class CreateMoviesTable extends Migration
             $table->string('status')->comment('Active, Inactive')->default('Active');
             $table->longText('description')->nullable();
 
-            $table->foreign('cinema_hall_id')->references('id')->on('cinema_halls')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('theater_id')->references('id')->on('theaters')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('vendor_id')->references('id')->on('vendors')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });

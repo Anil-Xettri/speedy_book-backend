@@ -16,7 +16,6 @@ class CreateBookingsTable extends Migration
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('vendor_id');
-            $table->unsignedBigInteger('cinema_hall_id');
             $table->unsignedBigInteger('movie_id');
             $table->unsignedBigInteger('customer_id');
             $table->unsignedBigInteger('seat_id');
@@ -30,10 +29,10 @@ class CreateBookingsTable extends Migration
             $table->string('status')->comment('Available,Reserve,Sold Out, Unavailable')->default('Available');
             $table->longText('notes')->nullable();
 
-            $table->foreign('cinema_hall_id')->references('id')->on('cinema_halls')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('vendor_id')->references('id')->on('vendors')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('movie_id')->references('id')->on('movies')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('seat_id')->references('id')->on('seats')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

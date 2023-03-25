@@ -5,7 +5,7 @@
     <div class="row my-4">
         <div class="col-md-6">
             <label for=""><span
-                    class="show-text">Cinema Hall:</span></label> {{ $item->cinemaHall ? $item->cinemaHall->name : '---'}}
+                    class="show-text">Theater:</span></label> {{ $item->theater ? $item->theater->name : '---'}}
             <br>
         </div>
 
