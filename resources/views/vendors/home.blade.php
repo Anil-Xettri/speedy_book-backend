@@ -68,7 +68,7 @@
                     <div class="card-title">Now Showing</div>
                 </div>
                 <div class="card-body hide-scroll" style="overflow-y: scroll; height: 390px">
-                    @foreach($nowShowings as $nowShowing)
+                    @forelse($nowShowings as $nowShowing)
                         <a target="_blank" href="{{route('movies.show', $nowShowing['id'])}}">
                             <div class="row no-gutters m-1">
                                 <div class="col-auto">
@@ -79,7 +79,7 @@
                                     <div class="card-block px-2">
                                         <p class="text-lg font-weight-bold my-0">{{$nowShowing['title']}}</p>
                                         <p class="text-muted text-success text-md font-weight-bold my-0"
-                                           style="color: red!important;">{{$nowShowing['cinema_hall']}}</p>
+                                           style="color: rgba(255,9,0,0.78)!important;">{{$nowShowing['cinema_hall']}}</p>
                                         <p class="text-muted text-sm font-weight-bold my-0">{{$nowShowing['start_time']}}
                                             - {{$nowShowing['end_time']}}</p>
                                     </div>
@@ -87,7 +87,11 @@
                             </div>
                             <hr>
                         </a>
-                    @endforeach
+                    @empty
+                        <div class="alert alert-danger text-center">
+                            No movies are now showing
+                        </div>
+                    @endforelse
 
                 </div>
             </div>
@@ -99,26 +103,30 @@
                     <div class="card-title">Coming Soon</div>
                 </div>
                 <div class="card-body hide-scroll" style="overflow-y: scroll; height: 390px">
-                    @foreach($nowShowings as $nowShowing)
-                        <a target="_blank" href="{{route('movies.show', $nowShowing['id'])}}">
+                    @forelse($newMovies as $newMovie)
+                        <a target="_blank" href="{{route('movies.show', $newMovie['id'])}}">
                             <div class="row no-gutters m-1">
                                 <div class="col-auto">
-                                    <img src="{{$nowShowing['image'] ?: asset('images/placeholder-image.jpg')}}" alt=""
+                                    <img src="{{$newMovie['image'] ?: asset('images/placeholder-image.jpg')}}" alt=""
                                          style="object-fit: cover; border-radius: 3px" height="80px" width="80px">
                                 </div>
                                 <div class="col">
                                     <div class="card-block px-2">
-                                        <p class="text-lg font-weight-bold my-0">{{$nowShowing['title']}}</p>
+                                        <p class="text-lg font-weight-bold my-0">{{$newMovie['title']}}</p>
                                         <p class="text-muted text-success text-md font-weight-bold my-0"
-                                           style="color: red!important;">{{$nowShowing['cinema_hall']}}</p>
-                                        <p class="text-muted text-sm font-weight-bold my-0">{{$nowShowing['start_time']}}
-                                            - {{$nowShowing['end_time']}}</p>
+                                           style="color: rgba(208,0,255,0.67)!important;">{{$newMovie['cinema_hall']}}</p>
+                                        <p class="text-muted text-sm font-weight-bold my-0">{{$newMovie['start_time']}}
+                                            - {{$newMovie['end_time']}}</p>
                                     </div>
                                 </div>
                             </div>
                             <hr>
                         </a>
-                    @endforeach
+                        @empty
+                            <div class="alert alert-danger text-center">
+                                No movies are coming soon
+                            </div>
+                        @endforelse
 
                 </div>
             </div>

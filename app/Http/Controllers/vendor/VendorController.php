@@ -27,6 +27,9 @@ class VendorController extends Controller
         }
         $nowShowing = [];
         $comingSoon = [];
+        $nWeekSDate = Carbon::parse('this monday')->toDateString();
+        $nWeekEDate = Carbon::parse($nWeekSDate)->addDays(6)->toDateString();
+
 
         foreach ($allMovies as $movie) {
             foreach ($movie->showTimes as $showTime) {
@@ -44,7 +47,7 @@ class VendorController extends Controller
                     if ($currentDate->eq($showDate)) {
                         if (strtotime($currentTime) >= strtotime($startingTime) && strtotime($currentTime) <= strtotime($endingTime)) {
                             $cinemaHall = CinemaHall::where('id', $movie->cinema_hall_id)->first();
-                            $nowShowing[] = [
+                            $nowShowing[$movie->id] = [
                                 'id' => $movie->id,
                                 'title' => $movie->title,
                                 'cinema_hall' => $cinemaHall->name,
@@ -54,11 +57,23 @@ class VendorController extends Controller
                             ];
                         }
                     }
+                    if ($showDate->between($nWeekSDate, $nWeekEDate)) {
+                        $cinemaHall = CinemaHall::where('id', $movie->cinema_hall_id)->first();
+                        $comingSoon[$movie->id] = [
+                            'id' => $movie->id,
+                            'title' => $movie->title,
+                            'cinema_hall' => $cinemaHall->name,
+                            'start_time' => $startingTime,
+                            'end_time' => $endingTime,
+                            'image' => $movie->image_url
+                        ];
+                    }
 
                 }
             }
         }
         $info['nowShowings'] = $nowShowing;
+        $info['newMovies'] = $comingSoon;
         return view('vendors.home', $info);
     }
 }
