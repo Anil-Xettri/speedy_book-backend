@@ -18,21 +18,17 @@ class CreateBookingsTable extends Migration
             $table->unsignedBigInteger('vendor_id');
             $table->unsignedBigInteger('movie_id');
             $table->unsignedBigInteger('customer_id');
-            $table->unsignedBigInteger('seat_id');
             $table->integer('quantity')->default(1);
             $table->double('sub_total', 8,2);
             $table->double('discount',8,2)->nullable();
             $table->double('tax_amount',8,2)->nullable();
             $table->double('total',8,2);
 
-            $table->string('payment_method')->comment('Cash,Esewa, IME Pay, Khalti, Phone Pay')->default('Cash');
             $table->string('status')->comment('Available,Reserve,Sold Out, Unavailable')->default('Available');
-            $table->longText('notes')->nullable();
 
             $table->foreign('vendor_id')->references('id')->on('vendors')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('movie_id')->references('id')->on('movies')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('seat_id')->references('id')->on('seats')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

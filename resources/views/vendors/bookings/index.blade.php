@@ -18,7 +18,7 @@
                 <th>customer name</th>
                 <th>movie</th>
                 <th>tickets</th>
-                <th>showtime</th>
+                <th>total</th>
                 <th>status</th>
                 <th>action</th>
             </tr>
@@ -37,27 +37,27 @@
                 ajax: "{{ route('bookings.index') }}",
                 columns: [
                     {data: 'id', name: 'id'},
-                    {data: 'customer_name', name: 'customer_name'},
+                    {data: 'customer_id', name: 'customer_id'},
                     {data: 'movie_id', name: 'movie_id'},
                     {data: 'quantity', name: 'quantity'},
-                    {data: 'show_date_time', name: 'show_date_time'},
+                    {data: 'total', name: 'total'},
                     {
                         data: 'status', name: 'status', render: function (data, type, full, meta) {
                             switch (data) {
-                                case ('Pending'):
-                                    return `<span class="badge badge-warning">Pending</span>`;
+                                case ('Available'):
+                                    return `<span class="badge badge-success">Available</span>`;
                                     break;
-                                case ('Inactive'):
-                                    return `<span class="badge badge-secondary">Inactive</span>`;
+                                case ('Reserve'):
+                                    return `<span class="badge badge-warning">Reserve</span>`;
                                     break;
-                                case ('Confirmed'):
-                                    return `<span class="badge badge-success">Confirmed</span>`;
+                                case ('Sold Out'):
+                                    return `<span class="badge badge-danger">Sold Out</span>`;
                                     break;
-                                case ('Cancelled'):
-                                    return `<span class="badge badge-danger">Cancelled</span>`;
+                                case ('Unavailable'):
+                                    return `<span class="badge badge-secondary">Unavailable</span>`;
                                     break;
                                 default:
-                                    return `<span class="badge badge-secondary">Inactive</span>`;
+                                    return `<span class="badge badge-success">Available</span>`;
                             }
                         }
                     },

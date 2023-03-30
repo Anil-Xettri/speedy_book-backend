@@ -6,7 +6,7 @@ use App\Helpers\NotifyHelper;
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
-use App\Models\CinemaHall;
+use App\Models\Theater;
 use App\Models\Movie;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
@@ -34,22 +34,23 @@ class BookingController extends BaseController
             $data = Booking::where('vendor_id', auth('vendor')->user()->id)->orderBy('id', 'DESC');
             return Datatables::of($data)
                 ->addIndexColumn()
+                ->editColumn('customer_id', function ($data) {
+                    return $data->customer ? $data->custome->name : '-';
+                })
                 ->editColumn('movie_id', function ($data) {
                     return $data->movie ? '<a target="_blank" href="' . route('movies.show', $data->movie->id) . '">' . $data->movie->title . '</a>' : '-';
                 })
-                ->editColumn('show_date_time', function ($data) {
-                    return $data->movie ? $data->movie->show_date . " " . $data->movie->show_time . '</a>' : '-';
-                })
                 ->addColumn('action', function ($data) {
                     return view('templates.index_actions', [
-                        'id' => $data->id, 'route' => $this->route
+                        'id' => $data->id, 'route' => $this->route, 'hideEdit' => true
                     ])->render();
                 })
-                ->rawColumns(['action', 'movie_id', 'show_date_time'])
+                ->rawColumns(['action', 'movie_id', 'customer_id'])
                 ->make(true);
         }
 
         $info = $this->crudInfo();
+        $info['hideCreate'] = true;
         return view($this->indexResource(), $info);
     }
 
@@ -60,10 +61,10 @@ class BookingController extends BaseController
      */
     public function create()
     {
-        $info = $this->crudInfo();
-        $info['cinemaHalls'] = CinemaHall::where(['vendor_id' => auth('vendor')->user()->id, 'status' => 'Active'])->with('movies')->get();
-        $info['movies'] = Movie::where(['vendor_id' => auth('vendor')->user()->id, 'status' => 'Active'])->with('showTimes')->get();
-        return view($this->createResource(), $info);
+//        $info = $this->crudInfo();
+//        $info['cinemaHalls'] = Theater::where(['vendor_id' => auth('vendor')->user()->id, 'status' => 'Active'])->with('movies')->get();
+//        $info['movies'] = Movie::where(['vendor_id' => auth('vendor')->user()->id, 'status' => 'Active'])->with('showTimes')->get();
+//        return view($this->createResource(), $info);
     }
 
     /**
@@ -74,34 +75,34 @@ class BookingController extends BaseController
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'cinema_hall_id' => 'required',
-            'movie_id' => 'required',
-            'customer_name' => 'required',
-            'customer_email' => 'required|unique:bookings,customer_email',
-            'customer_phone' => 'required|min:8|max:11',
-        ]);
-        $data = $request->all();
-        $movie = Movie::where(['vendor_id' => auth('vendor')->user()->id, 'id' => 'movie_id'])->first();
-        if ($movie) {
-            $data['sub_total'] = $data['quantity'] * $data['ticket_price'];
-            if ($data['discount']) {
-                $data['total'] = $data['sub_total'] + $data['discount'];
-            } else {
-                $data['total'] = $data['sub_total'];
-            }
-
-            if ($data['tax_amount']) {
-                $data['total'] += $data['tax_amount'];
-            }
-        }
-
-        $booking = new Booking($data);
-        $booking->vendor_id = auth('vendor')->user()->id;
-        $booking->save();
-
-        NotifyHelper::addSuccess();
-        return redirect()->route($this->indexRoute());
+//        $request->validate([
+//            'cinema_hall_id' => 'required',
+//            'movie_id' => 'required',
+//            'customer_name' => 'required',
+//            'customer_email' => 'required|unique:bookings,customer_email',
+//            'customer_phone' => 'required|min:8|max:11',
+//        ]);
+//        $data = $request->all();
+//        $movie = Movie::where(['vendor_id' => auth('vendor')->user()->id, 'id' => 'movie_id'])->first();
+//        if ($movie) {
+//            $data['sub_total'] = $data['quantity'] * $data['ticket_price'];
+//            if ($data['discount']) {
+//                $data['total'] = $data['sub_total'] + $data['discount'];
+//            } else {
+//                $data['total'] = $data['sub_total'];
+//            }
+//
+//            if ($data['tax_amount']) {
+//                $data['total'] += $data['tax_amount'];
+//            }
+//        }
+//
+//        $booking = new Booking($data);
+//        $booking->vendor_id = auth('vendor')->user()->id;
+//        $booking->save();
+//
+//        NotifyHelper::addSuccess();
+//        return redirect()->route($this->indexRoute());
     }
 
     /**
@@ -125,11 +126,11 @@ class BookingController extends BaseController
      */
     public function edit($id)
     {
-        $info = $this->crudInfo();
-        $info['item'] = Booking::where('vendor_id', auth('vendor')->user()->id)->findOrFail($id);
-        $info['cinemaHalls'] = CinemaHall::where(['vendor_id' => auth('vendor')->user()->id, 'status' => 'Active'])->with('movies')->get();
-        $info['movies'] = Movie::where(['vendor_id' => auth('vendor')->user()->id, 'status' => 'Active'])->with('showTimes')->get();
-        return view($this->editResource(), $info);
+//        $info = $this->crudInfo();
+//        $info['item'] = Booking::where('vendor_id', auth('vendor')->user()->id)->findOrFail($id);
+//        $info['cinemaHalls'] = Theater::where(['vendor_id' => auth('vendor')->user()->id, 'status' => 'Active'])->with('movies')->get();
+//        $info['movies'] = Movie::where(['vendor_id' => auth('vendor')->user()->id, 'status' => 'Active'])->with('showTimes')->get();
+//        return view($this->editResource(), $info);
     }
 
     /**
@@ -142,30 +143,31 @@ class BookingController extends BaseController
     public function update(Request $request, $id)
     {
         $request->validate([
-            'cinema_hall_id' => 'required',
-            'movie_id' => 'required',
-            'customer_name' => 'required',
-            'customer_email' => 'required|unique:bookings,customer_email',
-            'customer_phone' => 'required|min:8|max:11',
+//            'cinema_hall_id' => 'required',
+//            'movie_id' => 'required',
+//            'customer_name' => 'required',
+//            'customer_email' => 'required|unique:bookings,customer_email',
+//            'customer_phone' => 'required|min:8|max:11',
+            'status' => 'required'
         ]);
-        $data = $request->all();
-        $movie = Movie::where(['vendor_id' => auth('vendor')->user()->id, 'id' => 'movie_id'])->first();
-        if ($movie) {
-            $data['sub_total'] = $data['quantity'] * $data['ticket_price'];
-            if ($data['discount']) {
-                $data['total'] = $data['sub_total'] + $data['discount'];
-            } else {
-                $data['total'] = $data['sub_total'];
-            }
-
-            if ($data['tax_amount']) {
-                $data['total'] += $data['tax_amount'];
-            }
-        }
+//        $data = $request->all();
+//        $movie = Movie::where(['vendor_id' => auth('vendor')->user()->id, 'id' => 'movie_id'])->first();
+//        if ($movie) {
+//            $data['sub_total'] = $data['quantity'] * $data['ticket_price'];
+//            if ($data['discount']) {
+//                $data['total'] = $data['sub_total'] + $data['discount'];
+//            } else {
+//                $data['total'] = $data['sub_total'];
+//            }
+//
+//            if ($data['tax_amount']) {
+//                $data['total'] += $data['tax_amount'];
+//            }
+//        }
 
         $booking = Booking::where('vendor_id', auth('vendor')->user()->id)->findOrFail($id);
-        $booking->vendor_id = auth('vendor')->user()->id;
-        $booking->update($data);
+        $booking->status = $request->status;
+        $booking->update();
 
         NotifyHelper::updateSuccess();
         return redirect()->route($this->indexRoute());

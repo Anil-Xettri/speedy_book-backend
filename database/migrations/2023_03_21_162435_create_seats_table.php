@@ -17,6 +17,7 @@ class CreateSeatsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('vendor_id');
             $table->unsignedBigInteger('theater_id');
+            $table->unsignedBigInteger('booking_id')->nullable();
             $table->integer('row_no')->nullable();
             $table->integer('column_no')->nullable();
             $table->string('seat_name')->nullable();
@@ -24,6 +25,7 @@ class CreateSeatsTable extends Migration
 
             $table->foreign('vendor_id')->references('id')->on('vendors')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('theater_id')->references('id')->on('theaters')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('booking_id')->references('id')->on('bookings')->nullOnDelete();
             $table->timestamps();
         });
     }
