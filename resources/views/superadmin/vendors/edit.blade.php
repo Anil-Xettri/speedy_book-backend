@@ -11,10 +11,10 @@
             image.src = URL.createObjectURL(event.target.files[0]);
         };
     </script>
-{{--    <script>--}}
-{{--        var loadFile = function (event) {--}}
-{{--            var bannerImage = document.getElementById('bannerOutput');--}}
-{{--            bannerImage.src = URL.createObjectURL(event.target.files[0]);--}}
-{{--        };--}}
-{{--    </script>--}}
+    <script>
+        var file = function (event) {
+            var bannerImage = document.getElementById('bannerOutput');
+            bannerImage.src = URL.createObjectURL(event.target.files[0]);
+        };
+    </script>
 @endpush

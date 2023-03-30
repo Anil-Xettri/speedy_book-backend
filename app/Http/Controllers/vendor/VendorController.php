@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\Theater;
 use App\Models\Movie;
+use App\Models\Vendor;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -75,5 +76,11 @@ class VendorController extends Controller
         $info['nowShowings'] = $nowShowing;
         $info['newMovies'] = $comingSoon;
         return view('vendors.home', $info);
+    }
+
+    public function profile($id)
+    {
+        $info['item'] = Vendor::findOrFail($id);
+        return view('vendors.profile', $info);
     }
 }

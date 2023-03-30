@@ -6,7 +6,7 @@
         @if($item->image)
             <div class="col-md-6">
                 <label>Image: </label><br>
-                <img class="" style="width: 150px; height: 150px"
+                <img class="" style="width: 250px; height: 250px"
                      src="{{$item->image_url}}"
                      alt="Movie Image">
             </div>
@@ -34,7 +34,7 @@
 
     <div class="row my-4">
         <div class="col-md-6">
-            <label for=""><span class="show-text">Duration:</span></label> {{ $item->duration.' Minutes' ?: '---'}}<br>
+            <label for=""><span class="show-text">Duration:</span></label> {{ $item->duration ?: '---'}}<br>
         </div>
         <div class="col-md-6">
             <label for=""><span class="show-text">Status:</span></label>

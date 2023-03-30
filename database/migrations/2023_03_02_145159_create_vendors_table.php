@@ -22,6 +22,7 @@ class CreateVendorsTable extends Migration
             $table->string('address')->nullable();
             $table->string('status')->comment('Active,Inactive')->default('Active');
             $table->string('image')->nullable();
+            $table->string('banner_image')->nullable();
 
             $table->string('registration_number')->nullable();
             $table->string('legal_number')->nullable();

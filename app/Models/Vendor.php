@@ -12,16 +12,30 @@ class Vendor extends Authenticatable
     use HasFactory;
 
     protected $guarded = ['id'];
-    protected $appends = ['image_url'];
+    protected $appends = ['image_url', 'banner_url'];
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
+    public function adminlte_profile_url()
+    {
+        return route('vendor.profile',$this->id);
+    }
+
     function getImageUrlAttribute()
     {
         if ($this->image) {
             return asset($this->image);
+        } else {
+            return null;
+        }
+    }
+
+    function getBannerUrlAttribute()
+    {
+        if ($this->banner_image) {
+            return asset($this->banner_image);
         } else {
             return null;
         }

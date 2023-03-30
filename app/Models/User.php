@@ -41,4 +41,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function adminlte_profile_url()
+    {
+        return route('superadmin.profile',$this->id);
+    }
 }

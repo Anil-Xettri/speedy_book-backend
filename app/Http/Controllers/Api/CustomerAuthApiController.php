@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\ImagePostHelper;
 use App\Http\Controllers\Controller;
+use App\Mail\OtpMail;
 use App\Models\Customer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class CustomerAuthApiController extends BaseApiController
@@ -214,6 +216,17 @@ class CustomerAuthApiController extends BaseApiController
             }
 
             $customer = Customer::where('email', $request->email)->first();
+
+            $otp = "12345";
+
+            $mail_details = [
+                'subject' => 'OTP Verification',
+                'body' => $otp
+            ];
+
+            Mail::to($request->email)->send(new OtpMail($mail_details));
+
+
             if (!$customer) {
                 return response()->json([
                     'success' => false,
@@ -223,7 +236,10 @@ class CustomerAuthApiController extends BaseApiController
 
             return response()->json([
                 'success' => true,
-                'data' => ['customer' => $customer]
+                'data' => [
+                    'customer' => $customer->id,
+                    'otp' => $otp
+                ]
             ]);
         } catch (\Exception $e) {
             return $this->sendError($e->getMessage());
@@ -236,6 +252,7 @@ class CustomerAuthApiController extends BaseApiController
             //validation
             $validator = Validator::make($request->all(), [
                 'customer_id' => 'required',
+                'otp' => 'required',
                 'new_password' => 'required|string|min:8',
             ]);
 
@@ -250,6 +267,13 @@ class CustomerAuthApiController extends BaseApiController
                 return response()->json([
                     'success' => false,
                     'message' => 'Invalid customer id. Please try again.'
+                ]);
+            }
+            if ($request->otp != "12345")
+            {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid otp.'
                 ]);
             }
 

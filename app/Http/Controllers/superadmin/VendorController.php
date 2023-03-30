@@ -100,6 +100,17 @@ class VendorController extends BaseController
             $vendor->update();
         }
 
+        if ($request->hasFile('banner_image') && $request->banner_image != '') {
+            $bannerFile = $request->file('banner_image');
+            $bannerExtension = $bannerFile->getClientOriginalExtension();
+            $bannerFilename = time() . '.' . $bannerExtension;
+
+            $bannerFilename = ImagePostHelper::saveImage($bannerFile, '/vendors/banner-images', $bannerFilename);
+            $vendor->banner_image = $bannerFilename;
+
+            $vendor->update();
+        }
+
         NotifyHelper::addSuccess();
         return redirect()->route($this->indexRoute());
     }
@@ -169,6 +180,21 @@ class VendorController extends BaseController
             $vendor->update();
         }
 
+        if ($request->hasFile('banner_image') && $request->banner_image != '') {
+
+            ImagePostHelper::deleteImage($vendor->banner_image);
+
+            $bannerFile = $request->file('banner_image');
+            $bannerExtension = $bannerFile->getClientOriginalExtension();
+            $bannerFilename = time() . '.' . $bannerExtension;
+
+            $bannerFilename = ImagePostHelper::saveImage($bannerFile, '/vendors/banner-images', $bannerFilename);
+
+            $vendor->banner_image = $bannerFilename;
+
+            $vendor->update();
+        }
+
         NotifyHelper::updateSuccess();
         return redirect()->route($this->indexRoute());
     }
@@ -183,6 +209,7 @@ class VendorController extends BaseController
     {
         $vendor = Vendor::findOrFail($id);
         ImagePostHelper::deleteImage($vendor->image);
+        ImagePostHelper::deleteImage($vendor->banner_image);
         $vendor->delete();
 
         NotifyHelper::deleteSuccess();
