@@ -17,14 +17,16 @@ class CreateBookingsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('vendor_id');
             $table->unsignedBigInteger('movie_id');
+            $table->dateTime('show_time');
             $table->unsignedBigInteger('customer_id');
             $table->integer('quantity')->default(1);
+            $table->double('price',8,2);
             $table->double('sub_total', 8,2);
             $table->double('discount',8,2)->nullable();
             $table->double('tax_amount',8,2)->nullable();
             $table->double('total',8,2);
 
-            $table->string('status')->comment('Available,Reserve,Sold Out, Unavailable')->default('Available');
+            $table->string('status')->comment('Paid,Unpaid')->default('Unpaid');
 
             $table->foreign('vendor_id')->references('id')->on('vendors')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('movie_id')->references('id')->on('movies')->onDelete('cascade')->onUpdate('cascade');

@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Profile')
+@section('title', 'Customer')
 
 @section('css')
     <style>
@@ -116,48 +116,16 @@
             <div class="padding">
                 <div class="text-center">
                     <!-- Column -->
-                    <div class="card box" style="width: 60%; margin-left: 20%"><a
-                            href="{{$item->banner_url ?: asset('images/placeholder-image.jpg')}}"><img
-                                class="card-img-top"
-                                src="{{$item->banner_url ?: asset('images/placeholder-image.jpg')}}"
-                                alt="Cover"></a>
-                        <div class="card-body little-profile">
+                    <div class="card box" style="width: 60%; margin-left: 20%">
+                        <div class="card-body little-profile mt-5">
                             <div class="text-center">
                                 <div class="pro-img"><a
-                                        href="{{$item->image_url ?: asset('images/placeholder-image.jpg')}}"><img
-                                            src="{{$item->image_url ?: asset('images/placeholder-image.jpg')}}"
+                                        href="{{$item->profile_image_url ?: asset('images/user-placeholder.png')}}"><img
+                                            src="{{$item->profile_image_url ?: asset('images/user-placeholder.png')}}"
                                             alt="user"></a></div>
                                 <h3 class="m-b-0">{{$item->name}}</h3>
                                 <p class="text-center text-muted">{{$item->email}}</p>
-                                <div class="row text-center m-t-20">
-                                    <div class="col-lg-4 col-md-4 m-t-20">
-                                        <h3 class="m-b-0 font-light">{{$item->address ?: 'N/A'}}</h3>
-                                        <small class="text-muted">Address</small>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 m-t-20">
-                                        <h3 class="m-b-0 font-light">{{$item->phone ?: 'N/A'}}</h3><small class="text-muted">Phone</small>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 m-t-20">
-                                        <h3 class="m-b-0 font-light">
-                                            {{$item->status}}
-                                        </h3><small class="text-muted">Status</small>
-                                    </div>
-                                </div>
-                                <div class="row text-center m-t-20">
-                                    <div class="col-lg-4 col-md-4 m-t-20">
-                                        <h3 class="m-b-0 font-light">{{$item->registration_number ?: 'N/A'}}</h3>
-                                        <small class="text-muted">Registration Number</small>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 m-t-20">
-                                        <h3 class="m-b-0 font-light">
-                                            {{$item->legal_type}}
-                                        </h3><small class="text-muted">Legal Type</small>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 m-t-20">
-                                        <h3 class="m-b-0 font-light">{{$item->legal_number ?: 'N/A'}}</h3>
-                                        <small class="text-muted">Legal Number</small>
-                                    </div>
-                                </div>
+                                <p class="text-center text-muted">{{$item->phone ?: ''}}</p>
                                 <hr>
                             </div>
                         </div>

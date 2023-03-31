@@ -17,7 +17,9 @@
                 <th>#id</th>
                 <th>customer name</th>
                 <th>movie</th>
+                <th>show time</th>
                 <th>tickets</th>
+                <th>price</th>
                 <th>total</th>
                 <th>status</th>
                 <th>action</th>
@@ -39,25 +41,21 @@
                     {data: 'id', name: 'id'},
                     {data: 'customer_id', name: 'customer_id'},
                     {data: 'movie_id', name: 'movie_id'},
+                    {data: 'show_time', name: 'show_time'},
                     {data: 'quantity', name: 'quantity'},
+                    {data: 'price', name: 'price'},
                     {data: 'total', name: 'total'},
                     {
                         data: 'status', name: 'status', render: function (data, type, full, meta) {
                             switch (data) {
-                                case ('Available'):
-                                    return `<span class="badge badge-success">Available</span>`;
+                                case ('Paid'):
+                                    return `<span class="badge badge-success">Paid</span>`;
                                     break;
-                                case ('Reserve'):
-                                    return `<span class="badge badge-warning">Reserve</span>`;
-                                    break;
-                                case ('Sold Out'):
-                                    return `<span class="badge badge-danger">Sold Out</span>`;
-                                    break;
-                                case ('Unavailable'):
-                                    return `<span class="badge badge-secondary">Unavailable</span>`;
+                                case ('Unpaid'):
+                                    return `<span class="badge badge-warning">Unpaid</span>`;
                                     break;
                                 default:
-                                    return `<span class="badge badge-success">Available</span>`;
+                                    return `<span class="badge badge-danger">Unpaid</span>`;
                             }
                         }
                     },

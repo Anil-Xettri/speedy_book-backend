@@ -40,12 +40,15 @@ class BookingController extends BaseController
                 ->editColumn('movie_id', function ($data) {
                     return $data->movie ? '<a target="_blank" href="' . route('movies.show', $data->movie->id) . '">' . $data->movie->title . '</a>' : '-';
                 })
+                ->editColumn('show_time', function ($data) {
+                    return $data->show_time ?: '-';
+                })
                 ->addColumn('action', function ($data) {
                     return view('templates.index_actions', [
                         'id' => $data->id, 'route' => $this->route, 'hideEdit' => true
                     ])->render();
                 })
-                ->rawColumns(['action', 'movie_id', 'customer_id'])
+                ->rawColumns(['action', 'movie_id', 'customer_id', 'show_time'])
                 ->make(true);
         }
 

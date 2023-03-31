@@ -18,7 +18,7 @@ class CreatePaymentsTable extends Migration
             $table->unsignedBigInteger('vendor_id');
             $table->unsignedBigInteger('booking_id');
             $table->string('payment_method')->comment('Cash,Khalti')->default('Cash');
-            $table->string('device_token');
+            $table->dateTime('payment_verify_at')->nullable();
 
             $table->foreign('vendor_id')->references('id')->on('vendors')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('booking_id')->references('id')->on('bookings')->onDelete('cascade')->onUpdate('cascade');

@@ -31,7 +31,7 @@
         <input type="file" name="image" @if(!$item->image) required @endif class="form-control" id="image"
                onchange="loadFile(event)"><br>
         <img src="" style="display: none" id="outputCreate" class="w-50 h-50"><br>
-        @if($item->image)
+        @if($item->image_url)
             <img src="{{$item->image_url}}" id="output" class="w-50 h-50"><br>
         @endif
     </div>
@@ -42,7 +42,7 @@
                onchange="file(event)"><br>
         <video src="" style="display: none" id="video-create" class="w-50 h-50" controls>
         </video>
-        @if($item->trailer)
+        @if($item->trailer_url)
             <video src="{{$item->trailer_url}}" id="video-edit" class="w-50 h-50" controls>
             </video>
         @endif

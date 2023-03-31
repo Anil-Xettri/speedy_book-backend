@@ -72,7 +72,8 @@ class CustomerController extends BaseController
      */
     public function show($id)
     {
-        //
+        $info['item'] = Customer::findOrFail($id);
+        return redirect()->route($this->showResource(), $info);
     }
 
     /**

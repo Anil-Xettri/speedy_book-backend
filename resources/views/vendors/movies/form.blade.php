@@ -28,21 +28,21 @@
     </div>
     <div class="col-md-6 my-2">
         <label for="image">Image <span class="text-danger">*</span></label><br>
-        <input type="file" name="image" @if(!$item->image) required @endif class="form-control" id="image"
+        <input type="file" name="image" @if(!$item->image_url) required @endif class="form-control" id="image"
                onchange="loadFile(event)"><br>
         <img src="" style="display: none" id="outputCreate" class="w-50 h-50"><br>
-        @if($item->image)
+        @if($item->image_url)
             <img src="{{$item->image_url}}" id="output" class="w-50 h-50"><br>
         @endif
     </div>
 
     <div class="col-md-6 my-2">
         <label for="trailer">Trailer <span class="text-danger">*</span></label><br>
-        <input type="file" name="trailer" @if(!$item->trailer) required @endif class="form-control" id="trailer"
-               onchange="file(event)"><br>
+        <input type="file" name="trailer" @if(!$item->image_url) required @endif class="form-control" id="trailer"
+               onchange="file(event)" accept=".mp4, .mov, .ogg, .qt"><br>
         <video src="" style="display: none" id="video-create" class="w-50 h-50" controls>
         </video>
-        @if($item->trailer)
+        @if($item->trailer_url)
             <video src="{{$item->trailer_url}}" id="video-edit" class="w-50 h-50" controls>
             </video>
         @endif

@@ -32,7 +32,7 @@ class MovieController extends BaseController
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->editColumn('image', function ($data) {
-                    $imgUrl = $data->image ? asset($data->image) : asset('images/placeholder-image.jpg');
+                    $imgUrl = $data->getImage() ? asset($data->getImage()) : asset('images/placeholder-image.jpg');
                     return '<a target="_blank" href="' . $imgUrl . '"><img style="height: 60%; width: 60%; object-fit: contain" src="' . $imgUrl . '" alt="logo"></a>';
                 })
                 ->editColumn('vendor_id', function ($data) {
@@ -123,30 +123,14 @@ class MovieController extends BaseController
         $movie = Movie::findOrFail($id);
         $movie->update($data);
 
-        if ($request->hasFile('image') && $request->image != '') {
-            ImagePostHelper::deleteImage($movie->image);
-
-            $file = $request->file('image');
-            $extension = $file->getClientOriginalExtension();
-            $filename = time() . '.' . $extension;
-
-            $filename = ImagePostHelper::saveImage($file, '/movies/images', $filename);
-            $movie->image = $filename;
-
-            $movie->update();
+        if ($request->image) {
+            $movie->clearMediaCollection();
+            $movie->addMediaFromRequest('image')->toMediaCollection();
         }
 
-        if ($request->hasFile('trailer') && $request->trailer != '') {
-            ImagePostHelper::deleteImage($movie->trailer);
-
-            $file = $request->file('trailer');
-            $extension = $file->getClientOriginalExtension();
-            $filename = time() . '.' . $extension;
-
-            $filename = ImagePostHelper::saveImage($file, '/movies/trailers', $filename);
-            $movie->trailer = $filename;
-
-            $movie->update();
+        if ($request->trailer) {
+            $movie->clearMediaCollection('trailer');
+            $movie->addMediaFromRequest('trailer')->toMediaCollection('trailer');
         }
 
         NotifyHelper::updateSuccess();
@@ -162,8 +146,8 @@ class MovieController extends BaseController
     public function destroy($id)
     {
         $movie = Movie::findOrFail($id);
-        ImagePostHelper::deleteImage($movie->image);
-        ImagePostHelper::deleteImage($movie->trailer);
+        $movie->clearMediaCollection();
+        $movie->clearMediaCollection('trailer');
         $movie->delete();
 
         NotifyHelper::deleteSuccess();

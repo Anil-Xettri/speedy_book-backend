@@ -3,7 +3,7 @@
 @endpush
 @section('form_content')
     <div class="row">
-        @if($item->image)
+        @if($item->image_url)
             <div class="col-md-6">
                 <label>Image: </label><br>
                 <img class="" style="width: 150px; height: 150px"
@@ -12,7 +12,7 @@
             </div>
         @endif
 
-        @if($item->trailer)
+        @if($item->trailer_url)
             <div class="col-md-6">
                 <label>Trailer: </label><br>
                 <video src="{{$item->trailer_url}}" style="width: 250px; height: 150px" controls>

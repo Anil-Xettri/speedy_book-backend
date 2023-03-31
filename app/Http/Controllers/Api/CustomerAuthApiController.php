@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 
 class CustomerAuthApiController extends BaseApiController
 {
@@ -120,20 +121,16 @@ class CustomerAuthApiController extends BaseApiController
         try {
             $customer->Update($request->only('name', 'email', 'phone'));
 
-            if ($request->hasFile('profile_image') && $request->profile_image != '') {
-
-                if ($customer->profile_image) {
-                    ImagePostHelper::deleteImage($customer->profile_image);
+            if ($request->profile_image) {
+                try {
+                    $customer->clearMediaCollection();
+                    $customer->addMediaFromBase64($request->profile_image)
+                        ->toMediaCollection();
+                    $customer->save();
+                } catch (FileDoesNotExist $e) {
+                } catch (\Exception $e) {
+                    error_log($e);
                 }
-
-                $file = $request->file('profile_image');
-                $extension = $file->getClientOriginalExtension();
-                $filename = time() . '.' . $extension;
-
-                $filename = ImagePostHelper::saveImage($file, '/customer/profile-images', $filename);
-                $customer->profile_image = $filename;
-
-                $customer->update();
             }
 
         } catch (\Exception $e) {
@@ -269,8 +266,7 @@ class CustomerAuthApiController extends BaseApiController
                     'message' => 'Invalid customer id. Please try again.'
                 ]);
             }
-            if ($request->otp != "12345")
-            {
+            if ($request->otp != "12345") {
                 return response()->json([
                     'success' => false,
                     'message' => 'Invalid otp.'
