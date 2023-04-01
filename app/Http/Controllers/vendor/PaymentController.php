@@ -1,40 +1,42 @@
 <?php
 
-namespace App\Http\Controllers\superadmin;
+namespace App\Http\Controllers\vendor;
 
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Controller;
-use App\Models\Customer;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
-class CustomerController extends BaseController
+class PaymentController extends BaseController
 {
     public function __construct()
     {
-        $this->title = 'Customer';
-        $this->resources = 'superadmin.customers.';
+        $this->title = 'Payment';
+        $this->resources = 'vendors.payments.';
         parent::__construct();
-        $this->route = 'customers.';
+        $this->route = 'payments.';
     }
-
     /**
      * Display a listing of the resource.
      *
-     * @param Request $request
-     * @return void
+     * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Customer::orderBy('id', 'DESC');
+            $data = Payment::where('vendor_id', auth('vendor')->user()->id)->orderBy('id', 'DESC');
             return Datatables::of($data)
                 ->addIndexColumn()
-                ->editColumn('image', function ($data) {
-                    $imgUrl = $data->profile_image ? asset($data->profile_image) : asset('images/user-placeholder.png');
-                    return '<a target="_blank" href="' . $imgUrl . '"><img style="height: 30%; width: 30%; object-fit: contain" src="' . $imgUrl . '" alt="logo"></a>';
+                ->editColumn('booking_id', function ($data) {
+                    return $data->booking ? '<a target="_blank" href="' . route('bookings.show', $data->booking->id) . '">#' . $data->booking->id . '</a>' : '-';
                 })
-                ->rawColumns(['image'])
+                ->addColumn('action', function ($data) {
+                    return view('templates.index_actions', [
+                        'id' => $data->id, 'route' => $this->route, 'hideEdit' => true, 'hideShow' => true
+                    ])->render();
+                })
+                ->rawColumns(['action', 'booking_id'])
                 ->make(true);
         }
 
@@ -72,8 +74,7 @@ class CustomerController extends BaseController
      */
     public function show($id)
     {
-        $info['item'] = Customer::findOrFail($id);
-        return redirect()->route($this->showResource(), $info);
+        //
     }
 
     /**

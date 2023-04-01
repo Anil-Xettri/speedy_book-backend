@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Movie extends Model
+class Movie extends BaseModel
 {
     use HasFactory;
 
@@ -14,20 +14,12 @@ class Movie extends Model
 
     function getImageUrlAttribute()
     {
-        if ($this->image) {
-            return asset($this->image);
-        } else {
-            return null;
-        }
+        return $this->getFirstMediaUrl();
     }
 
     function getTrailerUrlAttribute()
     {
-        if ($this->trailer) {
-            return asset($this->trailer);
-        } else {
-            return null;
-        }
+        return $this->getFirstMediaUrl('trailer');
     }
 
     public function vendor()

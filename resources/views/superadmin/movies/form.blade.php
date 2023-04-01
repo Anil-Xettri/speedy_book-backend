@@ -28,7 +28,7 @@
     </div>
     <div class="col-md-6 my-2">
         <label for="image">Image <span class="text-danger">*</span></label><br>
-        <input type="file" name="image" @if(!$item->image_url) required @endif class="form-control" id="image"
+        <input type="file" name="image" @if(!$item->image) required @endif class="form-control" id="image"
                onchange="loadFile(event)"><br>
         <img src="" style="display: none" id="outputCreate" class="w-50 h-50"><br>
         @if($item->image_url)
@@ -38,8 +38,8 @@
 
     <div class="col-md-6 my-2">
         <label for="trailer">Trailer <span class="text-danger">*</span></label><br>
-        <input type="file" name="trailer" @if(!$item->image_url) required @endif class="form-control" id="trailer"
-               onchange="file(event)" accept=".mp4, .mov, .ogg, .qt"><br>
+        <input type="file" name="trailer" @if(!$item->trailer) required @endif class="form-control" id="trailer"
+               onchange="file(event)"><br>
         <video src="" style="display: none" id="video-create" class="w-50 h-50" controls>
         </video>
         @if($item->trailer_url)

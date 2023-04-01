@@ -30,6 +30,6 @@ class Seat extends Model
 
     public function bookings()
     {
-        return $this->hasMany(Booking::class, 'customer_id');
+        return $this->belongsToMany(Booking::class, 'booking_seats');
     }
 }

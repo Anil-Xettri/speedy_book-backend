@@ -33,14 +33,14 @@
 <hr>
 <div class="row">
     <div class="col-md-4 rows-columns">
-        <label>Total Rows</label>
+        <label>Total Rows <span class="text-danger">*</span></label>
         <input type="number" class="form-control" required id="rows" name="total_rows" value="{{$item->rows}}"
                placeholder="Enter number of rows">
         <span class="text-danger" id="rows-error" style="display: none">Rows should not be empty or less than 1.</span>
     </div>
 
     <div class="col-md-4 rows-columns">
-        <label>Total Columns</label>
+        <label>Total Columns <span class="text-danger">*</span></label>
         <input type="number" class="form-control" required id="columns" name="total_columns" value="{{$item->columns}}"
                placeholder="Enter number of columns">
         <span class="text-danger" id="columns-error"

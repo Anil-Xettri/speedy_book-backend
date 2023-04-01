@@ -4,8 +4,10 @@ namespace App\Http\Controllers\vendor;
 
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
-use App\Models\CinemaHall;
+use App\Models\Payment;
+use App\Models\Theater;
 use App\Models\Movie;
+use App\Models\Vendor;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -13,9 +15,16 @@ class VendorController extends Controller
 {
     public function dashboard()
     {
-        $info['cinemaHalls'] = CinemaHall::where('vendor_id', auth('vendor')->user()->id)->count();
+        $info['theaters'] = Theater::where('vendor_id', auth('vendor')->user()->id)->count();
         $info['movies'] = Movie::where('vendor_id', auth('vendor')->user()->id)->count();
         $info['bookings'] = Booking::where('vendor_id', auth('vendor')->user()->id)->count();
+        $payments = Payment::where('vendor_id', auth('vendor')->user()->id)->with('booking')->get();
+        $collections = 0;
+        foreach ($payments as $payment)
+        {
+            $collections += $payment->booking->sum('total');
+        }
+        $info['collection'] = $collections;
         $allMovies = Movie::where('vendor_id', auth('vendor')->user()->id)->get();
         $currentDate = null;
         $currentTime = null;
@@ -46,11 +55,11 @@ class VendorController extends Controller
                     $endingTime = $result;
                     if ($currentDate->eq($showDate)) {
                         if (strtotime($currentTime) >= strtotime($startingTime) && strtotime($currentTime) <= strtotime($endingTime)) {
-                            $cinemaHall = CinemaHall::where('id', $movie->cinema_hall_id)->first();
+                            $theater = Theater::where('id', $movie->theater_id)->first();
                             $nowShowing[$movie->id] = [
                                 'id' => $movie->id,
                                 'title' => $movie->title,
-                                'cinema_hall' => $cinemaHall->name,
+                                'theater' => $theater->name,
                                 'start_time' => $startingTime,
                                 'end_time' => $endingTime,
                                 'image' => $movie->image_url
@@ -58,11 +67,11 @@ class VendorController extends Controller
                         }
                     }
                     if ($showDate->between($nWeekSDate, $nWeekEDate)) {
-                        $cinemaHall = CinemaHall::where('id', $movie->cinema_hall_id)->first();
+                        $theater = Theater::where('id', $movie->theater_id)->first();
                         $comingSoon[$movie->id] = [
                             'id' => $movie->id,
                             'title' => $movie->title,
-                            'cinema_hall' => $cinemaHall->name,
+                            'theater' => $theater->name,
                             'start_time' => $startingTime,
                             'end_time' => $endingTime,
                             'image' => $movie->image_url
@@ -75,5 +84,11 @@ class VendorController extends Controller
         $info['nowShowings'] = $nowShowing;
         $info['newMovies'] = $comingSoon;
         return view('vendors.home', $info);
+    }
+
+    public function profile($id)
+    {
+        $info['item'] = Vendor::findOrFail($id);
+        return view('vendors.profile', $info);
     }
 }

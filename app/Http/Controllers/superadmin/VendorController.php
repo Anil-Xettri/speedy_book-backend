@@ -34,7 +34,7 @@ class VendorController extends BaseController
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->editColumn('image', function ($data) {
-                    $imgUrl = $data->image ? asset($data->image) : asset('images/placeholder-image.jpg');
+                    $imgUrl = $data->getImage() ? asset($data->getImage()) : asset('images/placeholder-image.jpg');
                     return '<a target="_blank" href="' . $imgUrl . '"><img style="height: 60%; width: 60%; object-fit: contain" src="' . $imgUrl . '" alt="logo"></a>';
                 })
                 ->editColumn('phone', function ($data) {
@@ -89,16 +89,35 @@ class VendorController extends BaseController
         $vendor = new Vendor($data);
         $vendor->save();
 
-        if ($request->hasFile('image') && $request->image != '') {
-            $file = $request->file('image');
-            $extension = $file->getClientOriginalExtension();
-            $filename = time() . '.' . $extension;
-
-            $filename = ImagePostHelper::saveImage($file, '/vendors/images', $filename);
-            $vendor->image = $filename;
-
-            $vendor->update();
+        if ($request->image) {
+            $vendor->addMediaFromRequest('image')->toMediaCollection();
         }
+
+        if ($request->banner_image) {
+            $vendor->addMediaFromRequest('banner_image')->toMediaCollection('banner-image');
+        }
+
+//        if ($request->hasFile('image') && $request->image != '') {
+//            $file = $request->file('image');
+//            $extension = $file->getClientOriginalExtension();
+//            $filename = time() . '.' . $extension;
+//
+//            $filename = ImagePostHelper::saveImage($file, '/vendors/images', $filename);
+//            $vendor->image = $filename;
+//
+//            $vendor->update();
+//        }
+//
+//        if ($request->hasFile('banner_image') && $request->banner_image != '') {
+//            $bannerFile = $request->file('banner_image');
+//            $bannerExtension = $bannerFile->getClientOriginalExtension();
+//            $bannerFilename = time() . '.' . $bannerExtension;
+//
+//            $bannerFilename = ImagePostHelper::saveImage($bannerFile, '/vendors/banner-images', $bannerFilename);
+//            $vendor->banner_image = $bannerFilename;
+//
+//            $vendor->update();
+//        }
 
         NotifyHelper::addSuccess();
         return redirect()->route($this->indexRoute());
@@ -156,18 +175,43 @@ class VendorController extends BaseController
         $vendor = Vendor::findOrFail($id);
         $vendor->update($data);
 
-        if ($request->hasFile('image') && $request->image != '') {
-
-            ImagePostHelper::deleteImage($vendor->image);
-
-            $file = $request->file('image');
-            $extension = $file->getClientOriginalExtension();
-            $filename = time() . '.' . $extension;
-
-            $filename = ImagePostHelper::saveImage($file, '/vendors/images', $filename);
-            $vendor->image = $filename;
-            $vendor->update();
+        if ($request->image) {
+            $vendor->clearMediaCollection();
+            $vendor->addMediaFromRequest('image')->toMediaCollection();
         }
+
+        if ($request->banner_image) {
+            $vendor->clearMediaCollection('banner-image');
+            $vendor->addMediaFromRequest('banner_image')->toMediaCollection('banner-image');
+        }
+
+//        if ($request->hasFile('image') && $request->image != '') {
+//
+//            ImagePostHelper::deleteImage($vendor->image);
+//
+//            $file = $request->file('image');
+//            $extension = $file->getClientOriginalExtension();
+//            $filename = time() . '.' . $extension;
+//
+//            $filename = ImagePostHelper::saveImage($file, '/vendors/images', $filename);
+//            $vendor->image = $filename;
+//            $vendor->update();
+//        }
+//
+//        if ($request->hasFile('banner_image') && $request->banner_image != '') {
+//
+//            ImagePostHelper::deleteImage($vendor->banner_image);
+//
+//            $bannerFile = $request->file('banner_image');
+//            $bannerExtension = $bannerFile->getClientOriginalExtension();
+//            $bannerFilename = time() . '.' . $bannerExtension;
+//
+//            $bannerFilename = ImagePostHelper::saveImage($bannerFile, '/vendors/banner-images', $bannerFilename);
+//
+//            $vendor->banner_image = $bannerFilename;
+//
+//            $vendor->update();
+//        }
 
         NotifyHelper::updateSuccess();
         return redirect()->route($this->indexRoute());
@@ -182,7 +226,8 @@ class VendorController extends BaseController
     public function destroy($id)
     {
         $vendor = Vendor::findOrFail($id);
-        ImagePostHelper::deleteImage($vendor->image);
+        $vendor->clearMediaCollection();
+        $vendor->clearMediaCollection('banner-image');
         $vendor->delete();
 
         NotifyHelper::deleteSuccess();

@@ -20,13 +20,13 @@
             <!-- small box -->
             <div class="small-box bg-gradient-teal">
                 <div class="inner">
-                    <h3>{{$cinemaHalls}}</h3>
-                    <p>Cinema Halls</p>
+                    <h3>{{$theaters}}</h3>
+                    <p>Theaters</p>
                 </div>
                 <div class="icon">
                     <i class="fas fa-tv"></i>
                 </div>
-                <a href="{{route('cinema-halls.index')}}" class="small-box-footer">More Info <i
+                <a href="{{route('theaters.index')}}" class="small-box-footer">More Info <i
                         class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
@@ -60,9 +60,23 @@
                         class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
+        <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-gradient-yellow">
+                <div class="inner">
+                    <h3>{{$collection}}</h3>
+                    <p>Total Collection</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-money-bill-alt"></i>
+                </div>
+                <a href="{{route('payments.index')}}" class="small-box-footer">More Info <i
+                        class="fas fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
     </div>
     <div class="row mt-2">
-        <div class="col-md-4">
+        <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
                     <div class="card-title">Now Showing</div>
@@ -79,7 +93,7 @@
                                     <div class="card-block px-2">
                                         <p class="text-lg font-weight-bold my-0">{{$nowShowing['title']}}</p>
                                         <p class="text-muted text-success text-md font-weight-bold my-0"
-                                           style="color: rgba(255,9,0,0.78)!important;">{{$nowShowing['cinema_hall']}}</p>
+                                           style="color: rgba(255,9,0,0.78)!important;">{{$nowShowing['theater']}}</p>
                                         <p class="text-muted text-sm font-weight-bold my-0">{{$nowShowing['start_time']}}
                                             - {{$nowShowing['end_time']}}</p>
                                     </div>
@@ -97,7 +111,7 @@
             </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
                     <div class="card-title">Coming Soon</div>
@@ -114,7 +128,7 @@
                                     <div class="card-block px-2">
                                         <p class="text-lg font-weight-bold my-0">{{$newMovie['title']}}</p>
                                         <p class="text-muted text-success text-md font-weight-bold my-0"
-                                           style="color: rgba(208,0,255,0.67)!important;">{{$newMovie['cinema_hall']}}</p>
+                                           style="color: rgba(208,0,255,0.67)!important;">{{$newMovie['theater']}}</p>
                                         <p class="text-muted text-sm font-weight-bold my-0">{{$newMovie['start_time']}}
                                             - {{$newMovie['end_time']}}</p>
                                     </div>

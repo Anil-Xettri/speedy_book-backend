@@ -3,7 +3,7 @@
 @endpush
 @section('form_content')
     <div class="row">
-        @if($item->image)
+        @if($item->image_url)
             <div class="col-md-6">
                 <label>Image: </label><br>
                 <img class="img-fluid img-circle" style="width: 200px; height: 150px"
@@ -11,14 +11,14 @@
                      alt="Vendor Image">
             </div>
         @endif
-        {{--            @if($item->getImage('banner-image'))--}}
-        {{--                <div class="col-md-6">--}}
-        {{--                    <label>Banner Image: </label><br>--}}
-        {{--                    <img class="img-fluid img-circle" style="width: 200px; height: 150px"--}}
-        {{--                         src="{{$item->getImage('banner-image')}}"--}}
-        {{--                         alt="Vendor Image">--}}
-        {{--                </div>--}}
-        {{--            @endif--}}
+        @if($item->banner_url)
+            <div class="col-md-6">
+                <label>Banner Image: </label><br>
+                <img class="img-flui" style="width: 250px; height: 200px"
+                     src="{{$item->banner_url}}"
+                     alt="Banner Image">
+            </div>
+        @endif
     </div>
 
     <div class="row my-4">

@@ -134,7 +134,7 @@ return [
     'usermenu_header_class' => 'bg-primary',
     'usermenu_image' => false,
     'usermenu_desc' => false,
-    'usermenu_profile_url' => false,
+    'usermenu_profile_url' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -259,7 +259,7 @@ return [
     'register_url' => false,
     'password_reset_url' => false,
     'password_email_url' => false,
-    'profile_url' => false,
+    'profile_url' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -338,6 +338,12 @@ return [
             'guard' => 'web'
         ],
         [
+            'text' => 'Movies',
+            'route' => 'movie.index',
+            'icon' => 'nav-icon fas fa-film',
+            'guard' => 'web'
+        ],
+        [
             'text' => 'Customers',
             'route' => 'customers.index',
             'icon' => 'nav-icon fas fa-user',
@@ -371,6 +377,12 @@ return [
             'text' => 'Bookings',
             'route' => 'bookings.index',
             'icon' => 'nav-icon fas fa-cash-register',
+            'guard' => 'vendor'
+        ],
+        [
+            'text' => 'Payments',
+            'route' => 'payments.index',
+            'icon' => 'nav-icon fas fa-money-bill',
             'guard' => 'vendor'
         ],
     ],

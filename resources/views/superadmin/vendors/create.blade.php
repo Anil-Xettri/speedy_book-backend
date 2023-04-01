@@ -13,11 +13,11 @@
         };
     </script>
 
-{{--    <script>--}}
-{{--        var file = function (event) {--}}
-{{--            var bannerImage = document.getElementById('bannerOutputCreate');--}}
-{{--            bannerImage.src = URL.createObjectURL(event.target.files[0]);--}}
-{{--            $('#bannerOutputCreate').css('display', '');--}}
-{{--        };--}}
-{{--    </script>--}}
+    <script>
+        var file = function (event) {
+            var bannerImage = document.getElementById('bannerOutputCreate');
+            bannerImage.src = URL.createObjectURL(event.target.files[0]);
+            $('#bannerOutputCreate').css('display', '');
+        };
+    </script>
 @endpush

@@ -17,9 +17,14 @@ class Booking extends Model
         return $this->belongsTo(Vendor::class, 'vendor_id');
     }
 
-    public function seat()
+    public function seats()
     {
-        return $this->belongsTo(Seat::class, 'seat_id');
+        return $this->belongsToMany(Seat::class, 'booking_seats');
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class, 'booking_id');
     }
 
     public function movie()

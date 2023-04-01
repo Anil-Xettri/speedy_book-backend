@@ -61,19 +61,19 @@
         <label for="image_url">Image</label><br>
         <input type="file" name="image" class="form-control" id="image" onchange="loadFile(event)"><br>
         <img src="" style="display: none" id="outputCreate" class="w-50 h-50"><br>
-        @if($item->image)
-            <img src="{{$item->image_url}}" id="output" class="w-50 h-50"><br>
+        @if($item->getImage())
+            <img src="{{$item->getImage()}}" id="output" class="w-50 h-50"><br>
         @endif
     </div>
 
-    {{--    <div class="col-6 my-2">--}}
-    {{--        <label for="">Banner Image</label><br>--}}
-    {{--        <input type="file" name="banner_image" class="form-control" id="banner-image" onchange="file(event)"><br>--}}
-    {{--        <img src="" style="display: none" id="bannerOutputCreate" class="w-50 h-50"><br>--}}
-    {{--        @if($item->getImage('banner-image'))--}}
-    {{--            <img src="{{$item->getImage('banner-image')}}" id="bannerOutput" class="w-50 h-50"><br>--}}
-    {{--        @endif--}}
-    {{--    </div>--}}
+        <div class="col-6 my-2">
+            <label for="">Banner Image</label><br>
+            <input type="file" name="banner_image" class="form-control" id="banner-image" onchange="file(event)"><br>
+            <img src="" style="display: none" id="bannerOutputCreate" class="w-50 h-50"><br>
+            @if($item->getImage('banner-image'))
+                <img src="{{$item->getImage('banner-image')}}" id="bannerOutput" class="w-50 h-50"><br>
+            @endif
+        </div>
 </div>
 
 <div class="row">
