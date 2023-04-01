@@ -75,14 +75,11 @@ class TheaterController extends BaseController
 
         $theater = new Theater();
         $theater->name = $request->name;
-        $theater->email = $request->email;
-        $theater->phone = $request->phone;
         $theater->status = $request->status;
         $theater->rows = $request->total_rows;
         $theater->columns = $request->total_columns;
         $theater->vendor_id = auth('vendor')->user()->id;
         $theater->save();
-
         foreach ($request->seats ?? [] as $i => $seat) {
             $seatData = new Seat([
                 'vendor_id' => auth('vendor')->user()->id,
@@ -141,8 +138,6 @@ class TheaterController extends BaseController
         ]);
         $theater = Theater::findOrFail($id);
         $theater->name = $request->name;
-        $theater->email = $request->email;
-        $theater->phone = $request->phone;
         $theater->status = $request->status;
         $theater->rows = $request->total_rows;
         $theater->columns = $request->total_columns;

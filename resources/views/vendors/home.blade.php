@@ -76,7 +76,7 @@
         </div>
     </div>
     <div class="row mt-2">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="card">
                 <div class="card-header">
                     <div class="card-title">Now Showing</div>
@@ -111,7 +111,43 @@
             </div>
         </div>
 
-        <div class="col-md-6">
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Next Showing</div>
+                </div>
+                <div class="card-body hide-scroll" style="overflow-y: scroll; height: 390px">
+                    @forelse($nextShowings as $nextShowing)
+                        <a target="_blank" href="{{route('movies.show', $nextShowing['id'])}}">
+                            <div class="row no-gutters m-1">
+                                <div class="col-auto">
+                                    <img src="{{$nextShowing['image'] ?: asset('images/placeholder-image.jpg')}}" alt=""
+                                         style="object-fit: cover; border-radius: 3px" height="80px" width="80px">
+                                </div>
+                                <div class="col">
+                                    <div class="card-block px-2">
+                                        <p class="text-lg font-weight-bold my-0">{{$nextShowing['title']}}</p>
+                                        <p class="text-muted text-success text-md font-weight-bold my-0"
+                                           style="color: rgba(255,9,0,0.78)!important;">{{$nextShowing['theater']}}</p>
+                                        <p class="text-muted text-sm font-weight-bold my-0">{{$nextShowing['start_time']}}
+                                            - {{$nextShowing['end_time']}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                        </a>
+                    @empty
+                        <div class="alert alert-danger text-center">
+                            No movies are next showing
+                        </div>
+                    @endforelse
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
             <div class="card">
                 <div class="card-header">
                     <div class="card-title">Coming Soon</div>
@@ -136,11 +172,11 @@
                             </div>
                             <hr>
                         </a>
-                        @empty
-                            <div class="alert alert-danger text-center">
-                                No movies are coming soon
-                            </div>
-                        @endforelse
+                    @empty
+                        <div class="alert alert-danger text-center">
+                            No movies are coming soon
+                        </div>
+                    @endforelse
 
                 </div>
             </div>

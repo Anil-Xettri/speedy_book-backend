@@ -9,18 +9,6 @@
     </div>
 
     <div class="col-md-6">
-        <label for="email">Email</label>
-        <input type="email" id="email" class="form-control" name="email" placeholder="Enter email"
-               value="{{old('email', $item->email)}}">
-    </div>
-
-    <div class="col-md-6 my-2">
-        <label for="phone">Phone</label>
-        <input type="text" id="phone" class="form-control" name="phone" placeholder="Enter phone"
-               value="{{old('phone', $item->phone)}}">
-    </div>
-
-    <div class="col-md-6 my-2">
         <label for="status">Status</label>
         <select id="status" name="status" class="form-control">
             <option value="Active" {{old('status', $item->status) === "Active" ? 'selected' : ''}}>Active</option>
