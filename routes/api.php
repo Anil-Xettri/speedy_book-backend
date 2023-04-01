@@ -37,6 +37,8 @@ Route::group(['prefix' => '', 'middleware' => 'auth:customer-api'], function () 
     Route::get('cinema-halls', [MovieApiController::class, 'getCinemaHalls']);
     Route::get('theaters', [MovieApiController::class, 'getTheaters']);
     Route::get('movies', [MovieApiController::class, 'getMovies']);
+    Route::post('movie-showing', [MovieApiController::class, 'showings']);
+    Route::post('booking', [PaymentApiController::class, 'booking']);
     Route::post('verify-payment', [PaymentApiController::class, 'paymentVerification']);
 
 });

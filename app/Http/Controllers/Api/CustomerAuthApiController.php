@@ -215,6 +215,8 @@ class CustomerAuthApiController extends BaseApiController
             $customer = Customer::where('email', $request->email)->first();
 
             $otp = "12345";
+            $customer->otp = $otp;
+            $customer->update();
 
             $mail_details = [
                 'subject' => 'OTP Verification',

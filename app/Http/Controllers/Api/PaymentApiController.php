@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Booking;
 use App\Models\Payment;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -11,6 +12,27 @@ use Illuminate\Support\Facades\Validator;
 
 class PaymentApiController extends BaseApiController
 {
+    public function booking(Request $request)
+    {
+        try {
+            $customer = auth('customer-api')->user();
+            //validation
+            $validator = Validator::make($request->all(), [
+                'vendor_id' => 'required',
+                'movie_id' => 'required',
+            ]);
+
+            if ($validator->fails()) {
+                $response['data'] = $validator->messages();
+                $response['success'] = false;
+                return $response;
+            }
+
+        } catch (\Exception $e) {
+            return $this->sendError($e->getMessage());
+        }
+    }
+
     public function paymentVerification(Request $request)
     {
         try {
@@ -40,8 +62,8 @@ class PaymentApiController extends BaseApiController
 
             ])->post($verify_url, [
 
-                "amount" => $validator['amount'] * 100,
-                "token" => $validator['token']
+                "amount" => $request->amount * 100,
+                "token" => $request->token
 
             ]);
 
@@ -58,8 +80,21 @@ class PaymentApiController extends BaseApiController
                 ]);
             }
 
+            $booking = Booking::where('id',$request->booking_id)->first();
+
+            if (!$booking)
+            {
+                return response()->json([
+                    "success" => false,
+                    "message" => "Invalid Booking."
+                ]);
+            }
+
+            $booking->status= "Paid";
+            $booking->update();
+
             $payment = new Payment([
-                'booking_id' => $validator['amount'],
+                'booking_id' => $request->booking_id,
                 'payment_method' => "Khalti",
                 'payment_verify_at' => Carbon::now('Asia/Kathmandu')->toDateTimeString()
             ]);

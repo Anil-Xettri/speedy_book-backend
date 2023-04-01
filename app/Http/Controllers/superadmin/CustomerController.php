@@ -31,8 +31,8 @@ class CustomerController extends BaseController
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->editColumn('image', function ($data) {
-                    $imgUrl = $data->profile_image ? asset($data->profile_image) : asset('images/placeholder-image.jpg');
-                    return '<a target="_blank" href="' . $imgUrl . '"><img style="height: 60%; width: 60%; object-fit: contain" src="' . $imgUrl . '" alt="logo"></a>';
+                    $imgUrl = $data->profile_image ? asset($data->profile_image) : asset('images/user-placeholder.png');
+                    return '<a target="_blank" href="' . $imgUrl . '"><img style="height: 30%; width: 30%; object-fit: contain" src="' . $imgUrl . '" alt="logo"></a>';
                 })
                 ->rawColumns(['image'])
                 ->make(true);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\vendor;
 
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
+use App\Models\Payment;
 use App\Models\Theater;
 use App\Models\Movie;
 use App\Models\Vendor;
@@ -17,6 +18,13 @@ class VendorController extends Controller
         $info['theaters'] = Theater::where('vendor_id', auth('vendor')->user()->id)->count();
         $info['movies'] = Movie::where('vendor_id', auth('vendor')->user()->id)->count();
         $info['bookings'] = Booking::where('vendor_id', auth('vendor')->user()->id)->count();
+        $payments = Payment::where('vendor_id', auth('vendor')->user()->id)->with('booking')->get();
+        $collections = 0;
+        foreach ($payments as $payment)
+        {
+            $collections += $payment->booking->sum('total');
+        }
+        $info['collection'] = $collections;
         $allMovies = Movie::where('vendor_id', auth('vendor')->user()->id)->get();
         $currentDate = null;
         $currentTime = null;
