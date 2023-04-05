@@ -118,7 +118,7 @@
                     <div class="card-title">Next Showing</div>
                 </div>
                 <div class="card-body hide-scroll" style="overflow-y: scroll; height: 390px">
-                    @forelse($nextShowings as $nextShowing)
+                    @forelse($nextShowings ?? [] as $nextShowing)
                         <a target="_blank" href="{{route('movies.show', $nextShowing['id'])}}">
                             <div class="row no-gutters m-1">
                                 <div class="col-auto">

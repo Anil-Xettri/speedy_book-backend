@@ -27,6 +27,10 @@ class PaymentApiController extends BaseApiController
                 $response['success'] = false;
                 return $response;
             }
+//            foreach ($request->seats as $seat)
+//            {
+//
+//            }
 
         } catch (\Exception $e) {
             return $this->sendError($e->getMessage());

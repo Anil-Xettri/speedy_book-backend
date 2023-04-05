@@ -106,6 +106,7 @@
 @section('js')
     <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.19.0/jquery.validate.min.js"></script>
     <script>
+        let seatDetails = [];
         $('#button_submit').click(
             function (e) {
                 var form = $('#form');
@@ -125,6 +126,26 @@
                 if (!valid) {
                     return;
                 }
+
+                let seats = [...$('.seats')];
+                let rows = [...$('.rows')];
+                let columns = [...$('.columns')];
+
+                rows.forEach(function(row, obj){
+                    let keyValue = {
+                        seat : seats[obj].value,
+                        row: row.value,
+                        column: columns[obj].value,
+                    }
+
+                    seatDetails.push(keyValue)
+
+                });
+
+                form.append(`
+                        <input name="seats" type="hidden" value='${ JSON.stringify(seatDetails)}'>
+                    `);
+
                 form.submit();
             }
         );

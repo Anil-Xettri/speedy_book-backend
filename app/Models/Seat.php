@@ -30,6 +30,6 @@ class Seat extends Model
 
     public function bookings()
     {
-        return $this->belongsToMany(Booking::class, 'booking_seats');
+        return $this->belongsToMany(Booking::class, 'booking_seats')->withPivot('status')->withTimestamps();
     }
 }
