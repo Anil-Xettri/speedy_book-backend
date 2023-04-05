@@ -2,16 +2,16 @@
 
 @php( $password_reset_url = View::getSection('password_reset_url') ?? config('adminlte.password_reset_url', 'password/reset') )
 
-@if (config('adminlte.use_route_url', false))
-    @php( $password_reset_url = $password_reset_url ? route($password_reset_url) : '' )
-@else
-    @php( $password_reset_url = $password_reset_url ? url($password_reset_url) : '' )
-@endif
+{{--@if (config('adminlte.use_route_url', false))--}}
+{{--    @php( $password_reset_url = $password_reset_url ? route($password_reset_url) : '' )--}}
+{{--@else--}}
+{{--    @php( $password_reset_url = $password_reset_url ? url($password_reset_url) : '' )--}}
+{{--@endif--}}
 
 @section('auth_header', __('adminlte::adminlte.password_reset_message'))
 
 @section('auth_body')
-    <form action="{{ route('reset-password.vendor') }}" method="post">
+    <form action="{{ route('vendor.reset') }}" method="post">
         @csrf
 
         {{-- Token field --}}

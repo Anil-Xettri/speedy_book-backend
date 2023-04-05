@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Validation\Rules;
 
 class ResetPasswordController extends Controller
 {
@@ -30,6 +31,15 @@ class ResetPasswordController extends Controller
     */
 
 //    use ResetsPasswords;
+
+    public function showResetForm(Request $request)
+    {
+        $token = $request->route()->parameter('token');
+
+        return view('auth.passwords.reset')->with(
+            ['token' => $token, 'email' => $request->email]
+        );
+    }
 
     /**
      * Reset the given user's password.

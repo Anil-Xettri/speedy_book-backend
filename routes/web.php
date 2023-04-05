@@ -34,10 +34,10 @@ Route::post('/login/vendor', [LoginController::class, 'vendorLogin'])->name('ven
 Route::get('vendor/forget/password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('vendor.reset-password');
 Route::post('vendor/reset-email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('reset.link');
 
-Route::post('vendor/reset-password', [ResetPasswordController::class, 'reset'])->name('reset-password.vendor');
+Route::post('vendor/reset-password', [ResetPasswordController::class, 'reset'])->name('vendor.reset');
 
 
-Auth::routes(['register' => false, 'reset' => false, 'password.reset' => false]);
+Auth::routes(['register' => false]);
 
 Route::get('/home', [App\Http\Controllers\superadmin\HomeController::class, 'dashboard'])->name('superadmin.home');
 
