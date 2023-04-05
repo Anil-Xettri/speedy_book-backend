@@ -18,6 +18,7 @@
                 <th>image</th>
                 <th>title</th>
                 <th>Theater</th>
+                <th>Release Date</th>
                 <th>status</th>
                 <th>action</th>
             </tr>
@@ -53,6 +54,7 @@
                             }
                         }
                     },
+                    {data: 'release_date', name: 'release_date'},
                     {data: 'action', name: 'action'},
                 ],
             });

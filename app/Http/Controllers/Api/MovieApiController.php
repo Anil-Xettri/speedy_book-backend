@@ -88,9 +88,10 @@ class MovieApiController extends BaseApiController
             $currentTime = new Carbon(Carbon::now('Asia/Kathmandu')->format('H:i:s'));
             $nowShowing = null;
             $nextShowing = null;
+            $comingSoon = [];
             $diffSec = [];
 //            $diff = [];
-            $movies = Movie::where('vendor_id', $request->vendor_id)->get();
+            $movies = Movie::where(['vendor_id' => $request->vendor_id, 'status' => 'Active'])->get();
 
             foreach ($movies as $i => $movie) {
                 foreach ($movie->showTimes as $showTime) {
@@ -102,11 +103,53 @@ class MovieApiController extends BaseApiController
                         $result = date("H:i:s", strtotime($startingTime) + $secs);
                         $endingTime = $result;
                         $theater = Theater::where('id', $movie->theater_id)->first();
+                        $releaseDate = $movie->release_date;
                         if ($currentDate->eq($showDate)) {
-                            if (strtotime($currentTime) >= strtotime($startingTime) && strtotime($currentTime) <= strtotime($endingTime)) {
+//                            if (strtotime($currentTime) >= strtotime($startingTime) && strtotime($currentTime) <= strtotime($endingTime)) {
                                 $nowShowing[] = [
                                     'id' => $movie->id,
                                     'title' => $movie->title,
+                                    'release_date' => $movie->release_date,
+                                    'duration' => $movie->duration,
+                                    'theater_id' => $movie->theater->id,
+                                    'theater' => $movie->theater->name,
+                                    'start_time' => $startingTime,
+                                    'end_time' => $endingTime,
+                                    'description' => $movie->description,
+                                    'image' => $movie->image_url
+                                ];
+//                            }
+
+//                            if ($nowShowing || !empty($nowShowing)) {
+//                                foreach ($nowShowing as $showing) {
+//                                    if ($theater->id == $showing['theater_id'] && $startingTime > $showing['end_time']) {
+//                                        $difference = Carbon::parse($showing['end_time'])->diffInSeconds(Carbon::parse($startingTime));
+//                                        if (empty($diffSec)) {
+//                                            $diffSec[$theater->id][$showTime->id] = $difference;
+//                                        } else {
+//                                            if (!isset($diffSec[$theater->id])) {
+//                                                $diffSec[$theater->id][$showTime->id] = $difference;
+//                                            } else {
+//                                                foreach ($diffSec[$theater->id] as $oldShow) {
+//                                                    if ($oldShow > $difference) {
+//                                                        $diffSec[$theater->id] = [];
+//                                                        $diffSec[$theater->id][$showTime->id] = $difference;
+//                                                    }
+//                                                }
+//                                            }
+//                                        }
+//                                    }
+//                                }
+//                            }
+
+
+                            //comingSoon
+                            if ($releaseDate->gt($currentDate)) {
+                                $comingSoon[] = [
+                                    'id' => $movie->id,
+                                    'title' => $movie->title,
+                                    'release_date' => $movie->release_date,
+                                    'duration' => $movie->duration,
                                     'theater_id' => $movie->theater->id,
                                     'theater' => $movie->theater->name,
                                     'start_time' => $startingTime,
@@ -116,64 +159,45 @@ class MovieApiController extends BaseApiController
                                 ];
                             }
 
-                            if ($nowShowing || !empty($nowShowing)) {
-                                foreach ($nowShowing as $showing) {
-                                    if ($theater->id == $showing['theater_id'] && $startingTime > $showing['end_time']) {
-                                        $difference = Carbon::parse($showing['end_time'])->diffInSeconds(Carbon::parse($startingTime));
-                                        if (empty($diffSec)) {
-                                            $diffSec[$theater->id][$showTime->id] = $difference;
-//                                            $diff[$showTime->id] = Carbon::parse($showing['end_time'])->diffInSeconds(Carbon::parse($startingTime));
-                                        } else {
-                                            if (!isset($diffSec[$theater->id])) {
-                                                $diffSec[$theater->id][$showTime->id] = $difference;
-                                            } else {
-                                                foreach ($diffSec[$theater->id] as $oldShow) {
-                                                    if ($oldShow > $difference) {
-                                                        $diffSec[$theater->id] = [];
-                                                        $diffSec[$theater->id][$showTime->id] = $difference;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
                         }
                     }
                 }
             }
 
-            if (!empty($diffSec)) {
-                foreach ($diffSec as $theaterHall) {
-                    foreach ($theaterHall as $showTimeId => $value) {
-                        $nextShowTime = ShowTime::where('id', $showTimeId)->first();
-
-                        foreach (json_decode($nextShowTime->show_details, true) as $showDetails) {
-                            $nextStartingTime = date("H:i:s", strtotime($showDetails['show_time']));
-                            $nextDuration = $nextShowTime->movie->duration;
-                            $nextSecs = strtotime($nextDuration) - strtotime("00:00:00");
-                            $nextResult = date("H:i:s", strtotime($nextStartingTime) + $nextSecs);
-                            $nextEndingTime = $nextResult;
-
-                            $nextShowing[] = [
-                                'id' => $nextShowTime->movie->id,
-                                'title' => $nextShowTime->movie->title,
-                                'theater_id' => $nextShowTime->theater->id,
-                                'theater' => $nextShowTime->theater->name,
-                                'start_time' => $nextStartingTime,
-                                'end_time' => $nextEndingTime,
-                                'description' => $nextShowTime->movie->description,
-                                'image' => $nextShowTime->movie->image_url
-                            ];
-                        }
-                    }
-                }
-            }
+//            if (!empty($diffSec)) {
+//                foreach ($diffSec as $theaterHall) {
+//                    foreach ($theaterHall as $showTimeId => $value) {
+//                        $nextShowTime = ShowTime::where('id', $showTimeId)->first();
+//
+//                        foreach (json_decode($nextShowTime->show_details, true) as $showDetails) {
+//                            $nextStartingTime = date("H:i:s", strtotime($showDetails['show_time']));
+//                            $nextDuration = $nextShowTime->movie->duration;
+//                            $nextSecs = strtotime($nextDuration) - strtotime("00:00:00");
+//                            $nextResult = date("H:i:s", strtotime($nextStartingTime) + $nextSecs);
+//                            $nextEndingTime = $nextResult;
+//
+//                            $nextShowing[] = [
+//                                'id' => $nextShowTime->movie->id,
+//                                'title' => $nextShowTime->movie->title,
+//                                'theater_id' => $nextShowTime->theater->id,
+//                                'theater' => $nextShowTime->theater->name,
+//                                'release_date' => $nextShowTime->movie->release_date,
+//                                'duration' => $nextShowTime->movie->duration,
+//                                'start_time' => $nextStartingTime,
+//                                'end_time' => $nextEndingTime,
+//                                'description' => $nextShowTime->movie->description,
+//                                'image' => $nextShowTime->movie->image_url
+//                            ];
+//                        }
+//                    }
+//                }
+//            }
             return response()->json([
                 'success' => true,
                 'data' => [
                     'nowShowing' => $nowShowing,
-                    'nextShowing' => $nextShowing,
+//                    'nextShowing' => $nextShowing,
+                'comingSoon' => $comingSoon
                 ]
             ]);
 

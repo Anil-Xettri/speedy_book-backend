@@ -11,7 +11,7 @@
 @section('auth_header', __('adminlte::adminlte.password_reset_message'))
 
 @section('auth_body')
-    <form action="{{ route('reset.password.vendor') }}" method="post">
+    <form action="{{ route('reset-password.vendor') }}" method="post">
         @csrf
 
         {{-- Token field --}}

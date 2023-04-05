@@ -19,6 +19,7 @@ class CreateMoviesTable extends Migration
             $table->unsignedBigInteger('theater_id');
             $table->string('title');
             $table->time('duration');
+            $table->date('release_date');
 
             $table->string('status')->comment('Active, Inactive')->default('Active');
             $table->longText('description')->nullable();
