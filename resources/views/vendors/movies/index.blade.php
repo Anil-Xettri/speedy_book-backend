@@ -40,6 +40,7 @@
                     {data: 'image', name: 'image'},
                     {data: 'title', name: 'title'},
                     {data: 'theater_id', name: 'theater_id'},
+                    {data: 'release_date', name: 'release_date'},
                     {
                         data: 'status', name: 'status', render: function (data, type, full, meta) {
                             switch (data) {
@@ -54,7 +55,6 @@
                             }
                         }
                     },
-                    {data: 'release_date', name: 'release_date'},
                     {data: 'action', name: 'action'},
                 ],
             });
