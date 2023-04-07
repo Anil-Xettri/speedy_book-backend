@@ -142,23 +142,22 @@ class MovieApiController extends BaseApiController
 //                                }
 //                            }
 
+                        }
 
-                            //comingSoon
-                            if ($releaseDate > $currentDate) {
-                                $comingSoon[] = [
-                                    'id' => $movie->id,
-                                    'title' => $movie->title,
-                                    'release_date' => $movie->release_date,
-                                    'duration' => $movie->duration,
-                                    'theater_id' => $movie->theater->id,
-                                    'theater' => $movie->theater->name,
-                                    'start_time' => $startingTime,
-                                    'end_time' => $endingTime,
-                                    'description' => $movie->description,
-                                    'image' => $movie->image_url
-                                ];
-                            }
-
+                        //comingSoon
+                        if ($releaseDate > $currentDate) {
+                            $comingSoon[] = [
+                                'id' => $movie->id,
+                                'title' => $movie->title,
+                                'release_date' => $movie->release_date,
+                                'duration' => $movie->duration,
+                                'theater_id' => $movie->theater->id,
+                                'theater' => $movie->theater->name,
+                                'start_time' => $startingTime,
+                                'end_time' => $endingTime,
+                                'description' => $movie->description,
+                                'image' => $movie->image_url
+                            ];
                         }
                     }
                 }

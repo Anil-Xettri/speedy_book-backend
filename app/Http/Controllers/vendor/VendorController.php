@@ -63,7 +63,7 @@ class VendorController extends Controller
                     //nowShowing
                     if ($currentDate->eq($showDate)) {
                         if (strtotime($currentTime) >= strtotime($startingTime) && strtotime($currentTime) <= strtotime($endingTime)) {
-                            $nowShowing[$movie->id] = [
+                            $nowShowing[] = [
                                 'id' => $movie->id,
                                 'title' => $movie->title,
                                 'theater_id' => $theater->id,
@@ -100,9 +100,9 @@ class VendorController extends Controller
                     }
 
                     //comingSoon
-                    if ($currentDate < $releaseDate) {
+                    if ($releaseDate > $currentDate) {
                         $theater = Theater::where('id', $movie->theater_id)->first();
-                        $comingSoon[$movie->id] = [
+                        $comingSoon[] = [
                             'id' => $movie->id,
                             'title' => $movie->title,
                             'theater_id' => $theater->id,
