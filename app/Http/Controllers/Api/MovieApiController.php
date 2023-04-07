@@ -144,7 +144,7 @@ class MovieApiController extends BaseApiController
 
 
                             //comingSoon
-                            if ($releaseDate->gt($currentDate)) {
+                            if ($releaseDate > $currentDate) {
                                 $comingSoon[] = [
                                     'id' => $movie->id,
                                     'title' => $movie->title,

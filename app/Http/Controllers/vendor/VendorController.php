@@ -26,7 +26,7 @@ class VendorController extends Controller
             $collections += $payment->booking->sum('total');
         }
         $info['collection'] = $collections;
-        $allMovies = Movie::where('vendor_id', auth('vendor')->user()->id)->get();
+        $allMovies = Movie::where(['vendor_id' => auth('vendor')->user()->id, 'status' => 'Active'])->get();
         $currentDate = null;
         $currentTime = null;
         try {
@@ -43,7 +43,9 @@ class VendorController extends Controller
         $nWeekEDate = Carbon::parse($nWeekSDate)->addDays(6)->toDateString();
 
 
+
         foreach ($allMovies as $movie) {
+
             foreach ($movie->showTimes as $showTime) {
                 foreach (json_decode($showTime->show_details, true) as $showDetails) {
                     try {
@@ -57,6 +59,7 @@ class VendorController extends Controller
                     $result = date("H:i:s", strtotime($startingTime) + $secs);
                     $endingTime = $result;
                     $theater = Theater::where('id', $movie->theater_id)->first();
+                    $releaseDate = $movie->release_date;
                     //nowShowing
                     if ($currentDate->eq($showDate)) {
                         if (strtotime($currentTime) >= strtotime($startingTime) && strtotime($currentTime) <= strtotime($endingTime)) {
@@ -97,7 +100,8 @@ class VendorController extends Controller
                     }
 
                     //comingSoon
-                    if ($showDate->between($nWeekSDate, $nWeekEDate)) {
+                    dd($releaseDate);
+                    if ($currentDate < $releaseDate) {
                         $theater = Theater::where('id', $movie->theater_id)->first();
                         $comingSoon[$movie->id] = [
                             'id' => $movie->id,
