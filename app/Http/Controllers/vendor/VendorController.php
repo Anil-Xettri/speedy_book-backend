@@ -100,7 +100,6 @@ class VendorController extends Controller
                     }
 
                     //comingSoon
-                    dd($releaseDate);
                     if ($currentDate < $releaseDate) {
                         $theater = Theater::where('id', $movie->theater_id)->first();
                         $comingSoon[$movie->id] = [
