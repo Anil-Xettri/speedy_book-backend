@@ -62,7 +62,7 @@ class VendorController extends Controller
                     $releaseDate = $movie->release_date;
                     //nowShowing
                     if ($currentDate->eq($showDate)) {
-                        if (strtotime($currentTime) >= strtotime($startingTime) && strtotime($currentTime) <= strtotime($endingTime)) {
+//                        if (strtotime($currentTime) >= strtotime($startingTime) && strtotime($currentTime) <= strtotime($endingTime)) {
                             $nowShowing[] = [
                                 'id' => $movie->id,
                                 'title' => $movie->title,
@@ -72,7 +72,7 @@ class VendorController extends Controller
                                 'end_time' => $endingTime,
                                 'image' => $movie->image_url
                             ];
-                        }
+//                        }
                     }
 
                     //nextShowing
