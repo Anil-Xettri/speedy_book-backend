@@ -46,19 +46,19 @@
     <div class="row">
         <div class="col-md-3">
             <label style="margin-left: 70px">Movie Date</label>
-            <input type="text" required class="form-control" onfocus="(this.type='date')" placeholder="Enter Movie Date"
+            <input type="text" required class="form-control show-date" onfocus="(this.type='date')" placeholder="Enter Movie Date"
                    name="show_date[]">
         </div>
 
         <div class="col-md-3">
             <label style="margin-left: 70px">Movie Time</label>
-            <input type="text" required class="form-control" onfocus="(this.type='time')" placeholder="Enter Movie Time"
+            <input type="text" required class="form-control show-time" onfocus="(this.type='time')" placeholder="Enter Movie Time"
                    name="show_time[]">
         </div>
 
         <div class="col-md-3">
             <label style="margin-left: 70px">Ticket Price</label>
-            <input type="number" required class="form-control" placeholder="Enter Ticket Price" name="ticket_price[]">
+            <input type="number" required class="form-control show-price" placeholder="Enter Ticket Price" name="ticket_price[]">
         </div>
     </div>
 @elseif($routeName == "Edit")
@@ -68,7 +68,7 @@
                 @if ($loop->first)
                     <label style="margin-left: 70px">Movie Date</label>
                 @endif
-                <input type="text" required class="form-control" onfocus="(this.type='date')"
+                <input type="text" required class="form-control  show-date" onfocus="(this.type='date')"
                        placeholder="Enter Movie Date"
                        name="show_date[]" value="{{$showDetails['show_date']}}">
             </div>
@@ -77,7 +77,7 @@
                 @if ($loop->first)
                     <label style="margin-left: 70px">Movie Time</label>
                 @endif
-                <input type="text" required class="form-control" onfocus="(this.type='time')"
+                <input type="text" required class="form-control show-time" onfocus="(this.type='time')"
                        placeholder="Enter Movie Time"
                        name="show_time[]" value="{{$showDetails['show_time']}}">
             </div>
@@ -171,17 +171,17 @@
                                     <hr>
                                     <div class="row">
     <div class="col-md-3">
-        <input type="text" required class="form-control required-field" onfocus="(this.type='date')" placeholder="Enter Movie Date"
+        <input type="text" required class="form-control required-field show-date" onfocus="(this.type='date')" placeholder="Enter Movie Date"
                name="show_date[]" data-message="Movie Date">
     </div>
 
     <div class="col-md-3">
-        <input type="text" required class="form-control required-field" onfocus="(this.type='time')" placeholder="Enter Movie Time"
+        <input type="text" required class="form-control required-field show-time" onfocus="(this.type='time')" placeholder="Enter Movie Time"
                name="show_time[]" data-message="Movie Time">
     </div>
 
     <div class="col-md-3">
-        <input type="number" required class="form-control required-field" placeholder="Enter Ticket Price" name="ticket_price[]" data-message="Ticket Price">
+        <input type="number" required class="form-control required-field show-price" placeholder="Enter Ticket Price" name="ticket_price[]" data-message="Ticket Price">
     </div>
 <div class="col-md-3">
         <button class="remove btn btn-danger">Remove</button>

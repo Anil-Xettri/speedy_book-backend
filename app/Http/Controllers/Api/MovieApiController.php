@@ -71,6 +71,42 @@ class MovieApiController extends BaseApiController
         }
     }
 
+    public function movieDetails(Request $request, $id)
+    {
+        try {
+            $movie = Movie::where('id', $id)->first();
+            if (!$movie) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid Movie.'
+                ]);
+            }
+
+            $today = new Carbon(Carbon::now('Asia/Kathmandu')->toDateString());
+            $tomorrow = new Carbon(Carbon::tomorrow('Asia/Kathmandu')->toDateString());
+            $showDetails = [];
+
+            foreach ($movie->showTimes as $showTime) {
+                foreach (json_decode($showTime->show_details, true) as $showDetail) {
+                    if (new Carbon($showDetail['show_date']) == $today || new Carbon($showDetail['show_date']) == $tomorrow) {
+                        $showDetails[] = [
+                            'date' => $showDetail['show_date'],
+                            'time' => $showDetail['show_time'],
+                            'price' => $showDetail['ticket_price'],
+                        ];
+                    }
+                }
+            }
+            return response()->json([
+                'success' => true,
+                'data' => ['movie' => $movie, 'show_time' => $showDetails]
+            ]);
+
+        } catch (\Exception $e) {
+            return $this->sendError($e->getMessage());
+        }
+    }
+
     public function showings(Request $request)
     {
         try {
@@ -106,18 +142,18 @@ class MovieApiController extends BaseApiController
                         $releaseDate = $movie->release_date;
                         if ($currentDate->eq($showDate)) {
 //                            if (strtotime($currentTime) >= strtotime($startingTime) && strtotime($currentTime) <= strtotime($endingTime)) {
-                                $nowShowing[] = [
-                                    'id' => $movie->id,
-                                    'title' => $movie->title,
-                                    'release_date' => $movie->release_date,
-                                    'duration' => $movie->duration,
-                                    'theater_id' => $movie->theater->id,
-                                    'theater' => $movie->theater->name,
-                                    'start_time' => $startingTime,
-                                    'end_time' => $endingTime,
-                                    'description' => $movie->description,
-                                    'image' => $movie->image_url
-                                ];
+                            $nowShowing[] = [
+                                'id' => $movie->id,
+                                'title' => $movie->title,
+                                'release_date' => $movie->release_date,
+                                'duration' => $movie->duration,
+                                'theater_id' => $movie->theater->id,
+                                'theater' => $movie->theater->name,
+                                'start_time' => $startingTime,
+                                'end_time' => $endingTime,
+                                'description' => $movie->description,
+                                'image' => $movie->image_url
+                            ];
 //                            }
 
 //                            if ($nowShowing || !empty($nowShowing)) {
@@ -196,7 +232,7 @@ class MovieApiController extends BaseApiController
                 'data' => [
                     'nowShowing' => $nowShowing,
 //                    'nextShowing' => $nextShowing,
-                'comingSoon' => $comingSoon
+                    'comingSoon' => $comingSoon
                 ]
             ]);
 
