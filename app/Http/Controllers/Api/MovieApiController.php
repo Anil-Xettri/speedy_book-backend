@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Booking;
 use App\Models\Movie;
 use App\Models\ShowTime;
 use App\Models\Theater;
@@ -107,6 +108,56 @@ class MovieApiController extends BaseApiController
         }
     }
 
+    public function showDetails(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'show_id' => 'required',
+            ]);
+            if ($validator->fails()) {
+                $response['success'] = false;
+                $response['message'] = $validator->messages()->first();
+                return $response;
+            }
+
+            $showTime = ShowTime::where('id', $request->show_id)->first();
+            if (!$showTime) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid show time.'
+                ]);
+            }
+
+            $seatDetails = [];
+
+            foreach (json_decode($showTime->show_details, true) ?? [] as $showDetails) {
+                $showDate = $showDetails['show_date'];
+                $showTime = $showDetails['show_time'];
+                $showDateTime = $showDate . ' ' . $showTime;
+                $bookings = Booking::where('show_time', $showDateTime)->get();
+                foreach ($bookings as $booking) {
+                    foreach ($booking->seats as $seat) {
+                        $seatDetails[] = [
+                            'booking_id' => $seat->pivot->booking_id,
+                            'seat_id' => $seat->pivot->seat_id,
+                            'seat_name' => $seat->seat_name,
+                            'status' => $seat->pivot->status,
+                        ];
+                    }
+
+                }
+            }
+
+            return response()->json([
+                'success' => true,
+                'data' => $seatDetails
+            ]);
+
+        } catch (\Exception $e) {
+            return $this->sendError($e->getMessage());
+        }
+    }
+
     public function showings(Request $request)
     {
         try {
@@ -131,7 +182,7 @@ class MovieApiController extends BaseApiController
 
             foreach ($movies as $i => $movie) {
                 foreach ($movie->showTimes as $showTime) {
-                    foreach (json_decode($showTime->show_details, true) as $showDetails) {
+                    foreach (json_decode($showTime->show_details, true) ?? [] as $showDetails) {
                         $showDate = new Carbon($showDetails['show_date']);
                         $startingTime = date("H:i:s", strtotime($showDetails['show_time']));
                         $duration = $movie->duration;
