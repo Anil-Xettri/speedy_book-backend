@@ -28,8 +28,8 @@
 
 @section('css')
     <style>
-        .error {
-            color: #FF0000;
+        label.error {
+            color: rgba(234, 52, 52, 0.84);
         }
 
         body::-webkit-scrollbar {
@@ -114,10 +114,29 @@
 
                 $(document).find('.required-field').each(function () {
                     if (!$(this).val()) {
-                        $(this).parent().append(`<span style="color: red;font-weight: bold">This field is required.</span>`);
+                        $(this).parent().append(`<span style="color: rgba(234, 52, 52, 0.84);;font-weight: bold">This field is required.</span>`);
                         valid = false;
                     }
                 });
+
+                let routeName = "{{$routeName}}";
+                if (routeName)
+                {
+                    let movies = JSON.parse($(document).find('#movies').val());
+                    let movieId = $('#movie').val();
+                    var index = movies.findIndex(item => item.id == movieId);
+                    var movie = movies[index];
+
+                    var releaseDate = movie.release_date;
+                    $('.show-date').each(function (index, date) {
+                        let showDate = $(this).val();
+                        console.log(new Date(showDate) < new Date(releaseDate));
+                        if (new Date(showDate) < new Date(releaseDate)) {
+                            console.log("hello");
+                        }
+                    });
+                    return;
+                }
 
                 if (!form.valid()) {
                     valid = false;
@@ -131,9 +150,9 @@
                 let rows = [...$('.rows')];
                 let columns = [...$('.columns')];
 
-                rows.forEach(function(row, obj){
+                rows.forEach(function (row, obj) {
                     let keyValue = {
-                        seat : seats[obj].value,
+                        seat: seats[obj].value,
                         row: row.value,
                         column: columns[obj].value,
                     }
@@ -143,7 +162,7 @@
                 });
 
                 form.append(`
-                        <input name="seats" type="hidden" value='${ JSON.stringify(seatDetails)}'>
+                        <input name="seats" type="hidden" value='${JSON.stringify(seatDetails)}'>
                     `);
 
                 form.submit();

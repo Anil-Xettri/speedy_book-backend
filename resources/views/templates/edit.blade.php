@@ -69,8 +69,8 @@
 
 @section('css')
     <style>
-        .error {
-            color:#FF0000;
+        label.error {
+            color: rgba(234, 52, 52, 0.84);
         }
         body::-webkit-scrollbar {
             display: none;  /* Safari and Chrome */

@@ -85,9 +85,8 @@ class MovieApiController extends BaseApiController
                 ]);
             }
 
-            $today = new Carbon(Carbon::now('Asia/Kathmandu')->toDateString());
-            $tomorrow = new Carbon(Carbon::tomorrow('Asia/Kathmandu')->toDateString());
-            $showDetails = [];
+            $today = new Carbon(Carbon::now('Asia/Kathmandu')->format('Y-m-d'));
+            $tomorrow = new Carbon(Carbon::tomorrow('Asia/Kathmandu')->format('Y-m-d'));
             $todayShows = [];
             $tomorrowShows = [];
 
@@ -96,25 +95,25 @@ class MovieApiController extends BaseApiController
                     if (new Carbon($showDetail['show_date']) == $today) {
                         $todayShows[] = [
                             'show_time_id' => $showTime->id,
-                            'date' => $showDetail['show_date'],
-                            'time' => $showDetail['show_time'],
-                            'price' => $showDetail['ticket_price'],
+                            'show_date' => $showDetail['show_date'],
+                            'show_time' => $showDetail['show_time'],
+                            'ticket_price' => $showDetail['ticket_price'],
                         ];
                     }
 
                     if (new Carbon($showDetail['show_date']) == $tomorrow) {
                         $tomorrowShows[] = [
                             'show_time_id' => $showTime->id,
-                            'date' => $showDetail['show_date'],
-                            'time' => $showDetail['show_time'],
-                            'price' => $showDetail['ticket_price'],
+                            'show_date' => $showDetail['show_date'],
+                            'show_time' => $showDetail['show_time'],
+                            'ticket_price' => $showDetail['ticket_price'],
                         ];
                     }
                 }
             }
             return response()->json([
                 'success' => true,
-                'data' => ['movie' => $movie, '' . $today . '' => $todayShows, '' . $tomorrow . '' => $tomorrowShows]
+                'data' => ['movie' => $movie, '' . Carbon::parse($today)->format('Y-m-d') . '' => $todayShows, '' . Carbon::parse($tomorrow)->format('Y-m-d') . '' => $tomorrowShows]
             ]);
 
         } catch (\Exception $e) {
@@ -153,39 +152,28 @@ class MovieApiController extends BaseApiController
                 $showDate = $showDetails['show_date'];
                 $showTime = $showDetails['show_time'];
                 $showDateTime = $showDate . ' ' . $showTime;
-//                $bookingsDetails = Booking::where('show_time', $showDateTime)->get();
-//                foreach ($bookingsDetails ?? [] as $booking) {
-//                    foreach ($booking->seats ?? [] as $seat) {
-//                        $seatDetails[] = [
-//                            'booking_id' => $seat->pivot->booking_id,
-//                            'seat_id' => $seat->pivot->seat_id,
-//                            'seat_name' => $seat->seat_name,
-//                            'status' => $seat->pivot->status,
-//                        ];
-//                    }
-//                }
-
                 $bookings[] = Booking::where('show_time', $showDateTime)->pluck('id')->toArray();
             }
-
             $emptySeats = Seat::where(['theater_id' => $request->theater_id, 'seat_name' => ""])->get();
+
             foreach ($emptySeats ?? [] as $emptySeat) {
                 $seatDetails[] = [
-                    'booking_id' => null,
                     'seat_id' => $emptySeat->id,
                     'seat_name' => "",
+                    'row_no' => $emptySeat->row_no,
+                    'column_no' => $emptySeat->column_no,
                     'status' => "Unavailable",
                 ];
             }
-
             $seatData = BookingSeat::whereIn('booking_id', $bookings[0])->pluck('seat_id')->toArray();
-            $bookingSeats = $seatData;
-            $AvailSeats = Seat::where('theater_id', $request->theater_id)->where('seat_name', '!=', "")->whereNotIn('id', $bookingSeats)->get();
+//            $bookingSeats = $seatData;
+            $AvailSeats = Seat::where('theater_id', $request->theater_id)->where('seat_name', '!=', "")->whereNotIn('id', $seatData)->get();
             foreach ($AvailSeats ?? [] as $availSeat) {
                 $seatDetails[] = [
-                    'booking_id' => null,
                     'seat_id' => $availSeat->id,
                     'seat_name' => $availSeat->seat_name,
+                    'row_no' => $availSeat->row_no,
+                    'column_no' => $availSeat->column_no,
                     'status' => "Available",
                 ];
             }
@@ -193,18 +181,24 @@ class MovieApiController extends BaseApiController
             $b = BookingSeat::whereIn('booking_id', $bookings[0])->get();
             foreach ($b ?? [] as $f) {
                 $seatDetails[] = [
-                    'booking_id' => $f->id,
                     'seat_id' => $f->seat_id,
                     'seat_name' => $f->seat->seat_name,
+                    'row_no' => $f->seat->row_no,
+                    'column_no' => $f->seat->column_no,
                     'status' => $f->status,
                 ];
             }
 
-            $array = collect($seatDetails)->sortBy('seat_id');
+            $arrays = collect($seatDetails)->sortBy('seat_id');
+            $finalDetails = [];
+
+            foreach ($arrays ?? [] as $array) {
+                $finalDetails[] = $array;
+            }
 
             return response()->json([
                 'success' => true,
-                'data' => $array
+                'data' => ["theater" => $theater, "seats" => $finalDetails]
             ]);
 
         } catch (\Exception $e) {
