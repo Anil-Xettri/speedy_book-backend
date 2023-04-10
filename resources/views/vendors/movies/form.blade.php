@@ -15,10 +15,17 @@
         </select>
     </div>
     <div class="col-md-6 my-2">
-        <label for="password">Duration <span class="text-danger">*</span></label>
+        <label for="">Duration <span class="text-danger">*</span></label>
         <input type="text" name="duration" onfocus="(this.type='time')" class="form-control" placeholder="Enter Movie Duration"
                value="{{old('duration', $item->duration)}}">
     </div>
+
+    <div class="col-md-6 my-2">
+        <label for="">Release Date <span class="text-danger">*</span></label>
+        <input type="text" name="release_date" onfocus="(this.type='date')" class="form-control" placeholder="Enter Release Date"
+               value="{{old('release_date', $item->release_date)}}">
+    </div>
+
     <div class="col-md-6 my-2">
         <label for="">Status</label>
         <select name="status" class="form-control">

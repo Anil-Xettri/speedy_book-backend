@@ -45,6 +45,9 @@
 
     <div class="row my-4">
         <div class="col-md-6">
+            <label for=""><span class="show-text">Release Date:</span></label> {{ $item->release_date.' Minutes' ?: '---'}}<br>
+        </div>
+        <div class="col-md-6">
             <label for=""><span class="show-text">Status:</span></label>
             @if($item->status == 'Active')
                 <span class="badge badge-success">Active</span>

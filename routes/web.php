@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\superadmin\ChangePasswordController;
 use Illuminate\Support\Facades\Route;
 
@@ -29,7 +31,13 @@ Route::get('/redirect', function () {
 
 Route::post('/login/vendor', [LoginController::class, 'vendorLogin'])->name('vendor.login-redirect');
 
-Auth::routes(['register' => false, 'reset' => false, 'password.reset' => false]);
+Route::get('vendor/forget/password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('vendor.reset-password');
+Route::post('vendor/reset-email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('reset.link');
+
+Route::post('vendor/reset-password', [ResetPasswordController::class, 'reset'])->name('vendor.reset');
+
+
+Auth::routes(['register' => false]);
 
 Route::get('/home', [App\Http\Controllers\superadmin\HomeController::class, 'dashboard'])->name('superadmin.home');
 

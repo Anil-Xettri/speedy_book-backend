@@ -9,18 +9,6 @@
     </div>
 
     <div class="col-md-6">
-        <label for="email">Email</label>
-        <input type="email" id="email" class="form-control" name="email" placeholder="Enter email"
-               value="{{old('email', $item->email)}}">
-    </div>
-
-    <div class="col-md-6 my-2">
-        <label for="phone">Phone</label>
-        <input type="text" id="phone" class="form-control" name="phone" placeholder="Enter phone"
-               value="{{old('phone', $item->phone)}}">
-    </div>
-
-    <div class="col-md-6 my-2">
         <label for="status">Status</label>
         <select id="status" name="status" class="form-control">
             <option value="Active" {{old('status', $item->status) === "Active" ? 'selected' : ''}}>Active</option>
@@ -67,11 +55,11 @@
                                         @if($seat->row_no == $r && $seat->column_no == $c)
                                             <td>
                                                 <div>
-                                                    <input type="text" class="form-control w-100" name="seats[]"
+                                                    <input type="text" class="form-control w-100 seats"
                                                            value="{{$seat->seat_name}}">
-                                                    <input type="hidden" name="seat_ids[]" value="{{$seat->id}}">
-                                                    <input type="hidden" name="rows[]" value="{{$r}}">
-                                                    <input type="hidden" name="columns[]" value="{{$c}}">
+{{--                                                    <input type="hidden" class="seat-ids" name="seat_ids[]" value="{{$seat->id}}">--}}
+                                                    <input type="hidden" class="rows" value="{{$r}}">
+                                                    <input type="hidden" class="columns" value="{{$c}}">
                                                 </div>
                                             </td>
                                         @endif
@@ -88,29 +76,6 @@
 
 
 @push('scripts')
-    <script>
-        // let oldSelectionType = $('#seat-selection-type').val();
-        //
-        // if (oldSelectionType === "Rows_Columns") {
-        //     $('#total-seats').css('display', 'none');
-        //     $('.rows-columns').css('display', '');
-        // } else {
-        //     $('#total-seats').css('display', '');
-        //     $('.rows-columns').css('display', 'none');
-        // }
-
-        // $(document).on('change', '#seat-selection-type', function () {
-        //     let selectionType = $(this).val();
-        //
-        //     if (selectionType === "Rows_Columns") {
-        //         $('#total-seats').css('display', 'none');
-        //         $('.rows-columns').css('display', '');
-        //     } else {
-        //         $('#total-seats').css('display', '');
-        //         $('.rows-columns').css('display', 'none');
-        //     }
-        // });
-    </script>
     <script>
         $(document).ready(function () {
             $('#rows').on('keyup', function () {
@@ -149,9 +114,9 @@
                 var x = document.getElementById('seats').insertRow(r);
                 for (var c = 0; c < parseInt(cn, 10); c++) {
                     var y = x.insertCell(c);
-                    y.innerHTML = `<input type="text" class="form-control w-100 " name="seats[]" value="${seatNo}">
-                                    <input type="hidden" name="rows[]" value="${r}">
-                                    <input type="hidden" name="columns[]" value="${c}">`;
+                    y.innerHTML = `<input type="text" class="form-control w-100 seats" value="${seatNo}">
+                                    <input type="hidden" class="rows" value="${r}">
+                                    <input type="hidden" class="columns" value="${c}">`;
                     seatNo++;
                 }
             }

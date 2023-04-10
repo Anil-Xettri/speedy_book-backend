@@ -78,6 +78,7 @@ class MovieController extends BaseController
             'theater_id' => 'required',
             'title' => 'required',
             'duration' => 'required',
+            'release_date' => 'required',
             'image' => 'required|mimes:jpeg,jpg,png|max:10000',
             'trailer' => 'required|file||mimes:mp4,mov,ogg,qt|max:20000'
         ]);
@@ -138,6 +139,7 @@ class MovieController extends BaseController
             'theater_id' => 'required',
             'title' => 'required',
             'duration' => 'required',
+            'release_date' => 'required',
             'image' => 'mimes:jpeg,jpg,png|max:10000',
             'trailer' => 'file|mimes:mp4,mov,ogg,qt|max:20000'
         ]);

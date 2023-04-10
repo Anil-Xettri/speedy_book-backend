@@ -37,6 +37,9 @@
             <label for=""><span class="show-text">Duration:</span></label> {{ $item->duration ?: '---'}}<br>
         </div>
         <div class="col-md-6">
+            <label for=""><span class="show-text">Release Date:</span></label> {{ $item->release_date ?: '---'}}<br>
+        </div>
+        <div class="col-md-6">
             <label for=""><span class="show-text">Status:</span></label>
             @if($item->status == 'Active')
                 <span class="badge badge-success">Active</span>

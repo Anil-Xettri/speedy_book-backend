@@ -67,29 +67,30 @@ class TheaterController extends BaseController
      */
     public function store(Request $request)
     {
+//        dd($request->all());
         $request->validate([
             'name' => 'required',
             'total_rows' => 'required',
             'total_columns' => 'required'
         ]);
 
+        $seats = json_decode($request->seats, true);
+//        dd($seats);
+
         $theater = new Theater();
         $theater->name = $request->name;
-        $theater->email = $request->email;
-        $theater->phone = $request->phone;
         $theater->status = $request->status;
         $theater->rows = $request->total_rows;
         $theater->columns = $request->total_columns;
         $theater->vendor_id = auth('vendor')->user()->id;
         $theater->save();
-
-        foreach ($request->seats ?? [] as $i => $seat) {
+        foreach ($seats ?? [] as $i => $seat) {
             $seatData = new Seat([
                 'vendor_id' => auth('vendor')->user()->id,
                 'theater_id' => $theater->id,
-                'row_no' => $request->rows[$i],
-                'column_no' => $request->columns[$i],
-                'seat_name' => $seat,
+                'row_no' => $seat['row'],
+                'column_no' => $seat['column'],
+                'seat_name' => $seat['seat'],
             ]);
             $seatData->save();
         }
@@ -139,10 +140,10 @@ class TheaterController extends BaseController
             'total_rows' => 'required',
             'total_columns' => 'required'
         ]);
+        $seats = json_decode($request->seats, true);
+
         $theater = Theater::findOrFail($id);
         $theater->name = $request->name;
-        $theater->email = $request->email;
-        $theater->phone = $request->phone;
         $theater->status = $request->status;
         $theater->rows = $request->total_rows;
         $theater->columns = $request->total_columns;
@@ -150,13 +151,13 @@ class TheaterController extends BaseController
         $theater->update();
 
         Seat::where('theater_id', $theater->id)->delete();
-        foreach ($request->seats ?? [] as $i => $seat) {
+        foreach ($seats ?? [] as $i => $seat) {
             $seatData = new Seat();
             $seatData->vendor_id = auth('vendor')->user()->id;
             $seatData->theater_id = $theater->id;
-            $seatData->row_no = $request->rows[$i];
-            $seatData->column_no = $request->columns[$i];
-            $seatData->seat_name = $seat;
+            $seatData->row_no = $seat['row'];
+            $seatData->column_no = $seat['column'];
+            $seatData->seat_name = $seat['seat'];
             $seatData->save();
         }
 

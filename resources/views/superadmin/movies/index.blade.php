@@ -19,6 +19,7 @@
                 <th>Cinema Hall</th>
                 <th>title</th>
                 <th>Theater</th>
+                <th>Release Date</th>
                 <th>status</th>
                 <th>action</th>
             </tr>
@@ -41,6 +42,7 @@
                     {data: 'vendor_id', name: 'vendor_id'},
                     {data: 'title', name: 'title'},
                     {data: 'theater_id', name: 'theater_id'},
+                    {data: 'release_date', name: 'release_date'},
                     {
                         data: 'status', name: 'status', render: function (data, type, full, meta) {
                             switch (data) {

@@ -5,8 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
-use Modules\Billing\Entities\Account;
 use Spatie\Image\Exceptions\InvalidManipulation;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -14,7 +14,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Vendor extends Authenticatable implements HasMedia
 {
-    use HasFactory, InteractsWithMedia;
+    use HasFactory, Notifiable, InteractsWithMedia;
 
     protected $guarded = ['id'];
     protected $appends = ['image_url', 'banner_url'];
