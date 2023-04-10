@@ -126,8 +126,9 @@ class MovieApiController extends BaseApiController
         try {
             $validator = Validator::make($request->all(), [
                 'show_id' => 'required',
-//                'show_date' => 'required',
-//                'show_time' => 'required',
+                'show_date' => 'required',
+                'show_time' => 'required',
+                'show_price' => 'required',
                 'theater_id' => 'required',
             ]);
             if ($validator->fails()) {
@@ -241,7 +242,7 @@ class MovieApiController extends BaseApiController
                         $releaseDate = $movie->release_date;
                         if ($currentDate->eq($showDate)) {
 //                            if (strtotime($currentTime) >= strtotime($startingTime) && strtotime($currentTime) <= strtotime($endingTime)) {
-                            $nowShowing[] = [
+                            $nowShowing[$movie->id] = [
                                 'id' => $movie->id,
                                 'title' => $movie->title,
                                 'release_date' => $movie->release_date,
@@ -281,7 +282,7 @@ class MovieApiController extends BaseApiController
 
                         //comingSoon
                         if ($releaseDate > $currentDate) {
-                            $comingSoon[] = [
+                            $comingSoon[$movie->id] = [
                                 'id' => $movie->id,
                                 'title' => $movie->title,
                                 'release_date' => $movie->release_date,
@@ -326,12 +327,26 @@ class MovieApiController extends BaseApiController
 //                    }
 //                }
 //            }
+
+            $finalNowShowing = [];
+            $finalComingSoon = [];
+
+            foreach ($nowShowing ?? [] as $now)
+            {
+                $finalNowShowing[] = $now;
+            }
+
+            foreach ($comingSoon ?? [] as $soon)
+            {
+                $finalComingSoon[] = $soon;
+            }
+
             return response()->json([
                 'success' => true,
                 'data' => [
-                    'nowShowing' => $nowShowing,
+                    'nowShowing' => $finalNowShowing,
 //                    'nextShowing' => $nextShowing,
-                    'comingSoon' => $comingSoon
+                    'comingSoon' => $finalComingSoon
                 ]
             ]);
 
