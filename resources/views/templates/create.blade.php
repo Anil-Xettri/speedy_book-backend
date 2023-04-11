@@ -119,25 +119,6 @@
                     }
                 });
 
-                {{--let routeName = "{{$routeName}}";--}}
-                {{--if (routeName)--}}
-                {{--{--}}
-                {{--    let movies = JSON.parse($(document).find('#movies').val());--}}
-                {{--    let movieId = $('#movie').val();--}}
-                {{--    var index = movies.findIndex(item => item.id == movieId);--}}
-                {{--    var movie = movies[index];--}}
-
-                {{--    var releaseDate = movie.release_date;--}}
-                {{--    $('.show-date').each(function (index, date) {--}}
-                {{--        let showDate = $(this).val();--}}
-                {{--        console.log(new Date(showDate) < new Date(releaseDate));--}}
-                {{--        if (new Date(showDate) < new Date(releaseDate)) {--}}
-                {{--            console.log("hello");--}}
-                {{--        }--}}
-                {{--    });--}}
-                {{--    return;--}}
-                {{--}--}}
-
                 if (!form.valid()) {
                     valid = false;
                 }

@@ -17,6 +17,7 @@ class PaymentController extends BaseController
         parent::__construct();
         $this->route = 'payments.';
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -28,15 +29,27 @@ class PaymentController extends BaseController
             $data = Payment::where('vendor_id', auth('vendor')->user()->id)->orderBy('id', 'DESC');
             return Datatables::of($data)
                 ->addIndexColumn()
+                ->editColumn('customer_id', function ($data) {
+                    if ($data->booking) {
+                        return $data->booking->customer ? $data->booking->customer->name : '-';
+                    } else {
+                        return '-';
+                    }
+                })
+                ->editColumn('email', function ($data) {
+                    if ($data->booking) {
+                        return $data->booking->customer ? $data->booking->customer->email : '-';
+                    } else {
+                        return '-';
+                    }
+                })
                 ->editColumn('booking_id', function ($data) {
                     return $data->booking ? '<a target="_blank" href="' . route('bookings.show', $data->booking->id) . '">#' . $data->booking->id . '</a>' : '-';
                 })
-                ->addColumn('action', function ($data) {
-                    return view('templates.index_actions', [
-                        'id' => $data->id, 'route' => $this->route, 'hideEdit' => true, 'hideShow' => true
-                    ])->render();
+                ->editColumn('created-at', function ($data) {
+                    return $data->created_at ? $data->created_at->diffForHumans() : '-';
                 })
-                ->rawColumns(['action', 'booking_id'])
+                ->rawColumns(['created_at', 'customer_id', 'email', 'booking_id'])
                 ->make(true);
         }
 
@@ -58,7 +71,7 @@ class PaymentController extends BaseController
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -69,7 +82,7 @@ class PaymentController extends BaseController
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -80,7 +93,7 @@ class PaymentController extends BaseController
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -91,8 +104,8 @@ class PaymentController extends BaseController
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -103,7 +116,7 @@ class PaymentController extends BaseController
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

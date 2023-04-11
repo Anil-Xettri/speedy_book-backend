@@ -36,7 +36,7 @@
     <div class="col-md-12 mt-3">
         <div class="d-flex justify-content-between">
             <h4>Add Time and Price Details</h4>
-            <button id="add-new" class="btn btn-primary"><i class="fas fa-plus"></i> Add New Row</button>
+            <button id="add-new" class="btn btn-primary @if($routeName == "Create") disabled @endif"><i class="fas fa-plus"></i> Add New Row</button>
         </div>
     </div>
 </div>
@@ -46,19 +46,22 @@
     <div class="row">
         <div class="col-md-3">
             <label style="margin-left: 70px">Movie Date</label>
-            <input type="text" required class="form-control show-date" onfocus="(this.type='date')" placeholder="Enter Movie Date"
+            <input type="text" required class="form-control show-date" onfocus="(this.type='date')"
+                   placeholder="Enter Movie Date"
                    name="show_date[]">
         </div>
 
         <div class="col-md-3">
             <label style="margin-left: 70px">Movie Time</label>
-            <input type="text" required class="form-control show-time" onfocus="(this.type='time')" placeholder="Enter Movie Time"
+            <input type="text" required class="form-control show-time" onfocus="(this.type='time')"
+                   placeholder="Enter Movie Time"
                    name="show_time[]">
         </div>
 
         <div class="col-md-3">
             <label style="margin-left: 70px">Ticket Price</label>
-            <input type="number" required class="form-control show-price" placeholder="Enter Ticket Price" name="ticket_price[]">
+            <input type="number" required class="form-control show-price" placeholder="Enter Ticket Price"
+                   name="ticket_price[]">
         </div>
     </div>
 @elseif($routeName == "Edit")
@@ -118,6 +121,7 @@
     <script>
         $(document).ready(function () {
             let theaters = JSON.parse($("#theaters").val());
+            let movies = JSON.parse($("#movies").val());
 
             $('#theater').select2({
                 placeholder: "Select Theater",
@@ -194,6 +198,27 @@
                 e.preventDefault();
                 $(this).parent().parent().prev().remove();
                 $(this).parent().parent().remove();
+            });
+
+            var oldId = $(document).find('#movie').val();
+            var oldMovieIndex = movies.findIndex(item => item.id == oldId);
+            var oldMovie = movies[oldMovieIndex];
+            $(document).find('.show-date').each(function () {
+                $(this).attr({
+                    "min": `${oldMovie.release_date}`
+                });
+            });
+
+            $(document).on('change', '#movie', function () {
+                var id = $(this).val();
+                var movieIndex = movies.findIndex(item => item.id == id);
+                var movie = movies[movieIndex];
+                $(document).find('.show-date').each(function () {
+                    $(this).attr({
+                        "min": `${movie.release_date}`
+                    });
+                });
+
             });
         });
     </script>

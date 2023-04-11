@@ -15,9 +15,11 @@
             <thead>
             <tr class="text-left text-capitalize">
                 <th>#id</th>
+                <th>paid by</th>
+                <th>customer email</th>
                 <th>Booking Id</th>
                 <th>payment method</th>
-                <th>action</th>
+                <th>paid at</th>
             </tr>
             </thead>
 
@@ -34,6 +36,8 @@
                 ajax: "{{ route('payments.index') }}",
                 columns: [
                     {data: 'id', name: 'id'},
+                    {data: 'customer_id', name: 'customer_id'},
+                    {data: 'email', name: 'email'},
                     {data: 'booking_id', name: 'booking_id'},
                     {
                         data: 'payment_method', name: 'payment_method', render: function (data, type, full, meta) {
@@ -49,7 +53,7 @@
                             }
                         }
                     },
-                    {data: 'action', name: 'action'},
+                    {data: 'create_at', name: 'created_at'},
                 ],
             });
         });
