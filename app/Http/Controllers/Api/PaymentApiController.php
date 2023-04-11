@@ -43,6 +43,37 @@ class PaymentApiController extends BaseApiController
                     "message" => "At least one seat must be selected."
                 ]);
             }
+            $query = [
+                'vendor_id' => $request->vendor_id,
+                'theater_id' => $request->theater_id,
+                'movie_id' => $request->movie_id,
+                'show_time_id' => $request->show_time_id,
+                'show_time' => $request->show_date . ' ' . $request->show_time,
+            ];
+            $oldBookings = Booking::where($query)->get();
+
+            $reserveSeats = [];
+
+            foreach ($oldBookings ?? [] as $oldBooking) {
+                foreach ($oldBooking->seats ?? [] as $seat) {
+                    if ($seat->pivot->status == "Reserve" || $seat->pivot->status == "Sold Out" || $seat->pivot->status == "Unavailable") {
+                        $reserveSeats[] = $seat->id;
+                    }
+                }
+            }
+            $invalidSeats = [];
+            foreach ($request->seats ?? [] as $seat) {
+                if (in_array($seat, $reserveSeats)) {
+                    $invalidSeats[] = $seat;
+                }
+            }
+            if (!empty($invalidSeats)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Some seats are either already reserved, sold out or unavailable.',
+                    'data' => ['already_reserved_seats' => $invalidSeats]
+                ]);
+            }
 
             $quantity = count($request->seats);
             $subTotal = $quantity * $request->show_price;
@@ -62,13 +93,12 @@ class PaymentApiController extends BaseApiController
 
             $booking->save();
 
-            foreach ($request->seats ?? [] as $seat)
-            {
+            foreach ($request->seats ?? [] as $seat) {
                 $bookingSeat = new BookingSeat([
-                   'booking_id' => $booking->id,
-                   'seat_id' => $seat,
-                   'status' => 'Reserve',
-                   'ticket_number' => Str::random(5),
+                    'booking_id' => $booking->id,
+                    'seat_id' => $seat,
+                    'status' => 'Reserve',
+                    'ticket_number' => Str::random(5),
                 ]);
 
                 $bookingSeat->save();
@@ -79,8 +109,7 @@ class PaymentApiController extends BaseApiController
             $bookingSeatsDetails = BookingSeat::where('booking_id', $booking->id)->get();
             $seats = [];
 
-            foreach ($bookingSeatsDetails ?? [] as $seatData)
-            {
+            foreach ($bookingSeatsDetails ?? [] as $seatData) {
                 $seat = Seat::where('id', $seatData->seat_id)->first();
 
                 $seats[] = [
@@ -92,9 +121,9 @@ class PaymentApiController extends BaseApiController
 
 
             return response()->json([
-               'success' => true,
-               'message' => 'Booked Successfully.',
-               'data' => ['booking' => $bookingDetails, 'seats' => $seats, 'type' => 'reserve']
+                'success' => true,
+                'message' => 'Booked Successfully.',
+                'data' => ['booking' => $bookingDetails, 'seats' => $seats, 'type' => 'reserve']
             ]);
 
         } catch (\Exception $e) {
@@ -106,8 +135,7 @@ class PaymentApiController extends BaseApiController
     {
         try {
             $booking = Booking::where('id', $id)->first();
-            if (!$booking)
-            {
+            if (!$booking) {
                 return response()->json([
                     "success" => false,
                     "message" => "Invalid Booking."
