@@ -35,7 +35,10 @@ class BookingController extends BaseController
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->editColumn('customer_id', function ($data) {
-                    return $data->customer ? $data->custome->name : '-';
+                    return $data->customer ? $data->customer->name : '-';
+                })
+                ->editColumn('theater_id', function ($data) {
+                    return $data->theater ? '<a target="_blank" href="' . route('theaters.show', $data->theater->id) . '">' . $data->theater->name . '</a>' : '-';
                 })
                 ->editColumn('movie_id', function ($data) {
                     return $data->movie ? '<a target="_blank" href="' . route('movies.show', $data->movie->id) . '">' . $data->movie->title . '</a>' : '-';
@@ -48,7 +51,7 @@ class BookingController extends BaseController
                         'id' => $data->id, 'route' => $this->route, 'hideEdit' => true
                     ])->render();
                 })
-                ->rawColumns(['action', 'movie_id', 'customer_id', 'show_time'])
+                ->rawColumns(['action', 'theater_id', 'movie_id', 'customer_id', 'show_time'])
                 ->make(true);
         }
 
@@ -118,6 +121,7 @@ class BookingController extends BaseController
     {
         $info = $this->crudInfo();
         $info['item'] = Booking::where('vendor_id', auth('vendor')->user()->id)->findOrFail($id);
+        $info['hideEdit'] = true;
         return view($this->showResource(), $info);
     }
 

@@ -3,7 +3,7 @@
        class="btn btn-sm btn-clean btn-icon btn-hover-primary"><i
             class="fa fa-eye"></i></a>
 @endif
-@if(!isset($showEdit))
+@if(!isset($hideEdit))
     <a href="{{route($route.'edit',$id ?: $item->id)}}"
        class="btn btn-sm btn-clean btn-icon btn-hover-info"><i
             class="fa fa-pencil-alt"></i></a>

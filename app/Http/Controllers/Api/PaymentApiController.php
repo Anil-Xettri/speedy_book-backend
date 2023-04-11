@@ -114,15 +114,17 @@ class PaymentApiController extends BaseApiController
                 ]);
             }
 
-            $bookingSeats = BookingSeat::where('booking_id', $booking->id)->get();
+            $booking->delete();
 
-            foreach ($bookingSeats ?? [] as $bookingSeat)
-            {
-                $bookingSeat->status = "Available";
-                $bookingSeat->ticket_number = null;
-
-                $bookingSeat->update();
-            }
+//            $bookingSeats = BookingSeat::where('booking_id', $booking->id)->get();
+//
+//            foreach ($bookingSeats ?? [] as $bookingSeat)
+//            {
+//                $bookingSeat->status = "Available";
+//                $bookingSeat->ticket_number = null;
+//
+//                $bookingSeat->update();
+//            }
 
             return response()->json([
                 "success" => true,

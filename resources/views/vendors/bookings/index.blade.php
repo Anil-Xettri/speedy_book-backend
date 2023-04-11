@@ -16,6 +16,7 @@
             <tr class="text-left text-capitalize">
                 <th>#id</th>
                 <th>customer name</th>
+                <th>theater</th>
                 <th>movie</th>
                 <th>show time</th>
                 <th>tickets</th>
@@ -40,6 +41,7 @@
                 columns: [
                     {data: 'id', name: 'id'},
                     {data: 'customer_id', name: 'customer_id'},
+                    {data: 'theater_id', name: 'theater_id'},
                     {data: 'movie_id', name: 'movie_id'},
                     {data: 'show_time', name: 'show_time'},
                     {data: 'quantity', name: 'quantity'},
@@ -52,7 +54,7 @@
                                     return `<span class="badge badge-success">Paid</span>`;
                                     break;
                                 case ('Unpaid'):
-                                    return `<span class="badge badge-warning">Unpaid</span>`;
+                                    return `<span class="badge badge-danger">Unpaid</span>`;
                                     break;
                                 default:
                                     return `<span class="badge badge-danger">Unpaid</span>`;
