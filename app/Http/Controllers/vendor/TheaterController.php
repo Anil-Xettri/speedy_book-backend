@@ -141,6 +141,7 @@ class TheaterController extends BaseController
             'total_columns' => 'required'
         ]);
         $seats = json_decode($request->seats, true);
+//        dd($seats);
 
         $theater = Theater::findOrFail($id);
         $theater->name = $request->name;
@@ -149,17 +150,38 @@ class TheaterController extends BaseController
         $theater->columns = $request->total_columns;
         $theater->vendor_id = auth('vendor')->user()->id;
         $theater->update();
+        $oldSeatIndex = [];
 
-        Seat::where('theater_id', $theater->id)->delete();
-        foreach ($seats ?? [] as $i => $seat) {
-            $seatData = new Seat();
-            $seatData->vendor_id = auth('vendor')->user()->id;
-            $seatData->theater_id = $theater->id;
-            $seatData->row_no = $seat['row'];
-            $seatData->column_no = $seat['column'];
-            $seatData->seat_name = $seat['seat'];
-            $seatData->save();
+//        Seat::where('theater_id', $theater->id)->delete();
+        $oldSeats = Seat::where('theater_id', $theater->id)->get();
+        foreach ($oldSeats ?? [] as $s => $oldSeat) {
+            $oldSeatIndex[] = $s;
+            if (isset($seats[$s])) {
+                $oldSeat->vendor_id = auth('vendor')->user()->id;
+                $oldSeat->theater_id = $theater->id;
+                $oldSeat->row_no = $seats[$s]['row'];
+                $oldSeat->column_no = $seats[$s]['column'];
+                $oldSeat->seat_name = $seats[$s]['seat'];
+                $oldSeat->update();
+            } else {
+                $oldSeat->delete();
+            }
         }
+        foreach ($seats ?? [] as $i => $seat) {
+//            $seatData = new Seat();
+            if (in_array($i, $oldSeatIndex)) {
+
+            } else {
+                $seatData = new Seat();
+                $seatData->vendor_id = auth('vendor')->user()->id;
+                $seatData->theater_id = $theater->id;
+                $seatData->row_no = $seat['row'];
+                $seatData->column_no = $seat['column'];
+                $seatData->seat_name = $seat['seat'];
+                $seatData->save();
+            }
+        }
+
 
         NotifyHelper::updateSuccess();
         return redirect()->route($this->indexRoute());

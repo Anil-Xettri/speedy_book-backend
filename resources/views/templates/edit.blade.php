@@ -115,12 +115,14 @@
                 }
 
                 let seats = [...$('.seats')];
+                let seatIds = [...$('.seat-ids')];
                 let rows = [...$('.rows')];
                 let columns = [...$('.columns')];
 
                 rows.forEach(function(row, obj){
                     let keyValue = {
                         seat : seats[obj].value,
+                        seatIds: seatIds[obj].value,
                         row: row.value,
                         column: columns[obj].value,
                     }

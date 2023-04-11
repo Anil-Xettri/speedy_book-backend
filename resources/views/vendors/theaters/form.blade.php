@@ -57,7 +57,7 @@
                                                 <div>
                                                     <input type="text" class="form-control w-100 seats"
                                                            value="{{$seat->seat_name}}">
-{{--                                                    <input type="hidden" class="seat-ids" name="seat_ids[]" value="{{$seat->id}}">--}}
+                                                    <input type="hidden" class="seat-ids" name="seat_ids[]" value="{{$seat->id}}">
                                                     <input type="hidden" class="rows" value="{{$r}}">
                                                     <input type="hidden" class="columns" value="{{$c}}">
                                                 </div>
@@ -115,6 +115,7 @@
                 for (var c = 0; c < parseInt(cn, 10); c++) {
                     var y = x.insertCell(c);
                     y.innerHTML = `<input type="text" class="form-control w-100 seats" value="${seatNo}">
+                                   <input type="hidden" class="seat-ids" name="seat_ids[]" value="null">
                                     <input type="hidden" class="rows" value="${r}">
                                     <input type="hidden" class="columns" value="${c}">`;
                     seatNo++;
