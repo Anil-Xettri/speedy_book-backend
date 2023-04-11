@@ -23,7 +23,7 @@
             @endforeach
         </select>
     </div>
-
+    <input type="hidden" id="movies" value='@json($movies)'>
     <div class="col-md-6">
         <label for="">Movie <span class="text-danger">*</span></label>
         <select name="movie_id" id="movie" class="form-control required-field" style="width: 100%">

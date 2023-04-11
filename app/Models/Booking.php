@@ -17,9 +17,14 @@ class Booking extends Model
         return $this->belongsTo(Vendor::class, 'vendor_id');
     }
 
+    public function theater()
+    {
+        return $this->belongsTo(Theater::class, 'theater_id');
+    }
+
     public function seats()
     {
-        return $this->belongsToMany(Seat::class, 'booking_seats')->withPivot('status')->withTimestamps();
+        return $this->belongsToMany(Seat::class, 'booking_seats')->withPivot('status', 'ticket_number')->withTimestamps();
     }
 
     public function payments()
@@ -30,6 +35,11 @@ class Booking extends Model
     public function movie()
     {
         return $this->belongsTo(Movie::class, 'movie_id');
+    }
+
+    public function showTime()
+    {
+        return $this->belongsTo(ShowTime::class, 'show_time_id');
     }
 
     public function customer()

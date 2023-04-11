@@ -16,6 +16,11 @@ class Theater extends Model
         return $this->belongsTo(Vendor::class, 'vendor_id');
     }
 
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class, 'theater_id');
+    }
+
     public function seats()
     {
         return $this->hasMany(Seat::class, 'theater_id');

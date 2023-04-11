@@ -5,7 +5,4 @@
     @include('vendors.show-times.form')
 @endsection
 @push('scripts')
-    <script>
-
-    </script>
 @endpush

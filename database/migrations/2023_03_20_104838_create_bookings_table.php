@@ -16,7 +16,6 @@ class CreateBookingsTable extends Migration
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('vendor_id');
-            $table->unsignedBigInteger('theater_id');
             $table->unsignedBigInteger('movie_id');
             $table->dateTime('show_time');
             $table->unsignedBigInteger('customer_id');
@@ -30,7 +29,6 @@ class CreateBookingsTable extends Migration
             $table->string('status')->comment('Paid,Unpaid')->default('Unpaid');
 
             $table->foreign('vendor_id')->references('id')->on('vendors')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('theater_id')->references('id')->on('theaters')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('movie_id')->references('id')->on('movies')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
