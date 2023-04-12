@@ -98,7 +98,6 @@ class PaymentApiController extends BaseApiController
                     'booking_id' => $booking->id,
                     'seat_id' => $seat,
                     'status' => 'Reserve',
-                    'ticket_number' => Str::random(5),
                 ]);
 
                 $bookingSeat->save();
@@ -123,7 +122,7 @@ class PaymentApiController extends BaseApiController
             return response()->json([
                 'success' => true,
                 'message' => 'Booked Successfully.',
-                'data' => ['booking' => $bookingDetails, 'seats' => $seats, 'type' => 'reserve']
+                'data' => ['booking' => $bookingDetails, 'seats' => $seats, 'type' => $request->type]
             ]);
 
         } catch (\Exception $e) {
@@ -224,11 +223,22 @@ class PaymentApiController extends BaseApiController
             $booking->update();
 
             $bookingSeats = BookingSeat::where('booking_id', $booking->id)->get();
+            $seats = [];
 
             foreach ($bookingSeats ?? [] as $bookingSeat) {
                 $bookingSeat->status = "Sold Out";
+                $bookingSeat->ticket_number = Str::random(5);
                 $bookingSeat->update();
+
+                $seat = Seat::where('id', $bookingSeat->seat_id)->first();
+
+                $seats[] = [
+                    'id' => $seat->id,
+                    'seat_name' => $seat->seat_name,
+                    'ticket_number' => $bookingSeat->ticket_number
+                ];
             }
+
 
             $payment = new Payment([
                 'booking_id' => $request->booking_id,
@@ -239,7 +249,8 @@ class PaymentApiController extends BaseApiController
 
             return response()->json([
                 "success" => true,
-                "message" => "Payment Success."
+                "message" => "Payment Success.",
+                'data' => ['booking' => $booking, 'seats' => $seats, 'type' => $request->type]
             ]);
         } catch (\Exception $e) {
             return $this->sendError($e->getMessage());
