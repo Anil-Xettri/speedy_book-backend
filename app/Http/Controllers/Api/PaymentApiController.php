@@ -243,7 +243,7 @@ class PaymentApiController extends BaseApiController
 //
 //            error_log(json_encode($response->body()));
 
-            if ($response->failed() || !$response_data['idx']) {
+            if ($response->failed()) {
                 return response()->json([
                     "success" => false,
                     "message" => "Payment failed."
