@@ -147,14 +147,9 @@ class MovieApiController extends BaseApiController
             }
 
             $seatDetails = [];
-            $bookings = [];
 
-            foreach (json_decode($showTime->show_details, true) ?? [] as $showDetails) {
-                $showDate = $showDetails['show_date'];
-                $showTime = $showDetails['show_time'];
-                $showDateTime = $showDate . ' ' . $showTime;
-                $bookings[] = Booking::where('show_time', $showDateTime)->pluck('id')->toArray();
-            }
+            $showDateTime = $request->show_date . ' ' . $request->show_time;
+            $booking = Booking::where(["theater_id" => $request->theater_id, "show_time_id" => $request->show_id, 'show_time' => $showDateTime])->first();
             $emptySeats = Seat::where(['theater_id' => $request->theater_id, 'seat_name' => ""])->get();
 
             foreach ($emptySeats ?? [] as $emptySeat) {
@@ -166,8 +161,11 @@ class MovieApiController extends BaseApiController
                     'status' => "Unavailable",
                 ];
             }
-            $seatData = BookingSeat::whereIn('booking_id', $bookings[0])->pluck('seat_id')->toArray();
-//            $bookingSeats = $seatData;
+            if (!$booking) {
+                $seatData = [];
+            } else {
+                $seatData = BookingSeat::where('booking_id', $booking->id)->pluck('seat_id')->toArray();
+            }
             $AvailSeats = Seat::where('theater_id', $request->theater_id)->where('seat_name', '!=', "")->whereNotIn('id', $seatData)->get();
             foreach ($AvailSeats ?? [] as $availSeat) {
                 $seatDetails[] = [
@@ -178,8 +176,11 @@ class MovieApiController extends BaseApiController
                     'status' => "Available",
                 ];
             }
-
-            $b = BookingSeat::whereIn('booking_id', $bookings[0])->get();
+            if (!$booking) {
+                $b = [];
+            } else {
+                $b = BookingSeat::where('booking_id', $booking->id)->get();
+            }
             foreach ($b ?? [] as $f) {
                 $seatDetails[] = [
                     'seat_id' => $f->seat_id,
@@ -331,13 +332,11 @@ class MovieApiController extends BaseApiController
             $finalNowShowing = [];
             $finalComingSoon = [];
 
-            foreach ($nowShowing ?? [] as $now)
-            {
+            foreach ($nowShowing ?? [] as $now) {
                 $finalNowShowing[] = $now;
             }
 
-            foreach ($comingSoon ?? [] as $soon)
-            {
+            foreach ($comingSoon ?? [] as $soon) {
                 $finalComingSoon[] = $soon;
             }
 
