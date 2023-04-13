@@ -186,7 +186,7 @@ class PaymentApiController extends BaseApiController
         try {
             $customer = auth('customer-api')->user();
 
-            $booking = Booking::where('id', $id)->with('seats', 'vendor', 'theater', 'movie')->first();
+            $booking = Booking::where('id', $id)->with('vendor', 'theater', 'movie')->first();
             if (!$booking) {
                 return response()->json([
                     'success' => false,
@@ -194,9 +194,22 @@ class PaymentApiController extends BaseApiController
                 ]);
             }
 
+            $bookingSeats = BookingSeat::where('booking_id', $booking->id)->get();
+            $seats = [];
+
+            foreach ($bookingSeats ?? [] as $bookingSeat) {
+                $seat = Seat::where('id', $bookingSeat->seat_id)->first();
+
+                $seats[] = [
+                    'id' => $seat->id,
+                    'seat_name' => $seat->seat_name,
+                    'ticket_number' => $bookingSeat->ticket_number
+                ];
+            }
+
             return response()->json([
                 'success' => true,
-                'data' => $booking
+                'data' => ['booking' => $booking, 'seats' => $seats]
             ]);
 
         } catch (\Exception $e) {
@@ -280,7 +293,7 @@ class PaymentApiController extends BaseApiController
                 ]);
             }
 
-            $booking = Booking::where('id', $request->booking_id)->first();
+            $booking = Booking::where('id', $request->booking_id)->with('vendor', 'theater', 'movie')->first();
 
             if (!$booking) {
                 return response()->json([
