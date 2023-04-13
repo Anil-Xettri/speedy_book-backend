@@ -163,6 +163,46 @@ class PaymentApiController extends BaseApiController
         }
     }
 
+    public function bookingList()
+    {
+       try {
+           $customer = auth('customer-api')->user();
+
+           $bookings = Booking::where('customer_id', $customer->id)->with('seats', 'vendor', 'theater', 'movie')->get();
+
+           return response()->json([
+              'success' => true,
+              'data' => $bookings
+           ]);
+
+       } catch (\Exception $e) {
+           return $this->sendError($e->getMessage());
+       }
+    }
+
+    public function bookingDetails($id)
+    {
+        try {
+            $customer = auth('customer-api')->user();
+
+            $booking = Booking::where('id', $id)->with('seats', 'vendor', 'theater', 'movie')->first();
+            if (!$booking) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Invalid Booking"
+                ]);
+            }
+
+            return response()->json([
+                'success' => true,
+                'data' => $booking
+            ]);
+
+        } catch (\Exception $e) {
+            return $this->sendError($e->getMessage());
+        }
+    }
+
     public function paymentVerification(Request $request)
     {
         try {

@@ -41,6 +41,8 @@ Route::group(['prefix' => '', 'middleware' => 'auth:customer-api'], function () 
     Route::post('movie-showing', [MovieApiController::class, 'showings']);
     Route::post('show-details', [MovieApiController::class, 'showDetails']);
     Route::post('booking', [PaymentApiController::class, 'booking']);
+    Route::get('booking-list', [PaymentApiController::class, 'bookingList']);
+    Route::get('booking-details/{id}', [PaymentApiController::class, 'bookingDetails']);
     Route::get('cancel-booking/{id}', [PaymentApiController::class, 'cancelBooking']);
     Route::post('verify-payment', [PaymentApiController::class, 'paymentVerification']);
 
