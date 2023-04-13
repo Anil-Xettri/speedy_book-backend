@@ -43,6 +43,7 @@ class PaymentApiController extends BaseApiController
                     "message" => "At least one seat must be selected."
                 ]);
             }
+            $currentDateTime =
             $query = [
                 'vendor_id' => $request->vendor_id,
                 'theater_id' => $request->theater_id,
@@ -165,19 +166,19 @@ class PaymentApiController extends BaseApiController
 
     public function bookingList()
     {
-       try {
-           $customer = auth('customer-api')->user();
+        try {
+            $customer = auth('customer-api')->user();
 
-           $bookings = Booking::where('customer_id', $customer->id)->with('seats', 'vendor', 'theater', 'movie')->get();
+            $bookings = Booking::where('customer_id', $customer->id)->with('seats', 'vendor', 'theater', 'movie')->get();
 
-           return response()->json([
-              'success' => true,
-              'data' => $bookings
-           ]);
+            return response()->json([
+                'success' => true,
+                'data' => $bookings
+            ]);
 
-       } catch (\Exception $e) {
-           return $this->sendError($e->getMessage());
-       }
+        } catch (\Exception $e) {
+            return $this->sendError($e->getMessage());
+        }
     }
 
     public function bookingDetails($id)
@@ -222,28 +223,57 @@ class PaymentApiController extends BaseApiController
                 return $response;
             }
 
-            $verify_url = "https://a.khalti.com/api/v2/epayment/lookup/";
+//            $verify_url = "https://a.khalti.com/api/v2/epayment/lookup/";
+//
+//            $response = Http::withHeaders([
+//
+//                'Authorization' => 'Key test_secret_key_e3dae072d0ee46a48e5d08b713119810',
+//
+//                'Content-Type' => 'application/json',
+//
+//            ])->post($verify_url, [
+//
+//                "amount" => $request->amount * 100,
+//                "token" => $request->token,
+//                "transaction_id" => 23
+//
+//            ]);
 
-            $response = Http::withHeaders([
 
-                'Authorization' => 'Key test_secret_key_e3dae072d0ee46a48e5d08b713119810',
+            $args = http_build_query(array(
+                'token' => $request->token,
+                'amount' => $request->amount * 100
+            ));
 
-                'Content-Type' => 'application/json',
+            $url = "https://khalti.com/api/v2/payment/verify/";
 
-            ])->post($verify_url, [
+# Make the call using API.
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $args);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
-                "amount" => $request->amount * 100,
-                "token" => $request->token
+            $headers = ['Authorization: Key test_secret_key_e3dae072d0ee46a48e5d08b713119810'];
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
-            ]);
+// Response
+            $response = curl_exec($ch);
+            if (curl_errno($ch)) {
+                $error_msg = curl_error($ch);
+            } else {
+                $error_msg = null;
+            }
+            $status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
 
-            $response_data = json_decode($response->body(), TRUE);
+//            $response_data = json_decode($response->body(), TRUE);
 
 //            error_log($response->status());
 //
 //            error_log(json_encode($response->body()));
 
-            if ($response->failed()) {
+            if ($status_code == 400) {
                 return response()->json([
                     "success" => false,
                     "message" => "Payment failed."
