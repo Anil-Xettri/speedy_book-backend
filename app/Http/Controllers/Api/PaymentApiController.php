@@ -226,7 +226,7 @@ class PaymentApiController extends BaseApiController
 
             $response = Http::withHeaders([
 
-                'Authorization' => 'Key live_secret_key_5ade38ac08764d34b124bbaec8956cc2',
+                'Authorization' => 'Key test_secret_key_e3dae072d0ee46a48e5d08b713119810',
 
                 'Content-Type' => 'application/json',
 
