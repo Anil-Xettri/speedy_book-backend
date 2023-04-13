@@ -312,6 +312,7 @@ class PaymentApiController extends BaseApiController
 
             $payment = new Payment([
                 'booking_id' => $request->booking_id,
+                'vendor_id' => $booking->vendor_id,
                 'payment_method' => "Khalti",
                 'payment_verify_at' => Carbon::now('Asia/Kathmandu')->toDateTimeString()
             ]);
