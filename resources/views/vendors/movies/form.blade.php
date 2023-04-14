@@ -1,3 +1,20 @@
+@push('styles')
+    <style>
+        .without_ampm::-webkit-datetime-edit-ampm-field {
+            display: none;
+        }
+
+        input[type=time]::-webkit-clear-button {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            -o-appearance: none;
+            -ms-appearance: none;
+            appearance: none;
+            margin: -10px;
+        }
+    </style>
+@endpush
+
 <div class="form-group row">
     <div class="col-md-6">
         <label for="">Title <span class="text-danger">*</span></label>
@@ -16,13 +33,15 @@
     </div>
     <div class="col-md-6 my-2">
         <label for="">Duration <span class="text-danger">*</span></label>
-        <input type="text" required name="duration" onfocus="(this.type='time')" class="form-control" placeholder="Enter Movie Duration"
+        <input type="text" required name="duration" onfocus="(this.type='time')" class="form-control without_ampm"
+               placeholder="Enter Movie Duration"
                value="{{old('duration', $item->duration)}}">
     </div>
 
     <div class="col-md-6 my-2">
         <label for="">Release Date <span class="text-danger">*</span></label>
-        <input type="text" required name="release_date" onfocus="(this.type='date')" class="form-control" placeholder="Enter Release Date"
+        <input type="text" required name="release_date" onfocus="(this.type='date')" class="form-control"
+               placeholder="Enter Release Date"
                value="{{old('release_date', $item->release_date)}}">
     </div>
 
