@@ -222,6 +222,7 @@ class MovieApiController extends BaseApiController
             }
 
             $currentDate = new Carbon(Carbon::now('Asia/Kathmandu')->toDateString());
+//            $tomorrowDate = new Carbon(Carbon::tomorrow('Asia/Kathmandu')->toDateString());
             $currentTime = new Carbon(Carbon::now('Asia/Kathmandu')->format('H:i:s'));
             $nowShowing = null;
             $nextShowing = null;

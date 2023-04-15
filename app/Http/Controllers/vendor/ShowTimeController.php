@@ -65,7 +65,7 @@ class ShowTimeController extends BaseController
     {
         $info = $this->crudInfo();
         $info['theaters'] = Theater::where(['vendor_id' => auth('vendor')->user()->id, 'status' => 'Active'])->with('movies')->get();
-        $info['movies'] = Movie::where(['vendor_id' => auth('vendor')->user()->id, 'status' => 'Active'])->get();
+        $info['movies'] = Movie::where(['vendor_id' => auth('vendor')->user()->id, 'status' => 'Active'])->with('showTimes')->get();
         $info['routeName'] = 'Create';
         return view($this->createResource(), $info);
     }
@@ -128,7 +128,7 @@ class ShowTimeController extends BaseController
         $info = $this->crudInfo();
         $info['item'] = ShowTime::where('vendor_id', auth('vendor')->user()->id)->findOrFail($id);
         $info['theaters'] = Theater::where(['vendor_id' => auth('vendor')->user()->id, 'status' => 'Active'])->with('movies')->get();
-        $info['movies'] = Movie::where(['vendor_id' => auth('vendor')->user()->id, 'status' => 'Active'])->get();
+        $info['movies'] = Movie::where(['vendor_id' => auth('vendor')->user()->id, 'status' => 'Active'])->with('showTimes')->get();
         $info['routeName'] = 'Edit';
         return view($this->editResource(), $info);
     }
@@ -174,8 +174,7 @@ class ShowTimeController extends BaseController
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public
-    function destroy($id)
+    public function destroy($id)
     {
         $showTime = ShowTime::where('vendor_id', auth('vendor')->user()->id)->findOrFail($id);
         $showTime->delete();

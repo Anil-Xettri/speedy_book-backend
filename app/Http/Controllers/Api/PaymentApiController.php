@@ -43,7 +43,19 @@ class PaymentApiController extends BaseApiController
                     "message" => "At least one seat must be selected."
                 ]);
             }
-            $currentDateTime =
+            $now = Carbon::now('Asia/Kathmandu')->format('Y-m-d H:i');
+            $currentDateTime = Carbon::parse($now);
+            $givenDateTime = Carbon::parse($request->show_date. ' '.$request->show_time);
+            if ($givenDateTime->lt($currentDateTime)) {
+                $diff = $givenDateTime->diffInMinutes($currentDateTime);
+
+                if ($diff <= 60) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Booking time is over.'
+                        ]);
+                }
+            }
             $query = [
                 'vendor_id' => $request->vendor_id,
                 'theater_id' => $request->theater_id,
@@ -104,7 +116,7 @@ class PaymentApiController extends BaseApiController
                 $bookingSeat->save();
             }
 
-            $bookingDetails = $booking->with('vendor', 'theater', 'movie')->first();
+            $bookingDetails = Booking::where('id', $booking->id)->with('vendor', 'theater', 'movie')->first();
 
             $bookingSeatsDetails = BookingSeat::where('booking_id', $booking->id)->get();
             $seats = [];
