@@ -45,7 +45,7 @@ class PaymentApiController extends BaseApiController
             }
             $now = Carbon::now('Asia/Kathmandu')->format('Y-m-d H:i');
             $currentDateTime = Carbon::parse($now);
-            $givenDateTime = Carbon::parse($request->show_date. ' '.$request->show_time);
+            $givenDateTime = Carbon::parse($request->show_date . ' ' . $request->show_time);
             if ($givenDateTime->lt($currentDateTime)) {
                 $diff = $givenDateTime->diffInMinutes($currentDateTime);
 
@@ -53,7 +53,7 @@ class PaymentApiController extends BaseApiController
                     return response()->json([
                         'success' => false,
                         'message' => 'Booking time is over.'
-                        ]);
+                    ]);
                 }
             }
             $query = [
@@ -239,7 +239,6 @@ class PaymentApiController extends BaseApiController
                 'booking_id' => 'required',
                 'amount' => 'required',
             ]);
-
             //amount should be in paisa amount * 100
 
             if ($validator->fails()) {
@@ -247,6 +246,31 @@ class PaymentApiController extends BaseApiController
                 $response['success'] = false;
                 return $response;
             }
+
+            $booking = Booking::where('id', $request->booking_id)->with('vendor', 'theater', 'movie')->first();
+
+            if (!$booking) {
+                return response()->json([
+                    "success" => false,
+                    "message" => "Invalid Booking."
+                ]);
+            }
+
+
+            $now = Carbon::now('Asia/Kathmandu')->format('Y-m-d H:i');
+            $currentDateTime = Carbon::parse($now);
+            $givenDateTime = Carbon::parse($booking->show_date . ' ' . $booking->show_time);
+            if ($givenDateTime->lt($currentDateTime)) {
+                $diff = $givenDateTime->diffInMinutes($currentDateTime);
+
+                if ($diff <= 60) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Booking time is over.'
+                    ]);
+                }
+            }
+
 
 //            $verify_url = "https://a.khalti.com/api/v2/epayment/lookup/";
 //
@@ -302,15 +326,6 @@ class PaymentApiController extends BaseApiController
                 return response()->json([
                     "success" => false,
                     "message" => "Payment failed."
-                ]);
-            }
-
-            $booking = Booking::where('id', $request->booking_id)->with('vendor', 'theater', 'movie')->first();
-
-            if (!$booking) {
-                return response()->json([
-                    "success" => false,
-                    "message" => "Invalid Booking."
                 ]);
             }
 
