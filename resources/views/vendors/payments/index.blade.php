@@ -53,7 +53,7 @@
                             }
                         }
                     },
-                    {data: 'create_at', name: 'created_at'},
+                    {data: 'created_at', name: 'created_at'},
                 ],
             });
         });

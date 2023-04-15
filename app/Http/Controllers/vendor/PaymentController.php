@@ -46,7 +46,7 @@ class PaymentController extends BaseController
                 ->editColumn('booking_id', function ($data) {
                     return $data->booking ? '<a target="_blank" href="' . route('bookings.show', $data->booking->id) . '">#' . $data->booking->id . '</a>' : '-';
                 })
-                ->editColumn('created-at', function ($data) {
+                ->editColumn('created_at', function ($data) {
                     return $data->created_at ? $data->created_at->diffForHumans() : '-';
                 })
                 ->rawColumns(['created_at', 'customer_id', 'email', 'booking_id'])

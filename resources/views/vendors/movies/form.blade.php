@@ -33,9 +33,12 @@
     </div>
     <div class="col-md-6 my-2">
         <label for="">Duration <span class="text-danger">*</span></label>
-        <input type="text" required name="duration" onfocus="(this.type='time')" class="form-control without_ampm"
-               placeholder="Enter Movie Duration"
-               value="{{old('duration', $item->duration)}}">
+{{--        <input type="text" required name="duration" onfocus="(this.type='time')" class="form-control without_ampm"--}}
+{{--               placeholder="Enter Movie Duration"--}}
+{{--               value="{{old('duration', $item->duration)}}">--}}
+        <input type="text" required name="duration" id="durationForm" maxlength=8 pattern="^((\d+:)?\d+:)?\d*$"
+               placeholder="hh:mm:ss" size=30 class="form-control" value="{{old('duration', $item->duration)}}">
+
     </div>
 
     <div class="col-md-6 my-2">
@@ -84,6 +87,39 @@
 </div>
 @push('scripts')
     <script>
+        $(document).ready(function () {
+            // two or more digits, to be more precise (might get relevant for durations >= 100h)
+            var twoDigits = function (oneTwoDigits) {
+                if (oneTwoDigits < 10) {oneTwoDigits = "0" + oneTwoDigits};
+                return oneTwoDigits;
+            }
 
+            var Time = function (durationFormValue) {
+                var hmsString = String(durationFormValue);
+                var hms = hmsString.match(/^(?:(?:(\d+)\:)?(\d+)\:)?(\d+)$/);
+                if (hms === null) {
+                    throw new TypeError("Parameter " + hmsString +
+                        " must have the format ((int+:)?int+:)?int+");
+                }
+                var hoursNumber = +hms[1] || 0;
+                var minutesNumber = +hms[2] || 0;
+                var secondsNumber = +hms[3] || 0;
+                this.seconds = twoDigits(secondsNumber % 60);
+                minutesNumber += Math.floor(secondsNumber / 60);
+                this.minutes = twoDigits(minutesNumber % 60);
+                hoursNumber += Math.floor(minutesNumber / 60);
+                this.hours = twoDigits(hoursNumber);
+            };
+
+            Time.prototype.equals = function (otherTime) {
+                return (this.hours === otherTime.hours) &&
+                    (this.minutes === otherTime.minutes) &&
+                    (this.seconds === otherTime.seconds);
+            };
+
+            Time.prototype.toString = function () {
+                return this.hours + ":" + this.minutes + ":" + this.seconds;
+            }
+        });
     </script>
 @endpush
