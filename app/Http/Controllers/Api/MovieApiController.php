@@ -147,9 +147,10 @@ class MovieApiController extends BaseApiController
             }
 
             $seatDetails = [];
+            $booking = [];
 
             $showDateTime = $request->show_date . ' ' . $request->show_time;
-            $booking = Booking::where(["theater_id" => $request->theater_id, "show_time_id" => $request->show_id, 'show_time' => $showDateTime])->first();
+            $booking[] = Booking::where(["theater_id" => $request->theater_id, "show_time_id" => $request->show_id, 'show_time' => $showDateTime])->pluck('id')->toArray();
             $emptySeats = Seat::where(['theater_id' => $request->theater_id, 'seat_name' => ""])->get();
 
             foreach ($emptySeats ?? [] as $emptySeat) {
@@ -161,10 +162,9 @@ class MovieApiController extends BaseApiController
                     'status' => "Unavailable",
                 ];
             }
-            if (!$booking) {
-                $seatData = [];
-            } else {
-                $seatData = BookingSeat::where('booking_id', $booking->id)->pluck('seat_id')->toArray();
+            $seatData = [];
+            if (!empty($booking[0])) {
+                $seatData = BookingSeat::whereIn('booking_id', $booking[0])->pluck('seat_id')->toArray();
             }
             $AvailSeats = Seat::where('theater_id', $request->theater_id)->where('seat_name', '!=', "")->whereNotIn('id', $seatData)->get();
             foreach ($AvailSeats ?? [] as $availSeat) {
@@ -176,10 +176,9 @@ class MovieApiController extends BaseApiController
                     'status' => "Available",
                 ];
             }
-            if (!$booking) {
-                $b = [];
-            } else {
-                $b = BookingSeat::where('booking_id', $booking->id)->get();
+            $b = [];
+            if (!empty($booking[0])) {
+                $b = BookingSeat::whereIn('booking_id', $booking[0])->get();
             }
             foreach ($b ?? [] as $f) {
                 $seatDetails[] = [
