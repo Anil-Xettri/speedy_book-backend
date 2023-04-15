@@ -291,7 +291,7 @@ class PaymentApiController extends BaseApiController
 
             $args = http_build_query(array(
                 'token' => $request->token,
-                'amount' => $request->amount * 100
+                'amount' => $request->amount
             ));
 
             $url = "https://khalti.com/api/v2/payment/verify/";
