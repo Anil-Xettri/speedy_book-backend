@@ -184,7 +184,7 @@
     </div>
 
     <div class="row mt-3">
-        <div class="col-md-8">
+        <div class="col-md-6">
             <div class="card card-info">
                 <div class="card-header">
                     <h3 class="card-title">Total Number of Movies Releasing in this Month</h3>
@@ -209,28 +209,61 @@
             </div>
             <!-- /.card -->
         </div>
+
+        <div class="col-md-6">
+            <div class="card card-success">
+                <div class="card-header">
+                    <h3 class="card-title">Total Number of Collections in each Month of
+                        year {{\Carbon\Carbon::now()->year}}</h3>
+                    <div class="card-tools">
+                        <!-- Maximize Button -->
+                        <button type="button" class="btn btn-tool" data-card-widget="maximize" data-max-size="50px"><i
+                                class="fas fa-expand"></i></button>
+                        <!-- Collapse Button -->
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                class="fas fa-minus"></i></button>
+                        <!-- Remove Button -->
+                        <button type="button" class="btn btn-tool" data-card-widget="remove"><i
+                                class="fas fa-times"></i></button>
+                    </div>
+                    <!-- /.card-tools -->
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <canvas id="monthWiseCollections"></canvas>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
     </div>
     <input type="hidden" id="weeks" value='@json($weeks)'>
     <input type="hidden" id="weekWiseMovies" value='@json($weekWiseMovies)'>
 @stop
 
 @section('js')
-        <script src = "https://cdn.jsdelivr.net/npm/chart.js" ></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         let weeks = JSON.parse($('#weeks').val());
         let weekWiseMovies = JSON.parse($('#weekWiseMovies').val());
         let backgroundColors = [];
+        let borderColors = [];
         weeks.forEach(function (week, index) {
             if (index === 0) {
-                backgroundColors.push('rgb(241,13,13)');
+                backgroundColors.push('rgba(255, 99, 132, 0.2)');
+                borderColors.push('rgb(255, 99, 132)');
             } else if (index === 1) {
-                backgroundColors.push('rgb(9,243,243)');
+                backgroundColors.push('rgba(255, 159, 64, 0.2)');
+                borderColors.push('rgb(255, 159, 64)');
             } else if (index === 2) {
-                backgroundColors.push('rgb(200,19,236)');
+                backgroundColors.push('rgba(255, 205, 86, 0.2)');
+                borderColors.push('rgb(255, 205, 86)');
             } else if (index === 3) {
-                backgroundColors.push('rgba(108,97,172,0.87)');
+                backgroundColors.push('rgba(75, 192, 192, 0.2)');
+                borderColors.push('rgb(75, 192, 192)');
             } else if (index === 4) {
-                backgroundColors.push('rgba(135,57,1,0.87)');
+                backgroundColors.push('rgba(54, 162, 235, 0.2)');
+                borderColors.push('rgb(54, 162, 235)');
             }
 
         });
@@ -241,6 +274,8 @@
                 label: "Total Releasing Movies",
                 data: weekWiseMovies,
                 backgroundColor: backgroundColors,
+                borderColor: borderColors,
+                borderWidth: 1,
                 hoverOffset: 4,
             }]
         };
@@ -264,6 +299,54 @@
         const barChart = new Chart(
             document.getElementById('monthWiseMovies'),
             barConfig
+        );
+    </script>
+
+    <script>
+        const lineData = {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            datasets: [{
+                label: "Total Collections",
+                data: [{{$monthWiseCollections[1]}}, {{$monthWiseCollections[2]}}, {{$monthWiseCollections[3]}}, {{$monthWiseCollections[4]}}, {{$monthWiseCollections[5]}}, {{$monthWiseCollections[6]}}, {{$monthWiseCollections[7]}}, {{$monthWiseCollections[8]}}, {{$monthWiseCollections[9]}}, {{$monthWiseCollections[10]}}, {{$monthWiseCollections[11]}}, {{$monthWiseCollections[12]}}],
+                backgroundColor: [
+                    'rgb(241,13,13)',
+                    'rgba(255,159,64,0.99)',
+                    'rgb(163,253,3)',
+                    'rgb(9,243,243)',
+                    'rgb(10,38,57)',
+                    'rgb(84,3,241)',
+                    'rgb(200,19,236)',
+                    'rgb(36,110,238)',
+                    'rgb(245,98,85)',
+                    'rgba(0,255,4,0.87)',
+                    'rgba(135,57,1,0.87)',
+                    'rgba(108,97,172,0.87)',
+                ],
+                fill: false,
+                hoverOffset: 4,
+                tension: 0.1
+            }]
+        };
+        const dataConfig = {
+            type: 'line',
+            data: lineData,
+            options: {
+                scales: {
+                    x: {
+                        grid: {
+                            offset: true
+                        }
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            },
+        };
+
+        const chartDiagram = new Chart(
+            document.getElementById('monthWiseCollections'),
+            dataConfig
         );
     </script>
 @stop

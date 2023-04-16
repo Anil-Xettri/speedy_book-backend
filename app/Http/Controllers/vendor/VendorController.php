@@ -38,12 +38,25 @@ class VendorController extends Controller
             $endingWeekDate = $weekDates[1];
 
             $weekWiseMovies[] = Movie::where('vendor_id', auth('vendor')->user()->id)->whereMonth('release_date' , Carbon::now('Asia/Kathmandu')->month)->whereBetween('release_date', [$startingWeekDate, $endingWeekDate])->count();
-            $weeks[] = 'w'.$i;
+            $weeks[] = 'week-'.$i;
         }
 
         $info['weeks'] = $weeks;
         $info['weekWiseMovies'] = $weekWiseMovies;
 
+        $monthWiseCollections= [];
+        for ($i=1; $i<=12; $i++){
+            $paymentData = Payment::whereMonth('created_at', $i)
+                ->whereYear('created_at', Carbon::now()->year)
+                ->get();
+            $collectedAmount = 0;
+            foreach ($paymentData ?? [] as $payment)
+            {
+                $collectedAmount += $payment->booking->sum('total');
+            }
+            $monthWiseCollections[$i] = $collectedAmount;
+        }
+        $info['monthWiseCollections'] = $monthWiseCollections;
 
         $allMovies = Movie::where(['vendor_id' => auth('vendor')->user()->id, 'status' => 'Active'])->get();
         $currentDate = null;

@@ -44,7 +44,7 @@ class HomeController extends Controller
             $endingWeekDate = $weekDates[1];
 
             $weekWiseMovies[] = Movie::whereMonth('release_date', Carbon::now('Asia/Kathmandu')->month)->whereBetween('release_date', [$startingWeekDate, $endingWeekDate])->count();
-            $weeks[] = 'w'.$i;
+            $weeks[] = 'week-'.$i;
         }
 
         $info['weeks'] = $weeks;

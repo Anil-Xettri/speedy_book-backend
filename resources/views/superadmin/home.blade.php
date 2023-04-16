@@ -57,8 +57,8 @@
     </div>
 
     <div class="row mt-3">
-        <div class="col-md-9">
-            <div class="card card-info" style="margin-left: 150px">
+        <div class="col-md-8">
+            <div class="card card-info">
                 <div class="card-header">
                     <h3 class="card-title">Total Number of Movies Releasing in this Month</h3>
                     <div class="card-tools">
@@ -93,17 +93,23 @@
         let weeks = JSON.parse($('#weeks').val());
         let weekWiseMovies = JSON.parse($('#weekWiseMovies').val());
         let backgroundColors = [];
+        let borderColors = [];
         weeks.forEach(function (week, index) {
             if (index === 0) {
-                backgroundColors.push('rgb(241,13,13)');
+                backgroundColors.push('rgba(255, 99, 132, 0.2)');
+                borderColors.push('rgb(255, 99, 132)');
             } else if (index === 1) {
-                backgroundColors.push('rgb(9,243,243)');
+                backgroundColors.push('rgba(255, 159, 64, 0.2)');
+                borderColors.push('rgb(255, 159, 64)');
             } else if (index === 2) {
-                backgroundColors.push('rgb(200,19,236)');
+                backgroundColors.push('rgba(255, 205, 86, 0.2)');
+                borderColors.push('rgb(255, 205, 86)');
             } else if (index === 3) {
-                backgroundColors.push('rgba(108,97,172,0.87)');
+                backgroundColors.push('rgba(75, 192, 192, 0.2)');
+                borderColors.push('rgb(75, 192, 192)');
             } else if (index === 4) {
-                backgroundColors.push('rgba(135,57,1,0.87)');
+                backgroundColors.push('rgba(54, 162, 235, 0.2)');
+                borderColors.push('rgb(54, 162, 235)');
             }
 
         });
@@ -114,6 +120,8 @@
                 label: "Total Releasing Movies",
                 data: weekWiseMovies,
                 backgroundColor: backgroundColors,
+                borderColor: borderColors,
+                borderWidth: 1,
                 hoverOffset: 4,
             }]
         };
