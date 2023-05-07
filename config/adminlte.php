@@ -385,6 +385,12 @@ return [
             'icon' => 'nav-icon fas fa-money-bill',
             'guard' => 'vendor'
         ],
+        [
+            'text' => 'Collections',
+            'route' => 'collections',
+            'icon' => 'nav-icon fas fa-dollar-sign',
+            'guard' => 'vendor'
+        ],
     ],
 
     /*

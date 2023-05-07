@@ -46,7 +46,7 @@ class VendorController extends Controller
 
         $monthWiseCollections= [];
         for ($i=1; $i<=12; $i++){
-            $paymentData = Payment::whereMonth('created_at', $i)
+            $paymentData = Payment::where('vendor_id', auth('vendor')->user()->id)->whereMonth('created_at', $i)
                 ->whereYear('created_at', Carbon::now()->year)
                 ->get();
             $collectedAmount = 0;

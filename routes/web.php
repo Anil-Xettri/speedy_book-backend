@@ -62,4 +62,5 @@ Route::group(['prefix' => 'vendor', 'middleware' => 'auth:vendor'], function () 
     Route::resource('show-times', \App\Http\Controllers\vendor\ShowTimeController::class);
     Route::resource('bookings', \App\Http\Controllers\vendor\BookingController::class);
     Route::resource('payments', \App\Http\Controllers\vendor\PaymentController::class)->only('index');
+    Route::get('collections', [\App\Http\Controllers\vendor\CollectionController::class, 'getCollections'])->name('collections');
 });
